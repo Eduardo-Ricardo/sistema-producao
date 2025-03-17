@@ -14,13 +14,13 @@ Este projeto tem como objetivo registrar a produção diária dos funcionários,
 - Interface para entrada de dados
 - Interface para visualizar dados salvos
 - Criar Menu principal
+- Criar repositório no GitHub
+- Separação dos registros por ano em arquivos CSV 
 
 ### 🔹 Em andamento:
 
 - Otimizar interface de entrada e de visualização de dados
 - Criar botão para inicializar o servidor automaticamente
-- Separação dos registros por mês em arquivos CSV
-- Criar repositório no GitHub
 
 ## 📂 Estrutura do Projeto
 

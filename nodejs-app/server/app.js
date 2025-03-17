@@ -9,30 +9,52 @@ const PORT = 3000;
 app.use(cors());
 app.use(express.json());
 
-// Rota para salvar a produção no CSV
 app.post("/salvar", (req, res) => {
     const { employeeName, employeeRole, startTime, endTime, productionCount, productionDate } = req.body;
 
     console.log("Dados recebidos:", req.body); // Log dos dados recebidos no servidor
 
-
     if (!employeeName || !employeeRole || !startTime || !endTime || !productionCount || !productionDate) {
         return res.status(400).json({ error: "Preencha todos os campos!" });
     }
 
-    const linha = `${employeeName}, ${employeeRole}, ${startTime},${endTime},${productionCount},${productionDate}\n`;
+    // Extrai o ano da data fornecida (formato esperado: DD/MM)
+    const [dia, mes] = productionDate.split("/");
+    const ano = new Date().getFullYear(); // Usa o ano atual como padrão
 
-    fs.appendFile("data.csv", linha, (err) => {
+    // Define o diretório correto para armazenar os arquivos CSV
+    const pastaDados = path.join(__dirname, "data"); // Agora salva em "server/data/"
+    const nomeArquivo = `${ano}.csv`;
+    const caminhoArquivo = path.join(pastaDados, nomeArquivo);
+
+    // Garante que a pasta "data" exista dentro de "server"
+    if (!fs.existsSync(pastaDados)) {
+        fs.mkdirSync(pastaDados, { recursive: true });
+    }
+
+    // Formata os dados para salvar no CSV
+    const linha = `${employeeName},${employeeRole},${startTime},${endTime},${productionCount},${productionDate}\n`;
+
+    // Salva os dados no arquivo correspondente ao ano dentro da pasta correta
+    fs.appendFile(caminhoArquivo, linha, (err) => {
         if (err) {
             return res.status(500).json({ error: "Erro ao salvar os dados!" });
         }
-        console.log("Dados salvos com sucesso!");
+        console.log(`Dados salvos em ${caminhoArquivo}`);
         res.json({ message: "Produção registrada com sucesso!" });
     });
 });
 
 app.get("/dados", (req, res) => {
-    fs.readFile("data.csv", "utf8", (err, data) => {
+
+    // Define o diretório correto para ler os arquivos CSV
+    const pastaDados = path.join(__dirname, "data");
+    const nomeArquivo = `${new Date().getFullYear()}.csv`;
+    const caminhoArquivo = path.join(pastaDados, nomeArquivo);  
+    console.log("Caminho do arquivo: ", caminhoArquivo);
+
+    // Lê o arquivo CSV e converte em um array de objetos    
+    fs.readFile(caminhoArquivo, "utf8", (err, data) => {
         if (err) {
             return res.status(500).json({ error: "Erro ao ler o arquivo CSV!" });
         }
