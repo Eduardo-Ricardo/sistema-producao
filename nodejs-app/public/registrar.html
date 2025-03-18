@@ -4,55 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Marcação de Produção Diária</title>
-  <style>
-    /* Estilização simples para centralizar e dar uma aparência agradável */
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      margin: 0;
-      padding: 20px;
-    }
-    .container {
-      max-width: 500px;
-      margin: auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 5px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-    }
-    h1 {
-      text-align: center;
-      color: #333;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-    }
-    label {
-      margin-top: 15px;
-      font-weight: bold;
-    }
-    input, select {
-      padding: 8px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 16px;
-    }
-    button {
-      margin-top: 20px;
-      padding: 10px;
-      background: #28a745;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #218838;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
@@ -83,6 +35,7 @@
         <option value="Pregar Bolsos">Pregar Bolsos</option>
         <option value="Pespontar">Pespontar</option>
       </select>
+      <button type="button" id="adicionarFuncao">Adicionar Função</button>
 
       <!-- 3° Campo: Máquina (seleção automática) -->
       <label for="machine">Máquina:</label>
@@ -107,54 +60,6 @@
       <button type="submit">Registrar Produção</button>
     </form>
   </div>
-
-  <script>
-    // Mapeamento de funções para máquinas
-    const machineMap = {
-      "Juntar Partes": "Overlock",
-      "Pregar Bolsos": "Reta",
-      "Pespontar": "Reta"
-    };
-
-    // Atualiza a máquina automaticamente ao selecionar a função
-    document.getElementById("employeeRole").addEventListener("change", function() {
-      const selectedFunction = this.value;
-      document.getElementById("machine").value = machineMap[selectedFunction] || "";
-    });
-
-    // Captura e envia os dados do formulário para o servidor
-    document.getElementById("productionForm").addEventListener("submit", async function(event) {
-        event.preventDefault(); // Evita o recarregamento da página
-
-        // Captura os dados do formulário
-        const employeeName = document.getElementById("employeeName").value;
-        const employeeRole = document.getElementById("employeeRole").value;
-        const machine = document.getElementById("machine").value;
-        const startTime = document.getElementById("startTime").value;
-        const endTime = document.getElementById("endTime").value;
-        const productionCount = document.getElementById("productionCount").value;
-        const productionDate = document.getElementById("productionDate").value;
-
-        // Exibir os dados no console antes de enviar
-        console.log("Dados a serem enviados:", { employeeName, employeeRole, machine, startTime, endTime, productionCount, productionDate });
-
-        // Envia os dados para o servidor via Fetch API
-        const resposta = await fetch("http://localhost:3000/salvar", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ employeeName, employeeRole, machine, startTime, endTime, productionCount, productionDate }),
-        });
-
-        const resultado = await resposta.json();
-        console.log("Resposta do servidor:", resultado); // Log da resposta do servidor
-
-        alert(resultado.message || resultado.error);
-
-        if (resposta.ok) {
-          this.reset(); // Limpa o formulário após salvar os dados
-          document.getElementById("machine").value = ""; // Resetar a máquina também
-        }
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
