@@ -46,11 +46,12 @@ app.post("/salvar", (req, res) => {
 });
 
 app.get("/dados", (req, res) => {
+    const { employeeName, employeeRole, day, week, month } = req.query;
 
     // Define o diretório correto para ler os arquivos CSV
     const pastaDados = path.join(__dirname, "data");
     const nomeArquivo = `${new Date().getFullYear()}.csv`;
-    const caminhoArquivo = path.join(pastaDados, nomeArquivo);  
+    const caminhoArquivo = path.join(pastaDados, nomeArquivo);
     console.log("Caminho do arquivo: ", caminhoArquivo);
 
     // Lê o arquivo CSV e converte em um array de objetos    
@@ -60,10 +61,27 @@ app.get("/dados", (req, res) => {
         }
 
         const linhas = data.split("\n").filter(linha => linha.trim() !== "");
-        const registros = linhas.map(linha => {
+        let registros = linhas.map(linha => {
             const [employeeName, employeeRole, startTime, endTime, productionCount, productionDate] = linha.split(",");
             return { employeeName, employeeRole, startTime, endTime, productionCount, productionDate };
         });
+
+        // Aplicar filtros
+        if (employeeName) {
+            registros = registros.filter(registro => registro.employeeName === employeeName);
+        }
+        if (employeeRole) {
+            registros = registros.filter(registro => registro.employeeRole === employeeRole);
+        }
+        if (day) {
+            registros = registros.filter(registro => registro.productionDate.split("/")[0] === day);
+        }
+        if (week) {
+            // Implementar lógica para filtrar por semana
+        }
+        if (month) {
+            registros = registros.filter(registro => registro.productionDate.split("/")[1] === month);
+        }
 
         res.json(registros);
     });

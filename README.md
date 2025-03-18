@@ -19,8 +19,10 @@ Este projeto tem como objetivo registrar a produção diária dos funcionários,
 
 ### 🔹 Em andamento:
 
-- Otimizar interface de entrada e de visualização de dados
+- Otimizar interface de entrada 
+- Criar filtros para visualização de dados, filtrar por Funcionário, Função, Dia, Semana, Mês
 - Criar botão para inicializar o servidor automaticamente
+- Configurar os arquivos style.css e script.js
 
 ## 📂 Estrutura do Projeto
 

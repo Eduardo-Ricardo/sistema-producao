@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visualizar Produção</title>
+    <link rel="stylesheet" href="style.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -51,7 +52,31 @@
 <body>
 
     <h2>Produção Registrada</h2>
-    <button onclick="carregarDados()">Atualizar Dados</button>
+
+    <div>
+        <label for="employeeName">Funcionário:</label>
+        <select id="employeeName">
+            <option value="">Selecione um funcionário</option>
+            <option value="Luiz">Luiz</option>
+            <option value="Franciele">Franciele</option>
+            <option value="Deyse">Deyse</option>
+            <option value="Nathally">Nathally</option>
+            <option value="Leilaine">Leilaine</option>
+            <option value="Talita">Talita</option>
+            <option value="Wsley">Wsley</option>
+            <option value="Inês">Inês</option>
+            <option value="Linda">Linda</option>
+            <option value="Suzane">Suzane</option>
+        </select>
+        <label for="employeeRole">Função:</label>
+        <input type="text" id="employeeRole">
+        <label for="day">Dia:</label>
+        <input type="text" id="day">
+        <label for="month">Mês:</label>
+        <input type="text" id="month">
+        <button onclick="carregarDados()">Aplicar Filtros</button>
+    </div>
+
     <table id="tabelaProducao">
         <thead>
             <tr>
@@ -66,28 +91,7 @@
         <tbody></tbody>
     </table>
 
-    <script>
-        async function carregarDados() {
-            const resposta = await fetch("http://localhost:3000/dados");
-            const dados = await resposta.json();
-
-            const tabela = document.getElementById("tabelaProducao").getElementsByTagName("tbody")[0];
-            tabela.innerHTML = ""; // Limpa os dados antigos
-
-            dados.forEach(item => {
-                let linha = tabela.insertRow();
-                linha.insertCell(0).innerText = item.employeeName;
-                linha.insertCell(1).innerText = item.employeeRole;
-                linha.insertCell(2).innerText = item.startTime;
-                linha.insertCell(3).innerText = item.endTime;
-                linha.insertCell(4).innerText = item.productionCount;
-                linha.insertCell(5).innerText = item.productionDate;
-            });
-        }
-
-        // Carregar os dados assim que a página for aberta
-        window.onload = carregarDados;
-    </script>
+    <script src="script.js"></script>
 
 </body>
 </html>

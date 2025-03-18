@@ -59,7 +59,7 @@
     <h1>Marcação de Produção Diária</h1>
     <form id="productionForm">
 
-      <!-- 1° Campo: Nome (input com datalist para sugestões) -->
+      <!-- 1° Campo: Nome -->
       <label for="employeeName">Nome:</label>
       <input list="nomes" id="employeeName" name="employeeName" placeholder="Selecione ou digite o nome" required>
       <datalist id="nomes">
@@ -75,23 +75,32 @@
         <option value="Suzane">
       </datalist>
 
-      <!-- 2º Campo: atividade ou função executada-->
+      <!-- 2° Campo: Função -->
       <label for="employeeRole">Função:</label>
-      <input type="text" id="employeeRole" name="employeeRole" required>
+      <select id="employeeRole" name="employeeRole" required>
+        <option value="">Selecione uma função</option>
+        <option value="Juntar Partes">Juntar Partes</option>
+        <option value="Pregar Bolsos">Pregar Bolsos</option>
+        <option value="Pespontar">Pespontar</option>
+      </select>
 
-      <!-- 3° Campo: Início de atividade (input do tipo time para facilitar a entrada do formato HH:MM) -->
+      <!-- 3° Campo: Máquina (seleção automática) -->
+      <label for="machine">Máquina:</label>
+      <input type="text" id="machine" name="machine" readonly>
+
+      <!-- 4° Campo: Início da função -->
       <label for="startTime">Início da função/atividade (HH:MM):</label>
       <input type="time" id="startTime" name="startTime" required>
       
-      <!-- 4° Campo: Fim de atividade -->
+      <!-- 5° Campo: Fim da função -->
       <label for="endTime">Fim da função/atividade (HH:MM):</label>
       <input type="time" id="endTime" name="endTime" required>
       
-      <!-- 5° Campo: Quantidade (input numérico para produção) -->
+      <!-- 6° Campo: Quantidade Produzida -->
       <label for="productionCount">Quantidade Produzida:</label>
       <input type="number" id="productionCount" name="productionCount" required>
       
-      <!-- 6° Campo: Data (input de texto com placeholder e pattern para o formato DD/MM) -->
+      <!-- 7° Campo: Data -->
       <label for="productionDate">Data (DD/MM):</label>
       <input type="text" id="productionDate" name="productionDate" placeholder="DD/MM" pattern="\d{2}/\d{2}" title="Formato DD/MM" required>
       
@@ -100,37 +109,50 @@
   </div>
 
   <script>
+    // Mapeamento de funções para máquinas
+    const machineMap = {
+      "Juntar Partes": "Overlock",
+      "Pregar Bolsos": "Reta",
+      "Pespontar": "Reta"
+    };
+
+    // Atualiza a máquina automaticamente ao selecionar a função
+    document.getElementById("employeeRole").addEventListener("change", function() {
+      const selectedFunction = this.value;
+      document.getElementById("machine").value = machineMap[selectedFunction] || "";
+    });
+
+    // Captura e envia os dados do formulário para o servidor
     document.getElementById("productionForm").addEventListener("submit", async function(event) {
         event.preventDefault(); // Evita o recarregamento da página
 
         // Captura os dados do formulário
         const employeeName = document.getElementById("employeeName").value;
         const employeeRole = document.getElementById("employeeRole").value;
+        const machine = document.getElementById("machine").value;
         const startTime = document.getElementById("startTime").value;
         const endTime = document.getElementById("endTime").value;
         const productionCount = document.getElementById("productionCount").value;
         const productionDate = document.getElementById("productionDate").value;
 
         // Exibir os dados no console antes de enviar
-        console.log("Dados a serem enviados:", { employeeName, employeeRole, startTime, endTime, productionCount, productionDate });
-
+        console.log("Dados a serem enviados:", { employeeName, employeeRole, machine, startTime, endTime, productionCount, productionDate });
 
         // Envia os dados para o servidor via Fetch API
-        const resposta = await fetch("http://localhost:3000/salvar", 
-        {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ employeeName, employeeRole, startTime, endTime, productionCount, productionDate }),
+        const resposta = await fetch("http://localhost:3000/salvar", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ employeeName, employeeRole, machine, startTime, endTime, productionCount, productionDate }),
         });
 
         const resultado = await resposta.json();
-        
-        console.log("Resposta do servidor:", resultado); // Log da resposta do servidor 
+        console.log("Resposta do servidor:", resultado); // Log da resposta do servidor
 
         alert(resultado.message || resultado.error);
 
         if (resposta.ok) {
-        this.reset(); // Limpa o formulário após salvar os dados
+          this.reset(); // Limpa o formulário após salvar os dados
+          document.getElementById("machine").value = ""; // Resetar a máquina também
         }
     });
   </script>
