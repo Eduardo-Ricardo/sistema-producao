@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marcação de Produção Diária</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Ajustes específicos para esta página */
+    .form-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center; /* Centraliza os itens */
+      align-items: flex-start; /* Alinha os itens no topo */
+      flex-direction: column; /* Empilha os itens verticalmente por padrão */
+    }
+
+    @media (min-width: 320px) {
+      .form-container {
+        flex-direction: row; /* Alinha os itens horizontalmente em telas maiores */
+      }
+    }
+
+    form {
+      flex: 1;
+      min-width: 150px;
+    }
+
+    #ultimoRegistro {
+      flex: 1;
+      min-width: 150px;
+      background: #f2f9ff; /* Fundo azul claro */
+      padding: 20px;
+      border: 1px solid #007bff; /* Borda azul */
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    form label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #003366; /* Azul escuro */
+    }
+
+    form input, form select, form button {
+      width: 100%;
+      margin-bottom: 15px;
+      padding: 10px;
+      border: 1px solid #007bff; /* Azul padrão */
+      border-radius: 4px;
+      font-size: 16px;
+    }
+
+    form button {
+      background: #007bff; /* Azul padrão */
+      color: white;
+      cursor: pointer;
+    }
+
+    form button:hover {
+      background: #0056b3; /* Azul mais escuro */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav>
+      <a href="/">Início</a>
+      <a href="/producao/registrar.html">Registrar Produção</a>
+      <a href="/producao/visualizar.html">Visualizar Registros</a>
+      <a href="/fluxo-caixa/caixa.html">Fluxo de Caixa</a>
+    </nav>
+    <h1>Marcação de Produção Diária</h1>
+    <div class="form-container">
+      <!-- Formulário -->
+      <form id="productionForm">
+        <label for="employeeName">Nome:</label>
+        <input list="nomes" id="employeeName" name="employeeName" placeholder="Selecione ou digite o nome" required>
+        <datalist id="nomes">
+          <option value="Luiz">
+          <option value="Franciele">
+          <option value="Deyse">
+          <option value="Nathally">
+          <option value="Leilaine">
+          <option value="Talita">
+          <option value="Wsley">
+          <option value="Inês">
+          <option value="Linda">
+          <option value="Suzane">
+        </datalist>
+
+        <label for="employeeRole">Função:</label>
+        <select id="employeeRole" name="employeeRole" required>
+          <option value="">Selecione uma função</option>
+          <option value="Juntar Partes">Juntar Partes</option>
+          <option value="Pregar Bolsos">Pregar Bolsos</option>
+          <option value="Pespontar">Pespontar</option>
+        </select>
+
+        <button type="button" id="adicionarFuncao">Adicionar Função</button>
+
+        <label for="machine">Máquina:</label>
+        <input type="text" id="machine" name="machine" readonly>
+
+        <label for="startTime">Início da função/atividade (HH:MM):</label>
+        <input type="time" id="startTime" name="startTime" required>
+
+        <label for="endTime">Fim da função/atividade (HH:MM):</label>
+        <input type="time" id="endTime" name="endTime" required>
+
+        <label for="productionCount">Quantidade Produzida:</label>
+        <input type="number" id="productionCount" name="productionCount" required>
+
+        <label for="productionDate">Data (DD/MM):</label>
+        <input type="text" id="productionDate" name="productionDate" placeholder="DD/MM" pattern="\d{2}/\d{2}" title="Formato DD/MM" required>
+
+        <button type="submit">Registrar Produção</button>
+      </form>
+
+      <!-- Painel para exibir o último registro -->
+      <div id="ultimoRegistro">
+        <h2>Último Registro</h2>
+        <p>Selecione um funcionário para ver os registros.</p>
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

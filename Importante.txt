@@ -1,0 +1,4 @@
+Apos atualizações recentes na estrutura do projeto algumas funcionalidade estão fora de operação.
+
+
+Assim que possivel atualizar a pasta common para que o menu volte a funcionar.
