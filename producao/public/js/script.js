@@ -1,3 +1,12 @@
+// Carregar os dados assim que a página for aberta
+window.onload = () => {
+    console.log("[LOG] Página carregada. Iniciando carregamento de dados...");
+    // Carrega dados para tabela de produção para mostrar na tela (visualização)
+    carregarDados();
+    // Carrega o machineMap ao iniciar a página
+    carregarMachineMap();
+};
+
 // Função para carregar os dados com filtros
 function carregarDados() {
     console.log("[LOG] Iniciando o carregamento dos dados com filtros...");
@@ -60,14 +69,6 @@ function carregarDados() {
         });
 }
 
-// Carregar os dados assim que a página for aberta
-window.onload = () => {
-    console.log("[LOG] Página carregada. Iniciando carregamento de dados...");
-    carregarDados();
-    // Carrega o machineMap ao iniciar a página
-    carregarMachineMap();
-};
-
 // Inicializa o machineMap como um objeto vazio
 let machineMap = {}; // Inicializa como um objeto vazio
 
@@ -110,7 +111,7 @@ document.getElementById("employeeRole")?.addEventListener("change", function () 
     console.log("[LOG] Máquina atualizada para:", machine);
 });
 
-// Função para adicionar uma nova função e vinculá-la a uma máquina
+// Adicionar uma nova função e vinculá-la a uma máquina
 function adicionarFuncao() {
     console.log("[LOG] Iniciando o processo de adição de uma nova função...");
 

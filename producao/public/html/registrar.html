@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Marcação de Produção Diária</title>
-  <link rel="stylesheet" href="style.css">
   <style>
     /* Ajustes específicos para esta página */
     .form-container {
@@ -105,10 +104,10 @@
         <input type="text" id="machine" name="machine" readonly>
 
         <label for="startTime">Início da função/atividade (HH:MM):</label>
-        <input type="time" id="startTime" name="startTime" required>
+        <input type="time" id="startTime" name="startTime">
 
         <label for="endTime">Fim da função/atividade (HH:MM):</label>
-        <input type="time" id="endTime" name="endTime" required>
+        <input type="time" id="endTime" name="endTime">
 
         <label for="productionCount">Quantidade Produzida:</label>
         <input type="number" id="productionCount" name="productionCount" required>
@@ -126,6 +125,6 @@
       </div>
     </div>
   </div>
-  <script src="script.js"></script>
+  <script type="module" src="../js/registrar-funcao.js"></script>
 </body>
 </html>

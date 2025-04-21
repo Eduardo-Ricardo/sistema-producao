@@ -2,9 +2,11 @@ const express = require("express");
 const {
     listarProducao,
     adicionarProducao,
-    salvarMachineMap,
-    carregarMachineMap,
-} = require("./producaoController");
+    setMachineMap,
+    getMachineMap,
+    listarDadosFuncionario,
+    listarNomesFuncionarios,
+} = require("../controllers/producaoController");
 
 const router = express.Router();
 
@@ -15,10 +17,16 @@ router.get("/dados", listarProducao);
 router.post("/salvar", adicionarProducao);
 
 // Rota para salvar o machineMap
-router.post("/salvarMachineMap", salvarMachineMap);
+router.post("/setMachineMap", setMachineMap);
 
 // Rota para carregar o machineMap
-router.get("/carregarMachineMap", carregarMachineMap);
+router.get("/getMachineMap", getMachineMap);
+
+// Rota para listar dados de um funcionário específico
+router.get("/dados-funcionario", listarDadosFuncionario);
+
+// Rota para listar os nomes dos funcionários
+router.get("/nomes-funcionarios", listarNomesFuncionarios);
 
 // Rota de teste
 router.get("/teste", (req, res) => {

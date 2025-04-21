@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dados por Pessoa</title>
+  <link rel="stylesheet" href="/producao/css/global.css">
+  <link rel="stylesheet" href="/producao/css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Dados por Pessoa</h1>
+  </header>
+
+  <section>
+    <label for="selecaoPessoa">Selecione a Pessoa:</label>
+    <select id="selecaoPessoa">
+      <option value="">Selecione...</option>
+      <!-- Opções serão preenchidas dinamicamente -->
+    </select>
+    <button id="buscarDados">Buscar Dados</button>
+  </section>
+
+  <section>
+    <h2>Resumo</h2>
+    <p>Total de Funções Realizadas: <span id="totalFuncoes">--</span></p>
+    <p>Média Geral: <span id="mediaGeral">--</span></p>
+  </section>
+
+  <section>
+    <h2>Detalhes</h2>
+    <table id="tabelaDadosPessoa">
+      <thead>
+        <tr>
+          <th>Função</th>
+          <th>Máquina</th>
+          <th>Data</th>
+          <th>Início</th>
+          <th>Fim</th>
+          <th>Quantidade</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Linhas serão preenchidas dinamicamente -->
+      </tbody>
+    </table>
+  </section>
+
+  <script type="module" src="/producao/js/ficha-funcionario.js"></script>
+</body>
+</html>

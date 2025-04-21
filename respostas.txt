@@ -1,0 +1,17 @@
+1. 
+Gerenciar a produção geral da empresa e controle da produção por funcionário.
+Eu serei o usuário final ate o momento
+2. 
+Pastas principais:
+Common // Módulo principal do meu servidor, onde roda o App.js e onde deveria ficar os arquivos que são utulizados pelos outros modulos.
+docs // Módulo responsalvel pela documentação do projeto (sem uso atualmente).
+fluxo-caixa // Módulo para o sistema de fluxo de caixa (ainda em estado inicial de desenvolvimento).
+producao // Módulo em desenvolvimento avançado, responsavel pelo registro e visualização da produção.
+3. 
+Cadastro de produção, o sistema ja chama os dados do servidor node para visualização por funcionário, mas falta tratar esses dados e exibir eles na tela corretamente.
+4.
+Preciso refazer todo a estrutura da interface, ela ainda esta muito malfeita e precisa ser refatorada, porem ainda pode ser usada desta forma
+5. 
+O projeto usa Node como principal biblioteca.
+6.
+essa informação ainda existe no readme atual.

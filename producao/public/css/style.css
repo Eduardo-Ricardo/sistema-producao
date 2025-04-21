@@ -186,3 +186,22 @@ ul li:last-child {
     flex-direction: row; /* Alinha os itens horizontalmente em telas maiores */
   }
 }
+
+/* Estilo para alinhar os filtros na horizontal */
+div {
+    display: flex;
+    flex-wrap: wrap; /* Permite que os elementos quebrem linha se necessário */
+    align-items: center; /* Alinha os itens verticalmente no centro */
+    gap: 10px; /* Espaçamento entre os elementos */
+    margin-bottom: 20px; /* Espaçamento inferior */
+}
+
+div label {
+    margin-right: 5px; /* Espaçamento entre o label e o input */
+}
+
+div input,
+div select {
+    padding: 5px;
+    font-size: 14px;
+}
