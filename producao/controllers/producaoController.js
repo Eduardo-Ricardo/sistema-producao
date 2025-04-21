@@ -149,8 +149,11 @@ function getMachineMap(req, res) {
 async function listarDadosFuncionario(req, res) {
     console.log("[LOG] Iniciando listagem dos dados do funcionário...");
 
-    const funcionario = req.query.funcionario; // Nome do funcionário enviado pelo frontend
-    console.log("[LOG] Nome do funcionário recebido:", funcionario);
+    const funcionario = req.query.funcionario;
+    const dataInicio = req.query.dataInicio;
+    const dataFim = req.query.dataFim;
+
+    console.log("[LOG] Parâmetros recebidos:", { funcionario, dataInicio, dataFim });
 
     const pastaDados = path.join(__dirname, "../data");
     const nomeArquivo = `${new Date().getFullYear()}.csv`;
@@ -159,24 +162,113 @@ async function listarDadosFuncionario(req, res) {
     console.log("[LOG] Caminho do arquivo CSV:", caminhoArquivo);
 
     try {
-        // Lê o arquivo CSV e filtra os registros pelo nome do funcionário
-        const registros = await lerArquivoCSV(caminhoArquivo, { headers: false }); // Sem cabeçalhos
+        const registros = await lerArquivoCSV(caminhoArquivo, { headers: false });
         console.log(`[LOG] Total de registros carregados do arquivo CSV: ${registros.length}`);
 
-        // Filtra os registros onde a primeira coluna (índice 0) corresponde ao nome do funcionário
-        const registrosFiltrados = registros
-        .filter((registro) => registro[0] === funcionario)
-        .map((registro) => ({
-        Funcao: registro[1] || "N/A", // Coluna 2: Função
-        Inicio: registro[2] || "N/A", // Coluna 3: Início
-        Fim: registro[3] || "N/A", // Coluna 4: Fim
-        Quantidade: parseInt(registro[4], 10) || 0, // Coluna 5: Quantidade
-        Data: registro[5] || "N/A", // Coluna 6: Data
-    })); 
+        // Função auxiliar para calcular a duração em horas
+        function calcularDuracaoEmHoras(inicio, fim) {
+            if (!inicio || !fim || inicio === 'N/A' || fim === 'N/A') return 0;
+            
+            const [horaInicio, minInicio] = inicio.split(':').map(Number);
+            const [horaFim, minFim] = fim.split(':').map(Number);
+            
+            let duracaoEmMinutos = (horaFim * 60 + minFim) - (horaInicio * 60 + minInicio);
+            // Se a duração for negativa, assume que passou da meia-noite
+            if (duracaoEmMinutos < 0) {
+                duracaoEmMinutos += 24 * 60;
+            }
+            
+            return duracaoEmMinutos / 60; // Converte para horas
+        }
 
-        console.log("[LOG] Registros filtrados para o funcionário:", registrosFiltrados);
+        // Função para verificar se uma data está dentro do período
+        function estaNoPeriodo(data) {
+            if (!dataInicio && !dataFim) return true;
+            
+            const [dia, mes] = data.split('/').map(Number);
+            
+            if (dataInicio) {
+                const [diaInicio, mesInicio] = dataInicio.split('/').map(Number);
+                if (mes < mesInicio || (mes === mesInicio && dia < diaInicio)) return false;
+            }
+            
+            if (dataFim) {
+                const [diaFim, mesFim] = dataFim.split('/').map(Number);
+                if (mes > mesFim || (mes === mesFim && dia > diaFim)) return false;
+            }
+            
+            return true;
+        }
 
-        res.json(registrosFiltrados);
+        // Filtra registros do funcionário e mapeia para o formato desejado
+        const registrosMapeados = registros
+            .filter((registro) => registro[0] === funcionario && estaNoPeriodo(registro[5]))
+            .map((registro) => ({
+                Data: registro[5] || "N/A",
+                Funcao: registro[1] || "N/A",
+                Inicio: registro[2] || "N/A",
+                Fim: registro[3] || "N/A",
+                Quantidade: parseInt(registro[4], 10) || 0,
+                DuracaoHoras: calcularDuracaoEmHoras(registro[2], registro[3])
+            }))
+            .filter(registro => registro.DuracaoHoras > 0);
+
+        // Extrai as funções únicas
+        const funcoesUnicas = [...new Set(registrosMapeados.map(r => r.Funcao))];
+        console.log("[LOG] Funções únicas:", funcoesUnicas);
+
+        // Calcula totais e médias por função
+        const totaisPorFuncao = funcoesUnicas.map(funcao => {
+            const registrosDaFuncao = registrosMapeados.filter(r => r.Funcao === funcao);
+            
+            // Calcula produção por hora para cada registro
+            const producoesHora = registrosDaFuncao.map(r => ({
+                producaoHora: r.Quantidade / r.DuracaoHoras,
+                quantidade: r.Quantidade,
+                duracao: r.DuracaoHoras
+            }));
+
+            const total = registrosDaFuncao.reduce((acc, r) => acc + r.Quantidade, 0);
+            const totalHoras = registrosDaFuncao.reduce((acc, r) => acc + r.DuracaoHoras, 0);
+            
+            // Média das produções por hora - arredondada para inteiro
+            const mediaProducaoHora = Math.round(producoesHora.reduce((acc, p) => acc + p.producaoHora, 0) / producoesHora.length);
+
+            return {
+                funcao,
+                total,
+                quantidade_registros: registrosDaFuncao.length,
+                total_horas: Number(totalHoras.toFixed(2)),
+                media_por_hora: mediaProducaoHora
+            };
+        });
+
+        // Agrupa os registros por data
+        const registrosAgrupados = {};
+        registrosMapeados.forEach((registro) => {
+            if (!registrosAgrupados[registro.Data]) {
+                registrosAgrupados[registro.Data] = [];
+            }
+            registrosAgrupados[registro.Data].push(registro);
+        });
+
+        // Converte o objeto agrupado em um array e ordena por data
+        const registrosFinal = Object.entries(registrosAgrupados).map(([data, registros]) => ({
+            data,
+            registros: registros.sort((a, b) => a.Inicio.localeCompare(b.Inicio))
+        }));
+
+        registrosFinal.sort((a, b) => {
+            const [diaA, mesA] = a.data.split('/').map(Number);
+            const [diaB, mesB] = b.data.split('/').map(Number);
+            return mesA !== mesB ? mesA - mesB : diaA - diaB;
+        });
+
+        // Retorna os dados com as funções únicas incluídas
+        res.json({
+            registros: registrosFinal,
+            funcoes: totaisPorFuncao
+        });
     } catch (error) {
         console.error("[ERRO] Falha ao listar os dados do funcionário:", error);
         res.status(500).json({ error: "Erro ao listar os dados do funcionário!" });

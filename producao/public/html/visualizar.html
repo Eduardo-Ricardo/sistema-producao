@@ -4,72 +4,98 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Visualização de Produção</title>
-  <!-- Importar estilos -->
-  <link rel="stylesheet" href="/producao/css/global.css">
-  <link rel="stylesheet" href="/producao/css/style.css">
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
   <!-- Cabeçalho com informações resumidas -->
-  <header>
-    <h1>Visualização de Produção Diária</h1>
-    <div class="resumo">
-      <p>Total Produzido: <span id="totalProduzido">--</span></p>
-      <p>Média Diária Geral: <span id="mediaDiariaGeral">--</span></p>
-      <p>Média Semanal Geral: <span id="mediaSemanalGeral">--</span></p>
+  <nav class="nav">
+    <ul class="nav-list">
+      <li><a href="/" class="nav-link">Início</a></li>
+      <li><a href="/producao/html/registrar.html" class="nav-link">Registrar Produção</a></li>
+      <li><a href="/producao/html/visualizar.html" class="nav-link">Visualizar Registros</a></li>
+      <li><a href="/fluxo-caixa/caixa.html" class="nav-link">Fluxo de Caixa</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <header>
+      <h1 class="m-3">Visualização de Produção Diária</h1>
+      <div class="resumo-grid">
+        <div class="resumo-item">
+          <p>Total Produzido: <span id="totalProduzido">--</span></p>
+        </div>
+        <div class="resumo-item">
+          <p>Média Diária Geral: <span id="mediaDiariaGeral">--</span></p>
+        </div>
+        <div class="resumo-item">
+          <p>Média Semanal Geral: <span id="mediaSemanalGeral">--</span></p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Área de Filtros -->
+    <div class="card">
+      <div class="card-header">
+        <h2>Filtros</h2>
+      </div>
+      <form id="filtrosForm" class="form-container">
+        <div class="form-group">
+          <label for="filtroFuncionario" class="form-label">Funcionário:</label>
+          <select id="filtroFuncionario" name="filtroFuncionario" class="form-control">
+            <option value="">Todos</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="filtroFuncao" class="form-label">Função:</label>
+          <select id="filtroFuncao" name="filtroFuncao" class="form-control">
+            <option value="">Todas</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="dataInicio" class="form-label">Data Início:</label>
+          <input type="date" id="dataInicio" name="dataInicio" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label for="dataFim" class="form-label">Data Fim:</label>
+          <input type="date" id="dataFim" name="dataFim" class="form-control">
+        </div>
+
+        <button type="button" onclick="aplicarFiltros()" class="btn btn-primary">Filtrar</button>
+      </form>
     </div>
-  </header>
 
-  <!-- Área de Filtros -->
-  <section class="filtros">
-    <h2>Filtros</h2>
-    <form id="filtrosForm">
-      <label for="filtroFuncionario">Funcionário:</label>
-      <select id="filtroFuncionario" name="filtroFuncionario">
-        <option value="">Todos</option>
-        <!-- Opções serão preenchidas dinamicamente -->
-      </select>
+    <!-- Tabela Comparativa de Produção -->
+    <section class="card m-3">
+      <div class="card-header">
+        <h2>Comparação Geral dos Funcionários</h2>
+      </div>
+      <div class="table-container">
+        <table id="tabelaProducao" class="table">
+          <thead>
+            <tr>
+              <th>Funcionário</th>
+              <th>Função</th>
+              <th>Máquina</th>
+              <th>Data</th>
+              <th>Início</th>
+              <th>Fim</th>
+              <th>Quantidade</th>
+              <th>Média Diária</th>
+              <th>Média Semanal</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Linhas serão inseridas dinamicamente -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
 
-      <label for="filtroFuncao">Função:</label>
-      <select id="filtroFuncao" name="filtroFuncao">
-        <option value="">Todas</option>
-        <!-- Opções serão preenchidas dinamicamente -->
-      </select>
-
-      <label for="dataInicio">Data Início:</label>
-      <input type="date" id="dataInicio" name="dataInicio">
-
-      <label for="dataFim">Data Fim:</label>
-      <input type="date" id="dataFim" name="dataFim">
-
-      <button type="button" onclick="aplicarFiltros()">Filtrar</button>
-    </form>
-  </section>
-
-  <!-- Tabela Comparativa de Produção -->
-  <section class="tabela">
-    <h2>Comparação Geral dos Funcionários</h2>
-    <table id="tabelaProducao">
-      <thead>
-        <tr>
-          <th>Funcionário</th>
-          <th>Função</th>
-          <th>Máquina</th>
-          <th>Data</th>
-          <th>Início</th>
-          <th>Fim</th>
-          <th>Quantidade</th>
-          <th>Média Diária</th>
-          <th>Média Semanal</th>
-          <th>Ação</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Linhas serão inseridas dinamicamente -->
-      </tbody>
-    </table>
-  </section>
-
-  <!-- Inclusão dos scripts divididos em arquivos -->
-  <script type="module" src="/producao/js/eventos.js"></script>
+  <script type="module" src="../js/eventos.js"></script>
 </body>
 </html>

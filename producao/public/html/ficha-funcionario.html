@@ -4,48 +4,124 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dados por Pessoa</title>
-  <link rel="stylesheet" href="/producao/css/global.css">
-  <link rel="stylesheet" href="/producao/css/style.css">
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-  <header>
-    <h1>Dados por Pessoa</h1>
-  </header>
+  <nav class="nav">
+    <ul class="nav-list">
+      <li><a href="/" class="nav-link">Início</a></li>
+      <li><a href="/producao/html/registrar.html" class="nav-link">Registrar Produção</a></li>
+      <li><a href="/producao/html/visualizar.html" class="nav-link">Visualizar Registros</a></li>
+      <li><a href="/fluxo-caixa/caixa.html" class="nav-link">Fluxo de Caixa</a></li>
+    </ul>
+  </nav>
 
-  <section>
-    <label for="selecaoPessoa">Selecione a Pessoa:</label>
-    <select id="selecaoPessoa">
-      <option value="">Selecione...</option>
-      <!-- Opções serão preenchidas dinamicamente -->
-    </select>
-    <button id="buscarDados">Buscar Dados</button>
-  </section>
+  <div class="container">
+    <header>
+      <h1 class="m-3">Dados por Pessoa</h1>
+    </header>
 
-  <section>
-    <h2>Resumo</h2>
-    <p>Total de Funções Realizadas: <span id="totalFuncoes">--</span></p>
-    <p>Média Geral: <span id="mediaGeral">--</span></p>
-  </section>
+    <div class="card">
+      <div class="form-container">
+        <div class="form-group">
+          <label for="selecaoPessoa" class="form-label">Selecione a Pessoa:</label>
+          <select id="selecaoPessoa" class="form-control">
+            <option value="">Selecione...</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="dataInicio" class="form-label">Data Início:</label>
+          <input type="date" id="dataInicio" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="dataFim" class="form-label">Data Fim:</label>
+          <input type="date" id="dataFim" class="form-control">
+        </div>
+        <button id="buscarDados" class="btn btn-primary">Buscar Dados</button>
+      </div>
+    </div>
 
-  <section>
-    <h2>Detalhes</h2>
-    <table id="tabelaDadosPessoa">
-      <thead>
-        <tr>
-          <th>Função</th>
-          <th>Máquina</th>
-          <th>Data</th>
-          <th>Início</th>
-          <th>Fim</th>
-          <th>Quantidade</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Linhas serão preenchidas dinamicamente -->
-      </tbody>
-    </table>
-  </section>
+    <!-- Nova seção do calendário -->
+    <div class="card m-3">
+      <div class="card-header">
+        <h2>Calendário de Registros</h2>
+      </div>
+      <div class="form-container">
+        <div class="form-group">
+          <label for="mesCalendario" class="form-label">Selecione o Mês:</label>
+          <select id="mesCalendario" class="form-control">
+            <option value="1">Janeiro</option>
+            <option value="2">Fevereiro</option>
+            <option value="3">Março</option>
+            <option value="4">Abril</option>
+            <option value="5">Maio</option>
+            <option value="6">Junho</option>
+            <option value="7">Julho</option>
+            <option value="8">Agosto</option>
+            <option value="9">Setembro</option>
+            <option value="10">Outubro</option>
+            <option value="11">Novembro</option>
+            <option value="12">Dezembro</option>
+          </select>
+        </div>
+      </div>
+      <div id="calendario" class="calendario-container">
+        <!-- Calendário será gerado aqui -->
+      </div>
+    </div>
 
-  <script type="module" src="/producao/js/ficha-funcionario.js"></script>
+    <!-- Nova seção para exibir as funções -->
+    <div class="card m-3">
+      <div class="card-header">
+        <h2>Funções Realizadas</h2>
+      </div>
+      <div class="resumo-grid" id="funcoes-grid">
+        <!-- Funções serão inseridas aqui dinamicamente -->
+      </div>
+    </div>
+
+    <div class="card m-3">
+      <div class="card-header">
+        <h2>Resumo</h2>
+      </div>
+      <div class="resumo-grid">
+        <div class="resumo-item">
+          <p>Total de Dias: <span id="totalDias">--</span></p>
+        </div>
+        <div class="resumo-item">
+          <p>Total de Registros: <span id="totalRegistros">--</span></p>
+        </div>
+        <div class="resumo-item">
+          <p>Média Geral: <span id="mediaGeral">--</span></p>
+        </div>
+        <div class="resumo-item">
+          <p>Média por Dia: <span id="mediaPorDia">--</span></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card m-3">
+      <div class="card-header">
+        <h2>Detalhes por Dia</h2>
+      </div>
+      <div class="table-container">
+        <table id="tabelaDadosPessoa" class="table">
+          <thead>
+            <tr>
+              <th>Função</th>
+              <th>Início</th>
+              <th>Fim</th>
+              <th>Quantidade</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Linhas serão preenchidas dinamicamente -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../js/ficha-funcionario.js"></script>
 </body>
 </html>

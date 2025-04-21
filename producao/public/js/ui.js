@@ -123,32 +123,97 @@ export function preencherTabelaFuncionario(dados) {
     const tbody = document.getElementById("tabelaDadosPessoa").querySelector("tbody");
     tbody.innerHTML = ""; // Limpar tabela
 
-    dados.forEach((item) => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${item.Funcao}</td>
-            <td>${item.Maquina}</td>
-            <td>${item.Data}</td>
-            <td>${item.Inicio}</td>
-            <td>${item.Fim}</td>
-            <td>${item.Quantidade}</td>
+    // Itera sobre cada grupo de data
+    dados.registros.forEach((grupo) => {
+        // Criar linha de cabeçalho para a data
+        const headerRow = document.createElement("tr");
+        headerRow.innerHTML = `
+            <td colspan="6" style="background-color: #f0f0f0; font-weight: bold; text-align: center;">
+                Data: ${grupo.data}
+            </td>
         `;
-        tbody.appendChild(row);
+        tbody.appendChild(headerRow);
+
+        // Adicionar os registros do dia
+        grupo.registros.forEach((registro) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${registro.Funcao}</td>
+                <td>${registro.Inicio}</td>
+                <td>${registro.Fim}</td>
+                <td>${registro.Quantidade}</td>
+            `;
+            tbody.appendChild(row);
+        });
+
+        // Adicionar linha com totais do dia
+        const totalDia = grupo.registros.reduce((acc, registro) => acc + registro.Quantidade, 0);
+        const mediaDia = totalDia / grupo.registros.length;
+        
+        const totalRow = document.createElement("tr");
+        totalRow.innerHTML = `
+            <td colspan="3" style="text-align: right; font-weight: bold;">Total do dia:</td>
+            <td style="font-weight: bold;">${totalDia}</td>
+            <td colspan="2"></td>
+        `;
+        tbody.appendChild(totalRow);
+
+        // Adicionar linha em branco para separar os dias
+        const spacerRow = document.createElement("tr");
+        spacerRow.innerHTML = '<td colspan="6" style="height: 10px;"></td>';
+        tbody.appendChild(spacerRow);
     });
 
+    // Exibir as funções únicas
+    preencherFuncoesUnicas(dados.funcoes);
+
     console.log("[LOG] Tabela de dados do funcionário preenchida com sucesso.");
+}
+
+// Nova função para exibir as funções únicas
+export function preencherFuncoesUnicas(funcoes) {
+    console.log("[LOG] Preenchendo grid de funções únicas...");
+    
+    const funcoesGrid = document.getElementById("funcoes-grid");
+    funcoesGrid.innerHTML = ""; // Limpa o conteúdo anterior
+
+    // Ordena as funções por quantidade de registros (decrescente)
+    funcoes.sort((a, b) => b.quantidade_registros - a.quantidade_registros);
+
+    funcoes.forEach(funcao => {
+        const funcaoElement = document.createElement("div");
+        funcaoElement.className = "resumo-item";
+        funcaoElement.innerHTML = `
+            <h3>${funcao.funcao}</h3>
+            <div class="funcao-detalhes">
+                <p>Total Produzido: <span>${funcao.total}</span></p>
+                <p>Horas Trabalhadas: <span>${funcao.total_horas}</span></p>
+                <p>Média/Hora: <span>${funcao.media_por_hora}/h</span></p>
+                <p>Registros: <span>${funcao.quantidade_registros}</span></p>
+            </div>
+        `;
+        funcoesGrid.appendChild(funcaoElement);
+    });
+
+    console.log("[LOG] Grid de funções únicas preenchido com sucesso.");
 }
 
 // Calcula e exibe o resumo dos dados do funcionário na página ficha-funcionario.html
 export function calcularResumoFuncionario(dados) {
     console.log("[LOG] Iniciando cálculo do resumo dos dados do funcionário...");
 
-    const totalFuncoes = dados.length;
-    const totalQuantidade = dados.reduce((acc, item) => acc + (item.Quantidade || 0), 0);
-    const mediaGeral = totalQuantidade / totalFuncoes;
+    const totalDias = dados.length;
+    const totalRegistros = dados.reduce((acc, grupo) => acc + grupo.registros.length, 0);
+    const totalQuantidade = dados.reduce((acc, grupo) => 
+        acc + grupo.registros.reduce((sum, registro) => sum + registro.Quantidade, 0), 0);
+    
+    const mediaGeral = totalQuantidade / totalRegistros;
+    const mediaPorDia = totalQuantidade / totalDias;
 
-    document.getElementById("totalFuncoes").textContent = totalFuncoes;
+    document.getElementById("totalDias").textContent = totalDias;
+    document.getElementById("totalRegistros").textContent = totalRegistros;
     document.getElementById("mediaGeral").textContent = mediaGeral.toFixed(2);
+    document.getElementById("mediaPorDia").textContent = mediaPorDia.toFixed(2);
 
     console.log("[LOG] Resumo dos dados do funcionário calculado com sucesso.");
 }

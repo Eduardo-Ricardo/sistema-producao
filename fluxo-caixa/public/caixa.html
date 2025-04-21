@@ -3,34 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/style.css">
     <title>Controle de Caixa</title>
 </head>
 <body>
-    <h1>Controle de Caixa</h1>
-    <nav>
-        <a href="/">Início</a>
-        <a href="/producao/registrar.html">Registrar Produção</a>
-        <a href="/producao/visualizar.html">Visualizar Registros</a>
-        <a href="/fluxo-caixa/caixa.html">Fluxo de Caixa</a>
+    <nav class="nav">
+        <ul class="nav-list">
+            <li><a href="/" class="nav-link">Início</a></li>
+            <li><a href="/producao/html/registrar.html" class="nav-link">Registrar Produção</a></li>
+            <li><a href="/producao/html/visualizar.html" class="nav-link">Visualizar Registros</a></li>
+            <li><a href="/fluxo-caixa/caixa.html" class="nav-link">Fluxo de Caixa</a></li>
+        </ul>
     </nav>
 
-    <!-- Formulário de entrada de dados -->
-    <form id="formCaixa">
-        <label for="tipo">Tipo:</label>
-        <select id="tipo" required>
-            <option value="entrada">Entrada</option>
-            <option value="saida">Saída</option>
-        </select>
+    <div class="container">
+        <h1 class="m-3">Controle de Caixa</h1>
 
-        <label for="descricao">Descrição:</label>
-        <input type="text" id="descricao" placeholder="Descrição" required>
+        <!-- Formulário de entrada de dados -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Novo Registro</h2>
+            </div>
+            <form id="formCaixa" class="form-container">
+                <div class="form-group">
+                    <label for="tipo" class="form-label">Tipo:</label>
+                    <select id="tipo" class="form-control" required>
+                        <option value="entrada">Entrada</option>
+                        <option value="saida">Saída</option>
+                    </select>
+                </div>
 
-        <label for="valor">Valor:</label>
-        <input type="number" id="valor" placeholder="Valor" required>
+                <div class="form-group">
+                    <label for="descricao" class="form-label">Descrição:</label>
+                    <input type="text" id="descricao" class="form-control" placeholder="Descrição" required>
+                </div>
 
-        <button type="submit">Adicionar</button>
-    </form>
+                <div class="form-group">
+                    <label for="valor" class="form-label">Valor:</label>
+                    <input type="number" id="valor" class="form-control" placeholder="Valor" required>
+                </div>
+
+                <button type="submit" class="btn btn-success">Adicionar</button>
+            </form>
+        </div>
+
+        <!-- Grid para exibir entradas e saídas -->
+        <div class="grid-2 m-3">
+            <!-- Entradas -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Entradas</h2>
+                </div>
+                <div id="listaEntradas" class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Valor</th>
+                                <th>Data</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dados serão inseridos dinamicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Saídas -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Saídas</h2>
+                </div>
+                <div id="listaSaidas" class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Valor</th>
+                                <th>Data</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dados serão inseridos dinamicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="caixa.js"></script>
 </body>

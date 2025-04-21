@@ -1,6 +1,9 @@
 import { preencherTabelaFuncionario, calcularResumoFuncionario, preencherDropdownFuncionarios } from "./ui.js";
 import { capturarFiltrosFuncionario } from "./filtros.js";
 import { carregarDadosFuncionarioBackend, carregarNomesFuncionariosBackend } from "./dados.js";
+import { inicializarCalendario } from "./calendario.js";
+
+let dadosAtuais = null;
 
 // Carregar os nomes dos funcionários ao carregar a página
 window.onload = async () => {
@@ -23,21 +26,27 @@ document.getElementById("buscarDados").addEventListener("click", async () => {
 
     const filtros = capturarFiltrosFuncionario();
     if (!filtros) {
-        console.warn("[AVISO] Nenhum funcionário selecionado. A busca foi cancelada.");
+        console.warn("[AVISO] Filtros inválidos. A busca foi cancelada.");
         return;
     }
 
     console.log("[INFO] Filtros capturados:", filtros);
 
     try {
-        const dados = await carregarDadosFuncionarioBackend(filtros.funcionario);
+        const dados = await carregarDadosFuncionarioBackend(filtros.funcionario, filtros.dataInicio, filtros.dataFim);
         console.log("[INFO] Dados do funcionário carregados com sucesso:", dados);
 
+        dadosAtuais = dados;
+        
         preencherTabelaFuncionario(dados);
         console.log("[INFO] Tabela preenchida com os dados do funcionário.");
 
-        calcularResumoFuncionario(dados);
+        calcularResumoFuncionario(dados.registros);
         console.log("[INFO] Resumo calculado e exibido com sucesso.");
+
+        // Inicializar o calendário com os registros carregados
+        inicializarCalendario(dados.registros);
+        console.log("[INFO] Calendário inicializado com sucesso.");
     } catch (error) {
         console.error("[ERRO] Falha ao carregar os dados do funcionário:", error);
     }

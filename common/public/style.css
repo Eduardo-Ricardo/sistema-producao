@@ -1,245 +1,162 @@
-/* Estilos para a tabela */
-table {
-    width: 80%;
-    margin: 20px auto;
-    border-collapse: collapse;
-    background: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+/* Importação dos arquivos CSS modularizados */
+@import url('./css/base.css');
+@import url('./css/components.css');
+@import url('./css/layouts.css');
+
+/* Estilos específicos da aplicação que não se encaixam nos outros módulos */
+.ultimo-registro {
+  max-width: 600px;
+  margin: var(--spacing-lg) auto;
+  padding: var(--spacing-lg);
+  background: white;
+  border-radius: 8px;
+  box-shadow: var(--shadow-md);
 }
 
-th, td {
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: center;
+.resumo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-lg);
+  margin: var(--spacing-lg) 0;
 }
 
-th {
-    background: #28a745;
-    color: #fff;
+.resumo-item {
+  padding: var(--spacing-lg);
+  background: white;
+  border-radius: 8px;
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+  transition: transform 0.2s ease;
 }
 
-tr:nth-child(even) {
-    background: #f2f2f2;
+.resumo-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
-/* Estilos para o botão */
-button {
-    margin-top: 20px;
-    padding: 10px;
-    background: #28a745;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
+.resumo-item span {
+  display: block;
+  margin-top: var(--spacing-sm);
+  font-size: 1.4em;
+  font-weight: bold;
+  color: var(--primary-color);
 }
 
-button:hover {
-    background: #218838;
+/* Estilos específicos para o grid de funções */
+#funcoes-grid {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
 
-/* Estilos gerais */
-body {
-    font-family: Arial, sans-serif;
-    background: #f4f4f4;
-    margin: 0;
-    padding: 20px;
-    text-align: center;
+#funcoes-grid .resumo-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-h2 {
-    color: #333;
+#funcoes-grid h3 {
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-md);
+  font-size: 1.2em;
+  border-bottom: 2px solid var(--primary-color);
+  padding-bottom: var(--spacing-sm);
 }
 
-/* Estilização para a página de registro */
-body {
-    font-family: Arial, sans-serif;
-    background: #f4f4f4;
-    margin: 0;
-    padding: 20px;
+.funcao-detalhes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
 }
 
-.container {
-    max-width: 800px; /* Aumentado de 500px para 800px */
-    margin: auto;
-    background: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+.funcao-detalhes p {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid var(--border-color);
 }
 
-h1 {
-    text-align: center;
-    color: #333;
+.funcao-detalhes p:last-child {
+  border-bottom: none;
 }
 
-form {
-    display: flex;
-    flex-direction: column;
+.funcao-detalhes span {
+  font-size: 1.1em !important;
+  color: var(--text-color) !important;
 }
 
-label {
-    margin-top: 15px;
-    font-weight: bold;
+/* Estilos do calendário */
+.calendario-container {
+  padding: var(--spacing-lg);
 }
 
-input, select {
-    padding: 8px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
+.calendario {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  background: var(--border-color);
+  padding: 2px;
+  border-radius: 4px;
 }
 
-nav {
-    background: #007bff;
-    padding: 10px;
-    text-align: center;
-}
-nav a {
-    color: white;
-    text-decoration: none;
-    margin: 0 15px;
-    font-size: 18px;
-}
-nav a:hover {
-    text-decoration: underline;
-}        
-nav {
-    background: #007bff;
-    padding: 10px;
-    text-align: center;
-}
-nav a {
-    color: white;
-    text-decoration: none;
-    margin: 0 15px;
-    font-size: 18px;
-}
-nav a:hover {
-    text-decoration: underline;
-}        
-nav {
-    background: #007bff;
-    padding: 10px;
-    text-align: center;
-}
-nav a {
-    color: white;
-    text-decoration: none;
-    margin: 0 15px;
-    font-size: 18px;
-}
-nav a:hover {
-    text-decoration: underline;
-}        
-nav {
-    background: #007bff;
-    padding: 10px;
-    text-align: center;
-}
-nav a {
-    color: white;
-    text-decoration: none;
-    margin: 0 15px;
-    font-size: 18px;
-}
-nav a:hover {
-    text-decoration: underline;
+.calendario-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 2px;
 }
 
-#ultimoRegistro {
-    max-width: 600px; /* Define uma largura máxima */
-    margin: 20px auto; /* Centraliza a caixa */
-    padding: 20px; /* Espaçamento interno */
-    background: #f9f9f9; /* Fundo claro */
-    border: 1px solid #ddd; /* Borda sutil */
-    border-radius: 8px; /* Bordas arredondadas */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra leve */
-    font-size: 16px; /* Tamanho da fonte */
-    line-height: 1.6; /* Altura da linha */
-    color: #333; /* Cor do texto */
-    text-align: left; /* Alinha o texto à esquerda */
+.calendario-header span {
+  background: var(--primary-color);
+  color: white;
+  padding: var(--spacing-md);
+  text-align: center;
+  font-weight: bold;
+  border-radius: 4px;
 }
 
-#ultimoRegistro strong {
-    color: #007bff; /* Destaque para os títulos */
-    font-size: 18px; /* Tamanho maior para os títulos */
+.calendario-dia {
+  background: white;
+  padding: var(--spacing-md);
+  text-align: center;
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
 }
 
-#ultimoRegistro span {
-    display: block; /* Cada linha ocupa uma nova linha */
-    margin-top: 8px; /* Espaçamento entre as linhas */
+.calendario-dia:hover {
+  transform: scale(1.05);
 }
 
-.caixa-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    margin-top: 20px;
+.calendario-dia.tem-registro {
+  background: #007bff;
+  color: white;
 }
 
-.entradas, .saidas {
-    flex: 1;
-    background: #f9f9f9;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-height: 400px;
-    overflow-y: auto;
+.calendario-dia.sem-registro {
+  background: #dc3545;
+  color: white;
 }
 
-.entradas h2, .saidas h2 {
-    text-align: center;
-    color: #007bff;
+.calendario-dia.outro-mes {
+  background: #f8f9fa;
+  color: #adb5bd;
+  cursor: default;
 }
 
-ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+.calendario-dia.outro-mes:hover {
+  transform: none;
 }
 
-ul li {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    display: flex;
-    justify-content: space-between;
+.calendario-dia.fim-de-semana {
+  background: white;
+  color: #6c757d;
+  cursor: default;
 }
 
-ul li:last-child {
-    border-bottom: none;
-}
-
-form {
-    margin-top: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: space-between;
-}
-
-form label {
-    flex: 1 1 100%;
-    font-weight: bold;
-}
-
-form input, form select, form button {
-    flex: 1 1 calc(33.33% - 10px);
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-form button {
-    background: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-form button:hover {
-    background: #0056b3;
+.calendario-dia.fim-de-semana:hover {
+  transform: none;
 }

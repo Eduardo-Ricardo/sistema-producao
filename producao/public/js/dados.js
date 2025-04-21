@@ -67,11 +67,16 @@ export async function salvarMachineMap(machineMap) {
 }
 
 // Faz uma requisição ao backend para buscar os dados do funcionário na página ficha-funcionario.html
-export async function carregarDadosFuncionarioBackend(funcionario) {
+export async function carregarDadosFuncionarioBackend(funcionario, dataInicio, dataFim) {
     console.log(`[LOG] Iniciando carregamento dos dados do funcionário: ${funcionario}`);
+    console.log(`[LOG] Período: ${dataInicio || 'início'} até ${dataFim || 'fim'}`);
 
     try {
-        const response = await fetch(`/producao/dados-funcionario?funcionario=${encodeURIComponent(funcionario)}`);
+        const params = new URLSearchParams({ funcionario });
+        if (dataInicio) params.append('dataInicio', dataInicio);
+        if (dataFim) params.append('dataFim', dataFim);
+
+        const response = await fetch(`/producao/dados-funcionario?${params.toString()}`);
         if (!response.ok) {
             throw new Error("Erro ao buscar os dados do servidor.");
         }
