@@ -150,10 +150,7 @@ async function listarDadosFuncionario(req, res) {
     console.log("[LOG] Iniciando listagem dos dados do funcionário...");
 
     const funcionario = req.query.funcionario;
-    const dataInicio = req.query.dataInicio;
-    const dataFim = req.query.dataFim;
-
-    console.log("[LOG] Parâmetros recebidos:", { funcionario, dataInicio, dataFim });
+    console.log("[LOG] Nome do funcionário recebido:", funcionario);
 
     const pastaDados = path.join(__dirname, "../data");
     const nomeArquivo = `${new Date().getFullYear()}.csv`;
@@ -167,6 +164,11 @@ async function listarDadosFuncionario(req, res) {
 
         // Função auxiliar para calcular a duração em horas
         function calcularDuracaoEmHoras(inicio, fim) {
+            // Se ambos os horários forem 00:00, consideramos como um registro especial
+            if (inicio === '00:00' && fim === '00:00') {
+                return 1; // Retorna 1 hora como padrão para cálculo de média
+            }
+
             if (!inicio || !fim || inicio === 'N/A' || fim === 'N/A') return 0;
             
             const [horaInicio, minInicio] = inicio.split(':').map(Number);
@@ -181,37 +183,21 @@ async function listarDadosFuncionario(req, res) {
             return duracaoEmMinutos / 60; // Converte para horas
         }
 
-        // Função para verificar se uma data está dentro do período
-        function estaNoPeriodo(data) {
-            if (!dataInicio && !dataFim) return true;
-            
-            const [dia, mes] = data.split('/').map(Number);
-            
-            if (dataInicio) {
-                const [diaInicio, mesInicio] = dataInicio.split('/').map(Number);
-                if (mes < mesInicio || (mes === mesInicio && dia < diaInicio)) return false;
-            }
-            
-            if (dataFim) {
-                const [diaFim, mesFim] = dataFim.split('/').map(Number);
-                if (mes > mesFim || (mes === mesFim && dia > diaFim)) return false;
-            }
-            
-            return true;
-        }
-
         // Filtra registros do funcionário e mapeia para o formato desejado
         const registrosMapeados = registros
-            .filter((registro) => registro[0] === funcionario && estaNoPeriodo(registro[5]))
-            .map((registro) => ({
-                Data: registro[5] || "N/A",
-                Funcao: registro[1] || "N/A",
-                Inicio: registro[2] || "N/A",
-                Fim: registro[3] || "N/A",
-                Quantidade: parseInt(registro[4], 10) || 0,
-                DuracaoHoras: calcularDuracaoEmHoras(registro[2], registro[3])
-            }))
-            .filter(registro => registro.DuracaoHoras > 0);
+            .filter((registro) => registro[0] === funcionario)
+            .map((registro) => {
+                const duracao = calcularDuracaoEmHoras(registro[2], registro[3]);
+                return {
+                    Data: registro[5] || "N/A",
+                    Funcao: registro[1] || "N/A",
+                    Inicio: registro[2] || "N/A",
+                    Fim: registro[3] || "N/A",
+                    Quantidade: parseInt(registro[4], 10) || 0,
+                    DuracaoHoras: duracao,
+                    RegistroEspecial: registro[2] === '00:00' && registro[3] === '00:00'
+                };
+            });
 
         // Extrai as funções únicas
         const funcoesUnicas = [...new Set(registrosMapeados.map(r => r.Funcao))];
@@ -221,23 +207,30 @@ async function listarDadosFuncionario(req, res) {
         const totaisPorFuncao = funcoesUnicas.map(funcao => {
             const registrosDaFuncao = registrosMapeados.filter(r => r.Funcao === funcao);
             
-            // Calcula produção por hora para cada registro
-            const producoesHora = registrosDaFuncao.map(r => ({
-                producaoHora: r.Quantidade / r.DuracaoHoras,
-                quantidade: r.Quantidade,
-                duracao: r.DuracaoHoras
-            }));
+            // Calcula produção por hora para cada registro, excluindo registros especiais da média
+            const producoesHora = registrosDaFuncao
+                .filter(r => !r.RegistroEspecial)
+                .map(r => ({
+                    producaoHora: r.Quantidade / r.DuracaoHoras,
+                    quantidade: r.Quantidade,
+                    duracao: r.DuracaoHoras
+                }));
 
             const total = registrosDaFuncao.reduce((acc, r) => acc + r.Quantidade, 0);
-            const totalHoras = registrosDaFuncao.reduce((acc, r) => acc + r.DuracaoHoras, 0);
+            const totalHoras = registrosDaFuncao
+                .filter(r => !r.RegistroEspecial)
+                .reduce((acc, r) => acc + r.DuracaoHoras, 0);
             
-            // Média das produções por hora - arredondada para inteiro
-            const mediaProducaoHora = Math.round(producoesHora.reduce((acc, p) => acc + p.producaoHora, 0) / producoesHora.length);
+            // Média das produções por hora (apenas para registros não especiais)
+            const mediaProducaoHora = producoesHora.length > 0 
+                ? Math.round(producoesHora.reduce((acc, p) => acc + p.producaoHora, 0) / producoesHora.length)
+                : 0;
 
             return {
                 funcao,
                 total,
                 quantidade_registros: registrosDaFuncao.length,
+                registros_sem_tempo: registrosDaFuncao.filter(r => r.RegistroEspecial).length,
                 total_horas: Number(totalHoras.toFixed(2)),
                 media_por_hora: mediaProducaoHora
             };

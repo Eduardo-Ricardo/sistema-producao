@@ -137,10 +137,14 @@ export function preencherTabelaFuncionario(dados) {
         // Adicionar os registros do dia
         grupo.registros.forEach((registro) => {
             const row = document.createElement("tr");
+            // Verifica se é um registro sem horário marcado
+            const registroSemHora = registro.Inicio === '00:00' && registro.Fim === '00:00';
+            const horarioStyle = registroSemHora ? 'color: #6c757d; font-style: italic;' : '';
+            
             row.innerHTML = `
                 <td>${registro.Funcao}</td>
-                <td>${registro.Inicio}</td>
-                <td>${registro.Fim}</td>
+                <td style="${horarioStyle}">${registroSemHora ? 'Sem horário' : registro.Inicio}</td>
+                <td style="${horarioStyle}">${registroSemHora ? 'Sem horário' : registro.Fim}</td>
                 <td>${registro.Quantidade}</td>
             `;
             tbody.appendChild(row);
@@ -183,12 +187,19 @@ export function preencherFuncoesUnicas(funcoes) {
     funcoes.forEach(funcao => {
         const funcaoElement = document.createElement("div");
         funcaoElement.className = "resumo-item";
+        
+        // Verifica se existem registros sem tempo
+        const temRegistrosSemTempo = funcao.registros_sem_tempo > 0;
+        const mediaTexto = temRegistrosSemTempo 
+            ? `${funcao.media_por_hora}/h (${funcao.registros_sem_tempo} reg. sem horário)`
+            : `${funcao.media_por_hora}/h`;
+
         funcaoElement.innerHTML = `
             <h3>${funcao.funcao}</h3>
             <div class="funcao-detalhes">
                 <p>Total Produzido: <span>${funcao.total}</span></p>
                 <p>Horas Trabalhadas: <span>${funcao.total_horas}</span></p>
-                <p>Média/Hora: <span>${funcao.media_por_hora}/h</span></p>
+                <p>Média/Hora: <span>${mediaTexto}</span></p>
                 <p>Registros: <span>${funcao.quantidade_registros}</span></p>
             </div>
         `;
