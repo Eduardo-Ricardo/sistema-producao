@@ -42,9 +42,10 @@
 
           <div class="form-group">
             <label for="employeeRole" class="form-label">Função:</label>
-            <select id="employeeRole" name="employeeRole" class="form-control" required>
-              <option value="">Selecione uma função</option>
-            </select>
+            <input list="funcoes" id="employeeRole" name="employeeRole" class="form-control" placeholder="Selecione ou digite a função" required>
+            <datalist id="funcoes">
+              <!-- As opções serão preenchidas dinamicamente via JavaScript -->
+            </datalist>
             <button type="button" id="adicionarFuncao" class="btn btn-primary m-2">Adicionar Função</button>
           </div>
 

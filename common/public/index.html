@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sistema de Gestão</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <body>
   <nav class="nav">
@@ -21,8 +22,105 @@
       <div class="card-header">
         <h1>Bem-vindo ao Sistema de Gestão</h1>
       </div>
+      <div class="server-control">
+        <button id="startServer" class="btn btn-primary">
+          <i class="fas fa-power-off"></i>
+          Iniciar Servidor
+        </button>
+        <p id="serverStatus" class="server-status">Status do Servidor: Verificando...</p>
+        <div id="serverMessage" class="server-message" style="display: none;">
+          <p>Para iniciar o servidor manualmente:</p>
+          <ol>
+            <li>Abra o Explorador de Arquivos</li>
+            <li>Navegue até a pasta do sistema</li>
+            <li>Execute o arquivo "IniciarServidor.bat"</li>
+          </ol>
+        </div>
+      </div>
       <p class="p-2">Escolha uma das opções acima para navegar.</p>
     </div>
   </div>
+
+  <script>
+    let serverRunning = false;
+    let checkCount = 0;
+    const MAX_CHECKS = 3;
+
+    // Função para verificar o status do servidor
+    async function checkServerStatus() {
+      const statusElement = document.getElementById('serverStatus');
+      const startButton = document.getElementById('startServer');
+      const serverMessage = document.getElementById('serverMessage');
+      
+      try {
+        const response = await fetch('http://localhost:3000/api/server-status', {
+          mode: 'no-cors' // Tenta conexão mesmo sem CORS
+        });
+        
+        serverRunning = true;
+        statusElement.textContent = 'Status do Servidor: Conectado';
+        statusElement.style.color = '#28a745';
+        startButton.disabled = true;
+        startButton.style.opacity = '0.7';
+        serverMessage.style.display = 'none';
+        
+        // Se o servidor está rodando, atualiza a página para carregar o conteúdo
+        if (window.location.href.includes('file://')) {
+          window.location.href = 'http://localhost:3000';
+        }
+      } catch (error) {
+        checkCount++;
+        if (checkCount >= MAX_CHECKS) {
+          statusElement.textContent = 'Status do Servidor: Desconectado';
+          statusElement.style.color = '#dc3545';
+          startButton.disabled = false;
+          startButton.style.opacity = '1';
+          serverMessage.style.display = 'block';
+        }
+      }
+    }
+
+    // Função para tentar iniciar o servidor
+    async function startServer() {
+      const statusElement = document.getElementById('serverStatus');
+      const startButton = document.getElementById('startServer');
+      const serverMessage = document.getElementById('serverMessage');
+      
+      try {
+        statusElement.textContent = 'Status do Servidor: Tentando iniciar...';
+        statusElement.style.color = '#ffc107';
+        startButton.disabled = true;
+
+        // Se o servidor não estiver rodando, mostra as instruções manuais
+        if (!serverRunning) {
+          serverMessage.style.display = 'block';
+          return;
+        }
+
+        const response = await fetch('http://localhost:3000/api/start-server', {
+          method: 'POST'
+        });
+
+        if (response.ok) {
+          checkCount = 0;
+          setTimeout(checkServerStatus, 2000);
+        }
+      } catch (error) {
+        statusElement.textContent = 'Status do Servidor: Desconectado';
+        statusElement.style.color = '#dc3545';
+        startButton.disabled = false;
+        serverMessage.style.display = 'block';
+      }
+    }
+
+    // Adiciona o evento de clique ao botão
+    document.getElementById('startServer').addEventListener('click', startServer);
+
+    // Verifica o status do servidor quando a página carrega
+    checkServerStatus();
+
+    // Verifica o status periodicamente (a cada 5 segundos)
+    setInterval(checkServerStatus, 5000);
+  </script>
 </body>
 </html>

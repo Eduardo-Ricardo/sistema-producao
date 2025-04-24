@@ -25,37 +25,38 @@ export function atualizarTabela(dados) {
 
 // Atualiza o dropdown de funções na tela registrar.html
 export function atualizarDropdownFuncoes(machineMap) {
-    console.log("[LOG] Atualizando dropdown de funções com machineMap:", machineMap);
+    console.log("[LOG] Atualizando lista de funções...");
 
-    const employeeRoleSelect = document.getElementById("employeeRole");
-    if (!employeeRoleSelect) {
-        console.warn("[AVISO] Dropdown de funções não encontrado.");
+    const datalist = document.getElementById("funcoes");
+    if (!datalist) {
+        console.warn("[AVISO] Datalist de funções não encontrado.");
         return;
     }
 
-    employeeRoleSelect.innerHTML = ""; // Limpa os dados antigos
+    // Limpa as opções existentes
+    datalist.innerHTML = '';
 
+    // Adiciona as funções do machineMap
     Object.keys(machineMap).forEach(funcao => {
-        let option = document.createElement("option");
-        option.value = funcao; // O valor será a função
-        option.innerText = funcao; // O texto visível será a função
-        employeeRoleSelect.appendChild(option);
+        const option = document.createElement("option");
+        option.value = funcao;
+        datalist.appendChild(option);
     });
 
-    console.log("[LOG] Dropdown de funções atualizado com sucesso.");
+    console.log("[LOG] Lista de funções atualizada com sucesso.");
 }
 
 // Atualiza o campo de máquina ao selecionar o dropdown na tela registrar.html
 export function atualizarCampoMaquina(machineMap) {
     console.log("[LOG] Configurando EventListener para atualizar o campo de máquina...");
 
-    const employeeRoleSelect = document.getElementById("employeeRole");
-    if (!employeeRoleSelect) {
-        console.warn("[AVISO] Dropdown de funções não encontrado.");
+    const employeeRoleInput = document.getElementById("employeeRole");
+    if (!employeeRoleInput) {
+        console.warn("[AVISO] Input de funções não encontrado.");
         return;
     }
 
-    employeeRoleSelect.addEventListener("change", function () {
+    employeeRoleInput.addEventListener("input", function () {
         const selectedFunction = this.value;
         console.log("[LOG] Função selecionada:", selectedFunction);
 

@@ -93,3 +93,16 @@ document.getElementById("productionForm")?.addEventListener("submit", async func
         limparCamposFormulario();
     }
 });
+
+document.getElementById('employeeRole').addEventListener('input', function(e) {
+    const funcao = e.target.value;
+    const machineInput = document.getElementById('machine');
+    
+    // Atualiza o campo máquina baseado na função selecionada
+    fetch('/data/machineMap.json')
+        .then(response => response.json())
+        .then(machineMap => {
+            machineInput.value = machineMap[funcao] || '';
+        })
+        .catch(error => console.error('Erro ao carregar mapeamento de máquinas:', error));
+});
