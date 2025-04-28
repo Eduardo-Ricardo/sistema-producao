@@ -1,7 +1,7 @@
 {
   "1_Frente": {
     "Fechar_Fundilho": "Overlock",
-    "Acabamento_Bolso_Frontal": "Overlock",
+    "Chuleia_Bolso_Frontal": "Overlock",
     "Reforco_Fundilho": "Prespontadeira",
     "Barra_Bolso_Frontal": "Prespontadeira",
     "Aplicar_Bolso_Frontal": "Prespontadeira",
@@ -12,7 +12,7 @@
     "Presponto_Pala_Traseira": "Prespontadeira",
     "Uniao_Paineis_Traseiros": "Interlock",
     "Presponto_Costura_Central": "Prespontadeira",
-    "Acabamento_Bolso_Traseiro": "Overlock",
+    "Chuleia_Bolso_Traseiro": "Overlock",
     "Aplicar_Bolso_Traseiro": "Prespontadeira"
   },
   "3_Montagem": {
@@ -20,7 +20,7 @@
     "Presponto_Laterais": "Prespontadeira"
   },
   "4_Bolso_Lateral": {
-    "Acabamento_Bolso_Lateral": "Overlock",
+    "Chuleia_Bolso_Lateral": "Overlock",
     "Costura_Lapelas": "Reta",
     "Virar_Lapela": "Manual",
     "Presponto_Lapela": "Prespontadeira",
