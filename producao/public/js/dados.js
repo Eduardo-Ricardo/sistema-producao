@@ -34,6 +34,20 @@ export async function carregarMachineMap() {
         const machineMap = await resposta.json();
         console.log("[LOG] MachineMap carregado com sucesso:", machineMap);
 
+        // Se o machineMap estiver vazio ou não tiver a estrutura esperada, inicializa com a estrutura básica
+        if (!machineMap || Object.keys(machineMap).length === 0) {
+            return {
+                "1_Frente": {},
+                "2_Traseira": {},
+                "3_Montagem": {},
+                "4_Bolso_Lateral": {},
+                "5_Costura_Interna": {},
+                "6_Barras": {},
+                "7_Cos_Elastico": {},
+                "8_Acabamento": {}
+            };
+        }
+
         return machineMap;
     } catch (error) {
         console.error("[ERRO] Falha ao carregar machineMap:", error);
@@ -42,7 +56,6 @@ export async function carregarMachineMap() {
 }
 
 // Salva o machineMap no servidor
-// O machineMap deve ser um objeto onde as chaves são funções e os valores são máquinas
 export async function salvarMachineMap(machineMap) {
     console.log("[LOG] Iniciando salvamento do machineMap:", machineMap);
 
@@ -66,7 +79,7 @@ export async function salvarMachineMap(machineMap) {
     }
 }
 
-// Faz uma requisição ao backend para buscar os dados do funcionário na página ficha-funcionario.html
+// Faz uma requisição ao backend para buscar os dados do funcionário
 export async function carregarDadosFuncionarioBackend(funcionario, dataInicio, dataFim) {
     console.log(`[LOG] Iniciando carregamento dos dados do funcionário: ${funcionario}`);
     console.log(`[LOG] Período: ${dataInicio || 'início'} até ${dataFim || 'fim'}`);
@@ -115,7 +128,7 @@ export async function carregarNomesFuncionariosBackend() {
 
 // Envia os dados de produção para o servidor
 export async function enviarDadosProducao(dados) {
-    console.log("[LOG] Dados a serem enviados para o servidor:", dados); // Adicione este log
+    console.log("[LOG] Dados a serem enviados para o servidor:", dados);
 
     try {
         const resposta = await fetch("/producao/salvar", {

@@ -6,6 +6,9 @@ const {
     getMachineMap,
     listarDadosFuncionario,
     listarNomesFuncionarios,
+    getLotesRemessas,
+    addRemessa,
+    addLote
 } = require("../controllers/producaoController");
 
 const router = express.Router();
@@ -27,6 +30,11 @@ router.get("/dados-funcionario", listarDadosFuncionario);
 
 // Rota para listar os nomes dos funcionários
 router.get("/nomes-funcionarios", listarNomesFuncionarios);
+
+// Novas rotas para remessas e lotes
+router.get("/remessas", getLotesRemessas);
+router.post("/remessas", addRemessa);
+router.post("/remessas/:remessaId/lotes", addLote);
 
 // Rota de teste
 router.get("/teste", (req, res) => {

@@ -13,6 +13,7 @@
       <li><a href="/producao/html/registrar.html" class="nav-link">Registrar</a></li>
       <li><a href="/producao/html/visualizar.html" class="nav-link">Visualizar</a></li>
       <li><a href="/producao/html/ficha-funcionario.html" class="nav-link">Funcionários</a></li>
+      <li><a href="/producao/html/gerenciar-lotes.html" class="nav-link">Lotes</a></li>
       <li><a href="/fluxo-caixa/caixa.html" class="nav-link">Caixa</a></li>
     </ul>
   </nav>
@@ -71,6 +72,7 @@
       } catch (error) {
         checkCount++;
         if (checkCount >= MAX_CHECKS) {
+          serverRunning = false;
           statusElement.textContent = 'Status do Servidor: Desconectado';
           statusElement.style.color = '#dc3545';
           startButton.disabled = false;
@@ -103,24 +105,21 @@
 
         if (response.ok) {
           checkCount = 0;
-          setTimeout(checkServerStatus, 2000);
+          checkServerStatus();
         }
       } catch (error) {
-        statusElement.textContent = 'Status do Servidor: Desconectado';
-        statusElement.style.color = '#dc3545';
-        startButton.disabled = false;
         serverMessage.style.display = 'block';
       }
     }
 
-    // Adiciona o evento de clique ao botão
+    // Verificar status do servidor a cada 2 segundos
+    setInterval(checkServerStatus, 2000);
+
+    // Adicionar evento de clique ao botão
     document.getElementById('startServer').addEventListener('click', startServer);
 
-    // Verifica o status do servidor quando a página carrega
+    // Verificar status inicial
     checkServerStatus();
-
-    // Verifica o status periodicamente (a cada 5 segundos)
-    setInterval(checkServerStatus, 5000);
   </script>
 </body>
 </html>

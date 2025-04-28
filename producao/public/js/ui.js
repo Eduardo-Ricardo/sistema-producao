@@ -36,11 +36,15 @@ export function atualizarDropdownFuncoes(machineMap) {
     // Limpa as opções existentes
     datalist.innerHTML = '';
 
-    // Adiciona as funções do machineMap
-    Object.keys(machineMap).forEach(funcao => {
-        const option = document.createElement("option");
-        option.value = funcao;
-        datalist.appendChild(option);
+    // Itera sobre as seções do machineMap
+    Object.entries(machineMap).forEach(([secao, funcoes]) => {
+        // Para cada seção, adiciona suas funções ao datalist
+        Object.keys(funcoes).forEach(funcao => {
+            const option = document.createElement("option");
+            option.value = funcao;
+            option.dataset.secao = secao; // Armazena a seção para referência
+            datalist.appendChild(option);
+        });
     });
 
     console.log("[LOG] Lista de funções atualizada com sucesso.");
@@ -60,7 +64,15 @@ export function atualizarCampoMaquina(machineMap) {
         const selectedFunction = this.value;
         console.log("[LOG] Função selecionada:", selectedFunction);
 
-        const machine = machineMap[selectedFunction] || "Máquina não especificada";
+        // Procura a função em todas as seções do machineMap
+        let machine = "Máquina não especificada";
+        for (const [secao, funcoes] of Object.entries(machineMap)) {
+            if (selectedFunction in funcoes) {
+                machine = funcoes[selectedFunction];
+                break;
+            }
+        }
+
         const machineInput = document.getElementById("machine");
         if (machineInput) {
             machineInput.value = machine;
@@ -90,8 +102,31 @@ export function adicionarOpcaoAoDropdown(funcao) {
 }
 
 // Captura nova função e máquina do usuário e retorna um objeto com essas informações
-export function capturarNovaFuncaoEMaquina() {
+export function capturarNovaFuncaoEMaquina(machineMap) {
     console.log("[LOG] Iniciando captura de nova função e máquina...");
+
+    // Lista as seções disponíveis
+    const secoes = Object.keys(machineMap);
+    let secaoSelecionada = prompt(
+        `Selecione a seção para a nova função (digite o número):\n` +
+        secoes.map((secao, index) => `${index + 1}. ${secao}`).join('\n')
+    );
+
+    // Validação da seção
+    if (!secaoSelecionada) {
+        console.warn("[AVISO] Nenhuma seção selecionada.");
+        alert("É necessário selecionar uma seção.");
+        return null;
+    }
+
+    // Converte a entrada do usuário para o nome da seção
+    const indexSecao = parseInt(secaoSelecionada) - 1;
+    if (isNaN(indexSecao) || indexSecao < 0 || indexSecao >= secoes.length) {
+        console.warn("[AVISO] Seção inválida selecionada.");
+        alert("Seção inválida selecionada.");
+        return null;
+    }
+    secaoSelecionada = secoes[indexSecao];
 
     const novaFuncao = prompt("Digite o nome da nova função:");
     if (!novaFuncao) {
@@ -101,7 +136,6 @@ export function capturarNovaFuncaoEMaquina() {
     }
 
     let novaMaquina = null;
-
     while (!novaMaquina) {
         novaMaquina = prompt(`Digite o nome da máquina para a função "${novaFuncao}":\nOu deixe vazio para usar "Máquina não especificada".`);
         if (novaMaquina === null) {
@@ -113,8 +147,12 @@ export function capturarNovaFuncaoEMaquina() {
         }
     }
 
-    console.log("[LOG] Nova função e máquina capturadas:", { novaFuncao, novaMaquina });
-    return { [novaFuncao]: novaMaquina };
+    console.log("[LOG] Nova função e máquina capturadas:", { secaoSelecionada, novaFuncao, novaMaquina });
+    return {
+        secao: secaoSelecionada,
+        funcao: novaFuncao,
+        maquina: novaMaquina
+    };
 }
 
 // Atualiza a tabela de dados do funcionário na página ficha-funcionario.html

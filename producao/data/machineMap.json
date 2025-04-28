@@ -1,39 +1,47 @@
 {
-  "Juntar Partes": "Overlock",
-  "Pregar Bolsos": "Reta",
-  "Prespontar": "Reta",
-  "Pregar bolso lateral": "Overlock",
-  "Virar elástico": "Interlock",
-  "Lapela": "Máquina não especificada",
-  "Frente": "Overlock",
-  "Bolso traseiro": "Máquina não especificada",
-  "Pala": "Máquina não especificada",
-  "Montar frente": "Máquina não especificada",
-  "Prespontar lateral": "Máquina não especificada",
-  "Bolso lateral": "Máquina não especificada",
-  "Bolso na perna": "Máquina não especificada",
-  "Barra": "Máquina não especificada",
-  "Barra e etiqueta": "Máquina não especificada",
-  "Etiqueta": "Máquina não especificada",
-  "Faixa na perna": "Máquina não especificada",
-  "Barra de bolso traseiro": "Máquina não especificada",
-  "Traseira": "Máquina não especificada",
-  "Presponto pala": "Máquina não especificada",
-  "Prespontar traseira": "Máquina não especificada",
-  "Prespontar Frente": "Prespontadeira",
-  "Gancho \"J\"": "Prespontadeira",
-  "Fechar Pala": "Interlock",
-  "Fechar Lateral": "Interlock",
-  "Fechar Frente": "Overlock",
-  "Bolso traseiro (Overlock)": "Overlock",
-  "Fechar Traseira": "Overlock",
-  "Fechar Pala Frente": "Interlock",
-  "Fechar Pala Traseira": "Interlock",
-  "Fazer barra do Bolso, Pregar e Prespontar": "Prespontadeira",
-  "Casear Botão": "Caseadeira",
-  "Prespontar Pala Frente": "Prespontadeira",
-  "Fazer Barra Perna": "Reta",
-  "Fechar entre pernas": "Interlock",
-  "Prespontar Lapela": "Prespontadeira",
-  "Prespontar traseira e pregar bolso": "Prespontadeira"
+  "1_Frente": {
+    "Fechar_Fundilho": "Overlock",
+    "Acabamento_Bolso_Frontal": "Overlock",
+    "Reforco_Fundilho": "Prespontadeira",
+    "Barra_Bolso_Frontal": "Prespontadeira",
+    "Aplicar_Bolso_Frontal": "Prespontadeira",
+    "Costura_Pala_Frontal": "Overlock"
+  },
+  "2_Traseira": {
+    "Costura_Pala_Traseira": "Interlock",
+    "Presponto_Pala_Traseira": "Prespontadeira",
+    "Uniao_Paineis_Traseiros": "Interlock",
+    "Presponto_Costura_Central": "Prespontadeira",
+    "Acabamento_Bolso_Traseiro": "Overlock",
+    "Aplicar_Bolso_Traseiro": "Prespontadeira"
+  },
+  "3_Montagem": {
+    "Fechar_Laterais": "Interlock",
+    "Presponto_Laterais": "Prespontadeira"
+  },
+  "4_Bolso_Lateral": {
+    "Acabamento_Bolso_Lateral": "Overlock",
+    "Costura_Lapelas": "Reta",
+    "Virar_Lapela": "Manual",
+    "Presponto_Lapela": "Prespontadeira",
+    "Acabamento_Base_Lapela": "Overlock",
+    "Aplicar_Conjunto_Lateral": "Prespontadeira"
+  },
+  "5_Costura_Interna": {
+    "Fechar_Entrepernas": "Interlock"
+  },
+  "6_Barras": {
+    "Acabamento_Boca_Pernas": "Overlock",
+    "Barra_Final_Pernas": "Reta"
+  },
+  "7_Cos_Elastico": {
+    "Aplicar_Elastico": "Interlock",
+    "Costura_Etiqueta": "Reta",
+    "Acabamento_Elastico": "Elastiqueira"
+  },
+  "8_Acabamento": {
+    "Limpeza": "Manual",
+    "Revisao": "Manual",
+    "Passadoria": "Manual"
+  }
 }

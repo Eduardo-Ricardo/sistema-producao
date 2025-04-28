@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Lotes</title>
+    <link rel="stylesheet" href="/style.css">
+    <style>
+        .remessa-row {
+            background-color: #f8f9fa;
+        }
+        .table-sm {
+            margin: 0;
+            background-color: white;
+        }
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+            min-width: 30px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <ul class="nav-list">
+            <li><a href="/" class="nav-link">Início</a></li>
+            <li><a href="/producao/html/registrar.html" class="nav-link">Registrar Produção</a></li>
+            <li><a href="/producao/html/visualizar.html" class="nav-link">Visualizar Registros</a></li>
+            <li><a href="/producao/html/ficha-funcionario.html" class="nav-link">Funcionários</a></li>
+            <li><a href="/producao/html/gerenciar-lotes.html" class="nav-link">Lotes</a></li>
+            <li><a href="/fluxo-caixa/caixa.html" class="nav-link">Fluxo de Caixa</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1 class="m-3">Gerenciar Remessas e Lotes</h1>
+
+        <div class="grid-2">
+            <!-- Formulário de Remessa -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Nova Remessa</h2>
+                </div>
+                <form id="remessaForm" class="form-container">
+                    <div class="form-group">
+                        <label for="descricaoRemessa" class="form-label">Descrição:</label>
+                        <input type="text" id="descricaoRemessa" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="dataRecebimento" class="form-label">Data:</label>
+                        <input type="text" id="dataRecebimento" class="form-control" pattern="\d{2}/\d{2}" placeholder="DD/MM" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Registrar Remessa</button>
+                </form>
+            </div>
+
+            <!-- Formulário de Lote -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Novo Lote</h2>
+                </div>
+                <form id="loteForm" class="form-container">
+                    <div class="form-group">
+                        <label for="remessaSelect" class="form-label">Remessa:</label>
+                        <select id="remessaSelect" class="form-control" required>
+                            <option value="">Selecione uma remessa</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="tamanho" class="form-label">Tamanho:</label>
+                        <select id="tamanho" class="form-control" required>
+                            <option value="">Selecione o tamanho</option>
+                            <option value="P">P</option>
+                            <option value="M">M</option>
+                            <option value="G">G</option>
+                            <option value="GG">GG</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="quantidade" class="form-label">Quantidade:</label>
+                        <input type="number" id="quantidade" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-success">Adicionar Lote</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Tabela de Remessas -->
+        <div class="card m-3">
+            <div class="card-header">
+                <h2>Remessas Registradas</h2>
+            </div>
+            <div class="table-container">
+                <table id="tabelaRemessas" class="table">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Descrição</th>
+                            <th>Total por Tamanho</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dados serão inseridos dinamicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="../js/gerenciar-lotes.js"></script>
+</body>
+</html>

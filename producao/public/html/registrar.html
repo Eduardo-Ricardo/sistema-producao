@@ -5,83 +5,368 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Marcação de Produção Diária</title>
   <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    .section-card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: var(--shadow-sm);
+      padding: var(--spacing-lg);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .section-title {
+      color: var(--primary-color);
+      border-bottom: 2px solid var(--primary-color);
+      padding-bottom: var(--spacing-sm);
+      margin-bottom: var(--spacing-lg);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+
+    .form-flex {
+      display: flex;
+      gap: var(--spacing-lg);
+      flex-wrap: wrap;
+    }
+
+    .form-col {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .input-group .icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--primary-color);
+      pointer-events: none;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .input-group input,
+    .input-group select {
+      padding-left: 35px;
+      width: 100%;
+    }
+
+    .input-group label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 5px;
+    }
+
+    .input-group label i {
+      color: var(--primary-color);
+    }
+
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      margin-left: 5px;
+      color: #6c757d;
+    }
+
+    .tooltip:hover::after {
+      content: attr(data-tip);
+      position: absolute;
+      background: #333;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      white-space: nowrap;
+      z-index: 1;
+      left: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    #ultimoRegistro {
+      background: white;
+      border-radius: 8px;
+      box-shadow: var(--shadow-sm);
+      padding: var(--spacing-lg);
+    }
+
+    .registro-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--spacing-md);
+      margin-top: var(--spacing-md);
+    }
+
+    .registro-item {
+      padding: var(--spacing-md);
+      background: #f8f9fa;
+      border-radius: 4px;
+    }
+
+    .registro-item strong {
+      color: var(--primary-color);
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .funcoes-lista {
+      max-height: 200px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 8px;
+      margin-top: 8px;
+    }
+
+    .funcao-adicional {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      padding: 8px;
+      background: #f8f9fa;
+      border-radius: 4px;
+    }
+
+    .funcao-adicional select {
+      flex: 1;
+    }
+
+    .funcao-adicional button {
+      background: none;
+      border: none;
+      color: #dc3545;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 4px;
+    }
+
+    .funcao-adicional button:hover {
+      background: #fee2e2;
+    }
+
+    .funcao-quantidade {
+      margin-bottom: 16px;
+      padding: 12px;
+      border: 1px solid #e9ecef;
+      border-radius: 4px;
+      background: #f8f9fa;
+    }
+
+    .quantidade-header {
+      font-weight: bold;
+      color: var(--primary-color);
+      margin-bottom: 8px;
+    }
+  </style>
 </head>
 <body>
   <nav class="nav">
     <ul class="nav-list">
-      <li><a href="/" class="nav-link">Início</a></li>
-      <li><a href="/producao/html/registrar.html" class="nav-link">Registrar Produção</a></li>
-      <li><a href="/producao/html/visualizar.html" class="nav-link">Visualizar Registros</a></li>
-      <li><a href="/fluxo-caixa/caixa.html" class="nav-link">Fluxo de Caixa</a></li>
+      <li><a href="/" class="nav-link"><i class="fas fa-home"></i> Início</a></li>
+      <li><a href="/producao/html/registrar.html" class="nav-link"><i class="fas fa-plus-circle"></i> Registrar Produção</a></li>
+      <li><a href="/producao/html/visualizar.html" class="nav-link"><i class="fas fa-table"></i> Visualizar Registros</a></li>
+      <li><a href="/fluxo-caixa/caixa.html" class="nav-link"><i class="fas fa-dollar-sign"></i> Fluxo de Caixa</a></li>
+      <li><a href="/producao/html/gerenciar-lotes.html" class="nav-link"><i class="fas fa-boxes"></i> Gerenciar Lotes</a></li>
     </ul>
   </nav>
 
   <div class="container">
-    <h1 class="m-3">Marcação de Produção Diária</h1>
+    <h1 class="section-title m-3">
+      <i class="fas fa-clipboard-list"></i>
+      Marcação de Produção Diária
+    </h1>
     
     <div class="grid-2">
       <!-- Formulário -->
-      <div class="card">
-        <form id="productionForm" class="form-container">
+      <form id="productionForm" class="form-container">
+        <!-- Seção de Identificação -->
+        <div class="section-card">
+          <h2 class="section-title">
+            <i class="fas fa-user"></i>
+            Identificação
+          </h2>
+          <div class="form-flex">
+            <div class="input-group">
+              <label for="employeeName" class="form-label">
+                <i class="fas fa-user"></i> Nome:
+              </label>
+              <input list="nomes" id="employeeName" name="employeeName" class="form-control" placeholder="Selecione ou digite o nome" required>
+              <datalist id="nomes">
+                <option value="Luiz">
+                <option value="Franciele">
+                <option value="Deyse">
+                <option value="Nathally">
+                <option value="Leilaine">
+                <option value="Talita">
+                <option value="Wsley">
+                <option value="Inês">
+                <option value="Linda">
+                <option value="Suzane">
+              </datalist>
+            </div>
+          </div>
+        </div>
+
+        <!-- Seção de Função -->
+        <div class="section-card">
+          <h2 class="section-title">
+            <i class="fas fa-tasks"></i>
+            Funções e Máquina
+            <span class="tooltip" data-tip="Selecione uma ou mais funções da mesma máquina">
+              <i class="fas fa-question-circle"></i>
+            </span>
+          </h2>
+          <div class="form-flex">
+            <div class="form-col">
+              <div class="input-group">
+                <label for="employeeRole" class="form-label">
+                  <i class="fas fa-cog"></i> Função Principal:
+                </label>
+                <input list="funcoes" id="employeeRole" name="employeeRole" class="form-control" placeholder="Selecione ou digite a função" required>
+                <datalist id="funcoes">
+                  <!-- Preenchido via JavaScript -->
+                </datalist>
+              </div>
+              <div class="input-group">
+                <label class="form-label">
+                  <i class="fas fa-list"></i> Funções Adicionais:
+                  <span class="tooltip" data-tip="Selecione funções adicionais da mesma máquina">
+                    <i class="fas fa-question-circle"></i>
+                  </span>
+                </label>
+                <div id="funcoes-adicionais" class="funcoes-lista">
+                  <!-- Funções adicionais serão inseridas aqui -->
+                </div>
+                <button type="button" id="adicionarFuncaoExtra" class="btn btn-outline-primary mt-2">
+                  <i class="fas fa-plus-circle"></i> Adicionar Função Extra
+                </button>
+              </div>
+              <button type="button" id="adicionarFuncao" class="btn btn-primary m-2">
+                <i class="fas fa-plus"></i> Nova Função
+              </button>
+            </div>
+            <div class="form-col">
+              <div class="input-group">
+                <label for="machine" class="form-label">
+                  <i class="fas fa-wrench"></i> Máquina:
+                </label>
+                <input type="text" id="machine" name="machine" class="form-control" readonly>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Seção de Tempo -->
+        <div class="section-card">
+          <h2 class="section-title">
+            <i class="fas fa-clock"></i>
+            Período
+          </h2>
+          <div class="form-flex">
+            <div class="form-col">
+              <div class="input-group">
+                <label for="startTime" class="form-label">
+                  <i class="fas fa-play"></i> Início:
+                </label>
+                <input type="time" id="startTime" name="startTime" class="form-control">
+              </div>
+            </div>
+            <div class="form-col">
+              <div class="input-group">
+                <label for="endTime" class="form-label">
+                  <i class="fas fa-stop"></i> Fim:
+                </label>
+                <input type="time" id="endTime" name="endTime" class="form-control">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Seção de Produção -->
+        <div class="section-card">
+          <h2 class="section-title">
+            <i class="fas fa-box"></i>
+            Produção
+            <span class="tooltip" data-tip="Informe a quantidade para cada função">
+              <i class="fas fa-question-circle"></i>
+            </span>
+          </h2>
           <div class="form-group">
-            <label for="employeeName" class="form-label">Nome:</label>
-            <input list="nomes" id="employeeName" name="employeeName" class="form-control" placeholder="Selecione ou digite o nome" required>
-            <datalist id="nomes">
-              <option value="Luiz">
-              <option value="Franciele">
-              <option value="Deyse">
-              <option value="Nathally">
-              <option value="Leilaine">
-              <option value="Talita">
-              <option value="Wsley">
-              <option value="Inês">
-              <option value="Linda">
-              <option value="Suzane">
-            </datalist>
+            <label class="form-label">Tipo de Entrada:</label>
+            <div class="radio-group">
+              <label for="tipoQuantidade">
+                <input type="radio" id="tipoQuantidade" name="tipoEntrada" value="quantidade" checked>
+                <i class="fas fa-calculator"></i> Quantidade
+              </label>
+              <label for="tipoLote">
+                <input type="radio" id="tipoLote" name="tipoEntrada" value="lote">
+                <i class="fas fa-boxes"></i> Códigos de Lote
+              </label>
+            </div>
           </div>
 
-          <div class="form-group">
-            <label for="employeeRole" class="form-label">Função:</label>
-            <input list="funcoes" id="employeeRole" name="employeeRole" class="form-control" placeholder="Selecione ou digite a função" required>
-            <datalist id="funcoes">
-              <!-- As opções serão preenchidas dinamicamente via JavaScript -->
-            </datalist>
-            <button type="button" id="adicionarFuncao" class="btn btn-primary m-2">Adicionar Função</button>
+          <div id="quantidadeGroup">
+            <div id="quantidades-container">
+              <!-- Container para quantidades de cada função -->
+              <div class="input-group funcao-quantidade" data-funcao="principal">
+                <label for="productionCount" class="form-label">
+                  <i class="fas fa-hashtag"></i> Quantidade da Função Principal:
+                </label>
+                <input type="number" id="productionCount" name="productionCount" class="form-control">
+              </div>
+              <!-- Quantidades adicionais serão inseridas aqui -->
+            </div>
           </div>
 
-          <div class="form-group">
-            <label for="machine" class="form-label">Máquina:</label>
-            <input type="text" id="machine" name="machine" class="form-control" readonly>
+          <div id="loteGroup" class="form-group" style="display: none;">
+            <div class="input-group">
+              <label for="remessaSelect" class="form-label">
+                <i class="fas fa-box"></i> Remessa:
+              </label>
+              <select id="remessaSelect" class="form-control mb-2">
+                <option value="">Selecione a remessa</option>
+              </select>
+            </div>
+            <div class="input-group">
+              <label for="loteCodigos" class="form-label">
+                <i class="fas fa-list"></i> Códigos dos Lotes:
+              </label>
+              <select multiple id="loteCodigos" class="form-control" size="5">
+                <!-- Preenchido via JavaScript -->
+              </select>
+              <small class="form-text"><i class="fas fa-info-circle"></i> Segure CTRL para selecionar múltiplos lotes</small>
+            </div>
           </div>
 
-          <div class="form-group">
-            <label for="startTime" class="form-label">Início da função/atividade (HH:MM):</label>
-            <input type="time" id="startTime" name="startTime" class="form-control">
-          </div>
-
-          <div class="form-group">
-            <label for="endTime" class="form-label">Fim da função/atividade (HH:MM):</label>
-            <input type="time" id="endTime" name="endTime" class="form-control">
-          </div>
-
-          <div class="form-group">
-            <label for="productionCount" class="form-label">Quantidade Produzida:</label>
-            <input type="number" id="productionCount" name="productionCount" class="form-control" required>
-          </div>
-
-          <div class="form-group">
-            <label for="productionDate" class="form-label">Data (DD/MM):</label>
+          <div class="input-group">
+            <label for="productionDate" class="form-label">
+              <i class="fas fa-calendar"></i> Data:
+            </label>
             <input type="text" id="productionDate" name="productionDate" class="form-control" placeholder="DD/MM" pattern="\d{2}/\d{2}" title="Formato DD/MM" required>
           </div>
+        </div>
 
-          <button type="submit" class="btn btn-success">Registrar Produção</button>
-        </form>
-      </div>
+        <button type="submit" class="btn btn-success btn-lg w-100">
+          <i class="fas fa-save"></i> Registrar Produção
+        </button>
+      </form>
 
-      <!-- Painel para exibir o último registro -->
-      <div class="card" id="ultimoRegistro">
-        <h2>Último Registro</h2>
-        <p>Selecione um funcionário para ver os registros.</p>
+      <!-- Painel do Último Registro -->
+      <div id="ultimoRegistro" class="section-card">
+        <h2 class="section-title">
+          <i class="fas fa-history"></i>
+          Último Registro
+        </h2>
+        <div class="registro-info">
+          <p>Selecione um funcionário para ver os registros.</p>
+        </div>
       </div>
     </div>
   </div>

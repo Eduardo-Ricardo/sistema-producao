@@ -6,6 +6,7 @@ const csv = require("csv-parser");
 // Caminho da pasta "data" e arquivos
 const pastaDados = path.join(__dirname, "../data");
 const machineMapPath = path.join(pastaDados, "machineMap.json");
+const lotesRemessasPath = path.join(pastaDados, "lotesRemessas.json");
 
 // Garante que a pasta "data" exista
 function garantirPastaDados() {
@@ -44,27 +45,75 @@ function lerArquivoCSV(caminhoArquivo, opcoesOuCallback) {
 
 // Função para adicionar um registro de produção
 function adicionarProducao(req, res) {
-    garantirPastaDados(); // Garante que a pasta exista antes de acessar o arquivo
+    garantirPastaDados();
 
-    const { employeeName, employeeRole, startTime, endTime, productionCount, productionDate } = req.body;
+    const { employeeName, employeeRole, startTime, endTime, productionCount, productionDate, tipoEntrada, lotes } = req.body;
 
     console.log("[LOG] Dados recebidos para registro:", req.body);
 
-    if (!employeeName || !employeeRole || !startTime || !endTime || !productionCount || !productionDate) {
-        return res.status(400).json({ error: "Preencha todos os campos!" });
+    if (!employeeName || !employeeRole || !productionCount || !productionDate) {
+        return res.status(400).json({ error: "Preencha os campos obrigatórios!" });
     }
 
-    const linha = `${employeeName},${employeeRole},${startTime},${endTime},${productionCount},${productionDate}\n`;
+    let linha;
+    if (tipoEntrada === "lote") {
+        // Se for entrada por lotes, registra os códigos dos lotes na linha
+        const lotesCodigos = lotes.map(lote => `${lote.tamanho}${lote.numero}`).join("+");
+        linha = `${employeeName},${employeeRole},${startTime},${endTime},${lotesCodigos},${productionDate}\n`;
+    } else {
+        // Se for entrada por quantidade, registra normalmente
+        linha = `${employeeName},${employeeRole},${startTime},${endTime},${productionCount},${productionDate}\n`;
+    }
+
     const nomeArquivo = `${new Date().getFullYear()}.csv`;
     const caminhoArquivo = path.join(pastaDados, nomeArquivo);
 
     try {
         fs.appendFileSync(caminhoArquivo, linha);
         console.log("[LOG] Produção registrada com sucesso.");
+        
+        // Se foi registrado por lotes, atualiza as quantidades nos lotes
+        if (tipoEntrada === "lote" && lotes) {
+            atualizarQuantidadesLotes(lotes);
+        }
+
         res.json({ message: "Produção registrada com sucesso!" });
     } catch (error) {
         console.error("[ERRO] Falha ao salvar os dados no arquivo:", error);
         res.status(500).json({ error: "Erro ao salvar os dados!" });
+    }
+}
+
+// Função auxiliar para atualizar as quantidades dos lotes após uso
+function atualizarQuantidadesLotes(lotesUsados) {
+    console.log("[LOG] Atualizando quantidades dos lotes após uso...");
+
+    try {
+        const lotesRemessas = JSON.parse(fs.readFileSync(lotesRemessasPath, "utf8"));
+        let atualizou = false;
+
+        lotesRemessas.remessas.forEach(remessa => {
+            if (remessa.lotes) {
+                remessa.lotes.forEach(lote => {
+                    const loteUsado = lotesUsados.find(l => 
+                        l.tamanho === lote.tamanho && 
+                        l.numero === lote.numero
+                    );
+                    
+                    if (loteUsado) {
+                        lote.quantidade = Math.max(0, lote.quantidade - loteUsado.quantidade);
+                        atualizou = true;
+                    }
+                });
+            }
+        });
+
+        if (atualizou) {
+            fs.writeFileSync(lotesRemessasPath, JSON.stringify(lotesRemessas, null, 2));
+            console.log("[LOG] Quantidades dos lotes atualizadas com sucesso.");
+        }
+    } catch (error) {
+        console.error("[ERRO] Falha ao atualizar quantidades dos lotes:", error);
     }
 }
 
@@ -106,13 +155,33 @@ function carregarUltimoRegistro(req, res) {
 function setMachineMap(req, res) {
     console.log("[LOG] Iniciando salvamento do machineMap...");
 
-    garantirPastaDados(); // Garante que a pasta exista antes de acessar o arquivo
+    garantirPastaDados();
 
-    const machineMap = req.body; // Recebe o objeto machineMap do corpo da requisição
+    const machineMap = req.body;
     console.log("[LOG] Dados recebidos para o machineMap:", machineMap);
 
+    // Validar a estrutura do machineMap
+    const estruturaBasica = [
+        "1_Frente",
+        "2_Traseira",
+        "3_Montagem",
+        "4_Bolso_Lateral",
+        "5_Costura_Interna",
+        "6_Barras",
+        "7_Cos_Elastico",
+        "8_Acabamento"
+    ];
+
+    // Garantir que todas as seções básicas existam
+    const machineMapValidado = { ...machineMap };
+    estruturaBasica.forEach(secao => {
+        if (!machineMapValidado[secao]) {
+            machineMapValidado[secao] = {};
+        }
+    });
+
     try {
-        fs.writeFileSync(machineMapPath, JSON.stringify(machineMap, null, 2));
+        fs.writeFileSync(machineMapPath, JSON.stringify(machineMapValidado, null, 2));
         console.log("[LOG] Machine map salvo com sucesso!");
         res.json({ message: "Machine map salvo com sucesso!" });
     } catch (error) {
@@ -125,20 +194,65 @@ function setMachineMap(req, res) {
 function getMachineMap(req, res) {
     console.log("[LOG] Iniciando carregamento do machineMap...");
 
-    garantirPastaDados(); // Garante que a pasta exista antes de acessar o arquivo
+    garantirPastaDados();
 
     console.log("[LOG] Caminho do arquivo machineMap.json:", machineMapPath);
 
-    if (!fs.existsSync(machineMapPath)) {
-        console.warn("[AVISO] Arquivo machineMap.json não encontrado. Criando arquivo vazio...");
-        fs.writeFileSync(machineMapPath, JSON.stringify({}));
-    }
+    // Estrutura básica do machineMap
+    const estruturaBasica = {
+        "1_Frente": {},
+        "2_Traseira": {},
+        "3_Montagem": {},
+        "4_Bolso_Lateral": {},
+        "5_Costura_Interna": {},
+        "6_Barras": {},
+        "7_Cos_Elastico": {},
+        "8_Acabamento": {}
+    };
 
     try {
-        const machineMap = JSON.parse(fs.readFileSync(machineMapPath, "utf8")); // Lê o arquivo e converte para objeto
-        console.log("[LOG] Machine map carregado com sucesso:", machineMap);
+        let machineMap = estruturaBasica;
+        
+        if (fs.existsSync(machineMapPath)) {
+            const dadosArquivo = JSON.parse(fs.readFileSync(machineMapPath, "utf8"));
+            
+            // Se o arquivo existe mas não está no formato novo, converte
+            if (Object.keys(dadosArquivo).length > 0 && !dadosArquivo["1_Frente"]) {
+                // Converte o formato antigo para o novo
+                Object.entries(dadosArquivo).forEach(([funcao, maquina]) => {
+                    // Tenta identificar a seção baseada na função
+                    let secaoEncontrada = "1_Frente"; // Default para funções não identificadas
+                    
+                    const funcaoLower = funcao.toLowerCase();
+                    if (funcaoLower.includes("traseira") || funcaoLower.includes("pala traseira")) {
+                        secaoEncontrada = "2_Traseira";
+                    } else if (funcaoLower.includes("lateral")) {
+                        secaoEncontrada = "3_Montagem";
+                    } else if (funcaoLower.includes("bolso")) {
+                        secaoEncontrada = "4_Bolso_Lateral";
+                    } else if (funcaoLower.includes("entreperna")) {
+                        secaoEncontrada = "5_Costura_Interna";
+                    } else if (funcaoLower.includes("barra")) {
+                        secaoEncontrada = "6_Barras";
+                    } else if (funcaoLower.includes("cós") || funcaoLower.includes("elastico")) {
+                        secaoEncontrada = "7_Cos_Elastico";
+                    }
+                    
+                    machineMap[secaoEncontrada][funcao] = maquina;
+                });
+                
+                // Salva o novo formato
+                fs.writeFileSync(machineMapPath, JSON.stringify(machineMap, null, 2));
+            } else {
+                machineMap = { ...estruturaBasica, ...dadosArquivo };
+            }
+        } else {
+            // Se o arquivo não existe, cria com a estrutura básica
+            fs.writeFileSync(machineMapPath, JSON.stringify(estruturaBasica, null, 2));
+        }
 
-        res.json(machineMap); // Retorna o objeto como JSON
+        console.log("[LOG] Machine map carregado com sucesso:", machineMap);
+        res.json(machineMap);
     } catch (error) {
         console.error("[ERRO] Falha ao carregar o machineMap:", error);
         res.status(500).json({ error: "Erro ao carregar o machineMap!" });
@@ -327,6 +441,94 @@ function listarProducao(req, res) {
     }
 }
 
+// Função para carregar o arquivo de remessas e lotes
+function getLotesRemessas(req, res) {
+    console.log("[LOG] Iniciando carregamento das remessas e lotes...");
+    garantirPastaDados();
+
+    if (!fs.existsSync(lotesRemessasPath)) {
+        console.warn("[AVISO] Arquivo lotesRemessas.json não encontrado. Criando arquivo vazio...");
+        fs.writeFileSync(lotesRemessasPath, JSON.stringify({ remessas: [] }));
+    }
+
+    try {
+        const lotesRemessas = JSON.parse(fs.readFileSync(lotesRemessasPath, "utf8"));
+        console.log("[LOG] Remessas e lotes carregados com sucesso");
+        res.json(lotesRemessas);
+    } catch (error) {
+        console.error("[ERRO] Falha ao carregar remessas e lotes:", error);
+        res.status(500).json({ error: "Erro ao carregar remessas e lotes!" });
+    }
+}
+
+// Função para adicionar uma nova remessa
+function addRemessa(req, res) {
+    console.log("[LOG] Iniciando adição de nova remessa...");
+    garantirPastaDados();
+
+    const novaRemessa = req.body;
+    console.log("[LOG] Dados da nova remessa:", novaRemessa);
+
+    try {
+        let lotesRemessas = { remessas: [] };
+        if (fs.existsSync(lotesRemessasPath)) {
+            lotesRemessas = JSON.parse(fs.readFileSync(lotesRemessasPath, "utf8"));
+        }
+
+        // Adiciona a nova remessa com um ID único
+        novaRemessa.id = Date.now().toString();
+        novaRemessa.dataRegistro = new Date().toISOString();
+        lotesRemessas.remessas.push(novaRemessa);
+
+        fs.writeFileSync(lotesRemessasPath, JSON.stringify(lotesRemessas, null, 2));
+        console.log("[LOG] Remessa adicionada com sucesso!");
+        res.json({ message: "Remessa adicionada com sucesso!", remessaId: novaRemessa.id });
+    } catch (error) {
+        console.error("[ERRO] Falha ao adicionar remessa:", error);
+        res.status(500).json({ error: "Erro ao adicionar remessa!" });
+    }
+}
+
+// Função para adicionar um lote a uma remessa existente
+function addLote(req, res) {
+    console.log("[LOG] Iniciando adição de novo lote...");
+    const { remessaId } = req.params;
+    const novoLote = req.body;
+    
+    try {
+        const lotesRemessas = JSON.parse(fs.readFileSync(lotesRemessasPath, "utf8"));
+        const remessaIndex = lotesRemessas.remessas.findIndex(r => r.id === remessaId);
+        
+        if (remessaIndex === -1) {
+            return res.status(404).json({ error: "Remessa não encontrada!" });
+        }
+
+        // Se a remessa não tiver um array de lotes, cria um
+        if (!lotesRemessas.remessas[remessaIndex].lotes) {
+            lotesRemessas.remessas[remessaIndex].lotes = [];
+        }
+
+        // Encontra o maior número atual para o tamanho do lote
+        const lotesDoMesmoTamanho = lotesRemessas.remessas[remessaIndex].lotes
+            .filter(l => l.tamanho === novoLote.tamanho);
+        const maiorNumero = lotesDoMesmoTamanho.reduce((max, lote) => {
+            const num = parseInt(lote.numero) || 0;
+            return num > max ? num : max;
+        }, 0);
+
+        // Adiciona o novo lote com o próximo número da sequência
+        novoLote.id = Date.now().toString();
+        novoLote.numero = (maiorNumero + 1).toString();
+        lotesRemessas.remessas[remessaIndex].lotes.push(novoLote);
+
+        fs.writeFileSync(lotesRemessasPath, JSON.stringify(lotesRemessas, null, 2));
+        console.log("[LOG] Lote adicionado com sucesso!");
+        res.json({ message: "Lote adicionado com sucesso!", loteId: novoLote.id });
+    } catch (error) {
+        console.error("[ERRO] Falha ao adicionar lote:", error);
+        res.status(500).json({ error: "Erro ao adicionar lote!" });
+    }
+}
 
 module.exports = {
     lerArquivoCSV,
@@ -337,4 +539,7 @@ module.exports = {
     getMachineMap,
     listarDadosFuncionario,
     listarNomesFuncionarios,
+    getLotesRemessas,
+    addRemessa,
+    addLote
 };
