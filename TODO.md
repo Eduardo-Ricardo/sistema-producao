@@ -26,20 +26,40 @@
 ## Plano de Ação para Recuperação de Funcionalidades
 1. [x] Identificar funcionalidades estáveis na versão instável (`90ce0da`)
    - [x] Interface menu, registro, dados CSV, machine_map atualizado, functionGroup
-2. [ ] Mesclar funcionalidades recuperadas na branch de mescla
+2. [x] Mesclar funcionalidades recuperadas na branch de mescla
    - [x] Interface Menu
    - [ ] Interface Registro
    - [x] data.csv
    - [x] machineMap.json
       - [ ] Necessário atualizar nome mostrado na GUI.
    - [x] funcionGroup.json
-3. [ ] Testar exaustivamente as funcionalidades mescladas
+3. [x] Testar exaustivamente as funcionalidades mescladas
 4. [ ] Realizar commit no branch principal (`main`) após validação
 
 ## Observações
 - Manter backup do functionGroups.json durante o processo de atualização
 - Implementar mudanças gradualmente para evitar instabilidade no sistema
 - Testar exaustivamente cada nova feature antes de integrá-la ao sistema principal
+
+## Próximos Objetivos
+
+### Etapa 1: Refatorar producaoController
+- [ ] Dividir responsabilidades no arquivo `producaoController.js`.
+- [ ] Criar controladores separados para `machineMap`, `lotes` e `dados de produção`.
+- [ ] Adicionar testes unitários para funções críticas.
+
+### Etapa 2: Atualizar funcionalidade "Último Registro"
+- [ ] Atualizar a função `carregarUltimoRegistro` no backend para refletir o novo modelo de dados.
+- [ ] Atualizar o script `registrar-funcao.js` para exibir corretamente o último registro na interface.
+
+### Etapa 3: Atualizar lógica de envio de dados para o servidor
+- [ ] Modificar o frontend para capturar dados no novo formato de `machineMap.json` e `functionGroups.json`.
+- [ ] Atualizar o backend para processar e validar os dados recebidos no novo formato.
+
+### Etapa 4: Atualizar lógica de lotes
+- [ ] Revisar o fluxo de criação, atualização e associação de lotes.
+- [ ] Atualizar funções no backend para garantir o funcionamento correto dos lotes.
+- [ ] Testar a interface de gerenciamento de lotes (`gerenciar-lotes.html`) e corrigir problemas.
 
 ## Mapeamento de Commits
 - **Commit Instável:**
@@ -55,5 +75,5 @@
   - Descrição: Recuperação da pasta public do módulo common e do arquivo 2025.csv da versão instável.
 
 - **Commit de Recuperação da Interface:**
-  - Hash: (a ser gerado)
+  - Hash: `9782921`
   - Descrição: Recuperação da interface da página registrar.html da versão instável.
