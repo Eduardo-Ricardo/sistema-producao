@@ -5,43 +5,67 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sistema de Gestão</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-  <nav class="nav">
-    <ul class="nav-list">
-      <li><a href="/producao/html/registrar.html" class="nav-link">Registrar</a></li>
-      <li><a href="/producao/html/visualizar.html" class="nav-link">Visualizar</a></li>
-      <li><a href="/producao/html/ficha-funcionario.html" class="nav-link">Funcionários</a></li>
-      <li><a href="/producao/html/gerenciar-lotes.html" class="nav-link">Lotes</a></li>
-      <li><a href="/fluxo-caixa/caixa.html" class="nav-link">Caixa</a></li>
-    </ul>
-  </nav>
-
   <div class="container">
-    <div class="card">
-      <div class="card-header">
-        <h1>Bem-vindo ao Sistema de Gestão</h1>
-      </div>
-      <div class="server-control">
-        <button id="startServer" class="btn btn-primary">
-          <i class="fas fa-power-off"></i>
-          Iniciar Servidor
-        </button>
-        <p id="serverStatus" class="server-status">Status do Servidor: Verificando...</p>
-        <div id="serverMessage" class="server-message" style="display: none;">
-          <p>Para iniciar o servidor manualmente:</p>
-          <ol>
-            <li>Abra o Explorador de Arquivos</li>
-            <li>Navegue até a pasta do sistema</li>
-            <li>Execute o arquivo "IniciarServidor.bat"</li>
-          </ol>
+    <h1 class="section-title m-3">
+      <i class="fas fa-industry"></i>
+      Sistema de Gestão
+      <span id="serverStatus" class="server-status">
+        <i class="fas fa-circle-notch fa-spin"></i>
+        Verificando...
+      </span>
+    </h1>
+
+    <!-- Cards de Atalhos -->
+    <div class="grid-3 m-3">
+      <!-- Produção -->
+      <div class="section-card">
+        <h3 class="section-title">
+          <i class="fas fa-clipboard-list"></i>
+          Produção
+        </h3>
+        <div class="form-container">
+          <a href="/producao/html/registrar.html" class="btn btn-primary">
+            <i class="fas fa-plus-circle"></i> Registrar Produção
+          </a>
+          <a href="/producao/html/ficha-funcionario.html" class="btn btn-primary">
+            <i class="fas fa-id-card"></i> Produção por Funcionário
+          </a>
         </div>
       </div>
-      <p class="p-2">Escolha uma das opções acima para navegar.</p>
+
+      <!-- Gestão -->
+      <div class="section-card">
+        <h3 class="section-title">
+          <i class="fas fa-boxes"></i>
+          Lotes
+        </h3>
+        <div class="form-container">
+          <a href="/producao/html/gerenciar-lotes.html" class="btn btn-primary">
+            <i class="fas fa-plus-circle"></i> Registrar Lote
+          </a>
+        </div>
+      </div>
+
+      <!-- Financeiro -->
+      <div class="section-card">
+        <h3 class="section-title">
+          <i class="fas fa-cash-register"></i>
+          Financeiro
+        </h3>
+        <div class="form-container">
+          <button class="btn btn-secondary" disabled>
+            <i class="fas fa-clock"></i> Em breve
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
+  <!-- Scripts -->
+  <script src="/js/menu.js"></script>
   <script>
     let serverRunning = false;
     let checkCount = 0;
@@ -50,22 +74,16 @@
     // Função para verificar o status do servidor
     async function checkServerStatus() {
       const statusElement = document.getElementById('serverStatus');
-      const startButton = document.getElementById('startServer');
-      const serverMessage = document.getElementById('serverMessage');
       
       try {
         const response = await fetch('http://localhost:3000/api/server-status', {
-          mode: 'no-cors' // Tenta conexão mesmo sem CORS
+          mode: 'no-cors'
         });
         
         serverRunning = true;
-        statusElement.textContent = 'Status do Servidor: Conectado';
+        statusElement.innerHTML = '<i class="fas fa-check-circle"></i> Conectado';
         statusElement.style.color = '#28a745';
-        startButton.disabled = true;
-        startButton.style.opacity = '0.7';
-        serverMessage.style.display = 'none';
         
-        // Se o servidor está rodando, atualiza a página para carregar o conteúdo
         if (window.location.href.includes('file://')) {
           window.location.href = 'http://localhost:3000';
         }
@@ -73,53 +91,17 @@
         checkCount++;
         if (checkCount >= MAX_CHECKS) {
           serverRunning = false;
-          statusElement.textContent = 'Status do Servidor: Desconectado';
+          statusElement.innerHTML = '<i class="fas fa-times-circle"></i> Desconectado';
           statusElement.style.color = '#dc3545';
-          startButton.disabled = false;
-          startButton.style.opacity = '1';
-          serverMessage.style.display = 'block';
         }
-      }
-    }
-
-    // Função para tentar iniciar o servidor
-    async function startServer() {
-      const statusElement = document.getElementById('serverStatus');
-      const startButton = document.getElementById('startServer');
-      const serverMessage = document.getElementById('serverMessage');
-      
-      try {
-        statusElement.textContent = 'Status do Servidor: Tentando iniciar...';
-        statusElement.style.color = '#ffc107';
-        startButton.disabled = true;
-
-        // Se o servidor não estiver rodando, mostra as instruções manuais
-        if (!serverRunning) {
-          serverMessage.style.display = 'block';
-          return;
-        }
-
-        const response = await fetch('http://localhost:3000/api/start-server', {
-          method: 'POST'
-        });
-
-        if (response.ok) {
-          checkCount = 0;
-          checkServerStatus();
-        }
-      } catch (error) {
-        serverMessage.style.display = 'block';
       }
     }
 
     // Verificar status do servidor a cada 2 segundos
     setInterval(checkServerStatus, 2000);
 
-    // Adicionar evento de clique ao botão
-    document.getElementById('startServer').addEventListener('click', startServer);
-
     // Verificar status inicial
     checkServerStatus();
-  </script>
+</script>
 </body>
 </html>
