@@ -1,0 +1,58 @@
+{
+  "1_Frente": {
+    "1_Painel_Frontal": {
+      "Fechar_Fundilho": "Overlock",
+      "Prespontar_Fundilho": "Prespontadeira",
+      "Costurar_Pala_Frontal": "Overlock",
+      "Prespontar_Pala_Frontal": "Reta"
+    },
+    "2_Painel_Traseiro": {
+      "Costurar_Pala_Traseira": "Interlock",
+      "Prespontar_Pala_Traseira": "Prespontadeira",
+      "Unir_Painel_Traseiro": "Interlock",
+      "Prespontar_Traseiro": "Prespontadeira"
+    },
+    "6_Montagem": {
+      "Fechar_Lateral": "Interlock",
+      "Prespontar_Lateral": "Prespontadeira",
+      "Fechar_Entreperna": "Interlock",
+      "Barra_Perna": "Reta"
+    },
+    "7_Cos": {
+      "Aplicar_Elastico": "Interlock",
+      "Costurar_Etiqueta": "Reta",
+      "Finalizar_Elastico": "Elastiqueira"
+    },
+    "8_Acabamento": {
+      "Retirar_Linha": "Manual",
+      "Revisar": "Manual"
+    }
+  },
+  "2_Traseira": {},
+  "3_Montagem": {
+    "5_Bolso_Lateral": {
+      "Costurar_Lapela": "Reta",
+      "Virar_Lapela": "Manual",
+      "Prespontar_Lapela": "Prespontadeira",
+      "Chulear_Bolso_Lateral": "Overlock",
+      "Barra_Bolso_Lateral": "Prespontadeira",
+      "Aplicar_Bolso_Lateral": "Prespontadeira"
+    }
+  },
+  "4_Bolso_Lateral": {
+    "3_Bolso_Frontal": {
+      "Chulear_Bolso_Frontal": "Overlock",
+      "Barra_Bolso_Frontal": "Prespontadeira",
+      "Aplicar_Bolso_Frontal": "Prespontadeira"
+    },
+    "4_Bolso_Traseiro": {
+      "Chulear_Bolso_Traseiro": "Overlock",
+      "Barra_Bolso_Traseiro": "Prespontadeira",
+      "Aplicar_Bolso_Traseiro": "Prespontadeira"
+    }
+  },
+  "5_Costura_Interna": {},
+  "6_Barras": {},
+  "7_Cos_Elastico": {},
+  "8_Acabamento": {}
+}

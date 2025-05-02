@@ -16,8 +16,8 @@ Franciele,Prespontar pala traseira,15:30,15:51,35,04/03
 Franciele,Pala traseira,15:57,16:14,35,04/03
 Franciele,Pala traseira,16:19,16:40,42,04/03
 Franciele,Prespontar bolso traseira,16:46,17:10,35,04/03
-Franciele,Prespontar frente,07:30,07:56,,05/03
-Franciele,Prespontar frente,08:00,08:25,,05/03
+Franciele,Presponto_Pala_Frontal,07:30,07:56,,05/03
+Franciele,Presponto_Pala_Frontal,08:00,08:25,,05/03
 Franciele,Faixa na perna,08:45,09:37,92,05/03
 Franciele,Faixa na perna,10:00,10:18,30,05/03
 Franciele,Faixa na perna,10:19,10:39,40,05/03
@@ -33,20 +33,20 @@ Franciele,Prespontar lateral,10:53,11:45,42,06/03
 Franciele,Prespontar lateral,11:50,13:43,42,06/03
 Franciele,Virar elástico,13:43,14:44,92,06/03
 Franciele,Virar elástico,15:15,15:39,30,06/03
-Franciele,Etiqueta,07:00,08:41,180,07/03
+Franciele,Costura_Etiqueta,07:00,08:41,180,07/03
 Franciele,Virar elástico,08:51,12:00,180,07/03
 Franciele,Faixa na perna,13:10,13:28,21,07/03
-Franciele,Colocar etiqueta,13:30,14:00,75,07/03
+Franciele,Colocar Costura_Etiqueta,13:30,14:00,75,07/03
 Franciele,Virar elástico,14:01,15:40,117,07/03
-Franciele,Etiqueta,16:15,17:29,199,07/03
+Franciele,Costura_Etiqueta,16:15,17:29,199,07/03
 Franciele,Virar elástico,17:37,17:55,22,07/03
 Franciele,Virar elástico,08:00,10:22,140,10/03
-Franciele,Prespontar frente,10:27,12:03,212,10/03
+Franciele,Presponto_Pala_Frontal,10:27,12:03,212,10/03
 Franciele,Prespontar lateral,13:10,18:03,212,10/03
-Deyse,Prespontar,08:00,12:00,184,10/03
-Deyse,Presponto pala,13:07,15:25,81,10/03
-Deyse,Presponto traseira,15:25,16:30,25,10/03
-Deyse,presponto frente,16:30,17:55,89,10/03
+Dayse,Prespontar,08:00,12:00,184,10/03
+Dayse,Presponto pala,13:07,15:25,81,10/03
+Dayse,Presponto traseira,15:25,16:30,25,10/03
+Dayse,presponto frente,16:30,17:55,89,10/03
 Nathally,Lapela,08:30,11:30,231,04/03
 Nathally,Lapela,13:02,16:33,313,04/03
 Nathally,Lapela,08:25,11:30,270,05/03
@@ -75,7 +75,7 @@ Leilaine,Fazer barra,09:45,11:45,115,10/03
 Leilaine,fechar lapela,11:50,13:20,64,10/03
 Leilaine,Virar e prespontar lapela,13:20,14:50,87,10/03
 Leilaine,Prespontar lapela,14:50,15:20,74,10/03
-Leilaine,Fazer barra e etiqueta,15:20,17:00,73,10/03
+Leilaine,Fazer barra e Costura_Etiqueta,15:20,17:00,73,10/03
 Leilaine,Fazer barra,17:10,17:43,42,10/03
 Leilaine,Virar elástico,17:50,17:55,17,10/03
 Talita,Presponta traseira,11:41,11:52,42,04/03
@@ -99,37 +99,37 @@ Talita,Bolso lateral,08:50,09:21,25,12/03
 Talita,Montar frente,14:15,16:38,42,12/03
 Talita,Pala,13:20,14:39,42,17/03
 Talita,Prespontar lateral,14:44,15:42,43,17/03
-Linda,Pala,08:15,10:00,74,16/03
-Linda,Barra e etiqueta,10:22,11:50,60,16/03
-Linda,Barra e etiqueta,12:54,14:00,30,16/03
-Linda,Etiqueta,14:22,14:37,42,16/03
-Linda,Lapela,14:44,18:00,167,16/03
-Franciele,Etiqueta,07:00,07:59,112,17/03
-Franciele,Etiqueta,08:00,08:41,68,17/03
+Lynda,Pala,08:15,10:00,74,16/03
+Lynda,Barra e Costura_Etiqueta,10:22,11:50,60,16/03
+Lynda,Barra e Costura_Etiqueta,12:54,14:00,30,16/03
+Lynda,Costura_Etiqueta,14:22,14:37,42,16/03
+Lynda,Lapela,14:44,18:00,167,16/03
+Franciele,Costura_Etiqueta,07:00,07:59,112,17/03
+Franciele,Costura_Etiqueta,08:00,08:41,68,17/03
 Franciele,Virar elástico,08:51,12:00,180,17/03
 Franciele,Bolso traseiro,13:10,13:28,21,17/03
-Franciele,Etiqueta,13:30,14:00,75,17/03
+Franciele,Costura_Etiqueta,13:30,14:00,75,17/03
 Franciele,Virar elástico,14:01,15:40,117,17/03
-Franciele,Etiqueta,16:15,17:29,199,17/03
+Franciele,Costura_Etiqueta,16:15,17:29,199,17/03
 Franciele,Virar elástico,17:37,17:55,22,17/03
 Franciele,Prespontar lateral,07:30,10:41,117,18/03
-Franciele,Etiqueta,10:45,11:00,200,18/03
+Franciele,Costura_Etiqueta,10:45,11:00,200,18/03
 Franciele,Frente,11:10,12:00,16,18/03
 Franciele,Virar elástico,13:00,14:00,70,18/03
 Franciele,Barra,18:00,19:00,50,18/03
 Franciele,Virar elástico,07:06,08:00,80,19/03
-Franciele,Etiqueta,08:43,09:43,84,19/03
+Franciele,Costura_Etiqueta,08:43,09:43,84,19/03
 Franciele,Virar elástico,09:50,10:38,84,19/03
 Franciele,Frente,10:42,11:36,16,19/03
 Franciele,Virar elástico,11:40,14:35,96,19/03
 Franciele,Barra de bolso traseiro,14:36,16:30,43,19/03
 Franciele,Barra de bolso traseiro,16:50,17:55,43,19/03
 Franciele,Traseira,18:10,18:44,43,19/03
-Deyse,Presponto pala,10:03,15:30,298,19/03
-Deyse,Prespontar lateral,16:22,17:15,16,19/03
-Deyse,Prespontar traseira,17:15,17:50,42,19/03
+Dayse,Presponto pala,10:03,15:30,298,19/03
+Dayse,Prespontar lateral,16:22,17:15,16,19/03
+Dayse,Prespontar traseira,17:15,17:50,42,19/03
 Talita,Bolso lateral,08:51,10:20,43,18/03
-Deyse,Prespontar lateral,08:05,14:11,136,18/03
+Dayse,Prespontar lateral,08:05,14:11,136,18/03
 Nathally,Lapela,13:04,18:42,124,17/03
 Nathally,Lapela,13:07,18:07,309,18/03
 Nathally,Lapela,13:09,17:49,410,19/03
@@ -142,19 +142,19 @@ Isa,Lapela,00:00,00:00,270,08/04
 Isa,Lapela,00:00,00:00,45,09/04
 Isa,Lapela,00:00,00:00,450,10/04
 Dayse,Prespontar lateral,08:00,10:17,106,04/04
-Dayse,Prespontar Frente,10:23,12:00,135,04/04
+Dayse,Presponto_Pala_Frontal,10:23,12:00,135,04/04
 Dayse,Presponto pala,13:00,18:00,264,04/04
 Dayse,Prespontar lateral,08:04,10:10,86,02/04
 Dayse,Presponto pala,10:20,12:00,119,02/04
 Dayse,Presponto pala,13:14,14:52,143,02/04
-Dayse,Prespontar Frente,15:03,18:00,218,02/04
+Dayse,Presponto_Pala_Frontal,15:03,18:00,218,02/04
 Dayse,Presponto pala,08:00,12:00,184,01/04
 Dayse,Presponto pala,13:00,13:00,45,01/04
 Dayse,Presponto pala,13:51,14:57,90,01/04
 Dayse,Prespontar lateral,15:05,17:23,90,01/04
 Dayse,Presponto pala,08:05,10:03,135,31/03
-Dayse,Prespontar Frente,10:03,12:00,180,31/03
-Dayse,Prespontar Frente,13:12,14:30,87,31/03
+Dayse,Presponto_Pala_Frontal,10:03,12:00,180,31/03
+Dayse,Presponto_Pala_Frontal,13:12,14:30,87,31/03
 Dayse,Prespontar lateral,14:40,18:00,135,31/03
 Dayse,Prespontar lateral,08:00,12:00,160,28/03
 Dayse,Prespontar lateral,13:25,15:03,109,28/03
@@ -162,31 +162,31 @@ Dayse,Presponto pala,15:33,17:47,180,28/03
 Dayse,Presponto pala,08:00,10:59,196,27/03
 Dayse,Prespontar lateral,11:02,11:50,28,27/03
 Dayse,Prespontar lateral,13:00,14:20,58,27/03
-Dayse,Prespontar Frente,14:25,17:00,162,27/03
+Dayse,Presponto_Pala_Frontal,14:25,17:00,162,27/03
 Dayse,Prespontar lateral,08:15,10:38,86,26/03
-Dayse,Prespontar Frente,10:00,12:00,99,26/03
+Dayse,Presponto_Pala_Frontal,10:00,12:00,99,26/03
 Dayse,Prespontar lateral,13:20,17:50,157,26/03
 Dayse,Prespontar lateral,00:00,00:00,86,25/03
 Dayse,Presponto pala,13:47,16:11,172,25/03
-Dayse,Prespontar Frente,16:26,17:10,56,25/03
+Dayse,Presponto_Pala_Frontal,16:26,17:10,56,25/03
 Dayse,Prespontar lateral,17:11,18:00,28,25/03
 Dayse,Prespontar traseira,08:05,08:31,42,20/03
-Dayse,Prespontar Frente,08:38,12:00,300,20/03
-Dayse,Prespontar Frente,13:07,13:56,85,20/03
+Dayse,Presponto_Pala_Frontal,08:38,12:00,300,20/03
+Dayse,Presponto_Pala_Frontal,13:07,13:56,85,20/03
 Dayse,Prespontar lateral,14:08,16:50,85,20/03
 Dayse,Presponto pala,08:50,12:00,174,21/03
 Dayse,Prespontar lateral,08:05,11:57,105,18/03
 Dayse,Prespontar lateral,13:07,14:11,31,18/03
 Dayse,Presponto pala,14:12,18:00,118,18/03
-Dayse,Prespontar Frente,11:42,11:55,44,07/04
-Dayse,Prespontar Frente,13:00,15:00,220,07/04
+Dayse,Presponto_Pala_Frontal,11:42,11:55,44,07/04
+Dayse,Presponto_Pala_Frontal,13:00,15:00,220,07/04
 Dayse,Prespontar lateral,15:06,17:23,88,07/04
-Dayse,Prespontar Frente,17:15,18:00,44,07/04
-Dayse,Prespontar Frente,00:00,00:00,132,10/04
+Dayse,Presponto_Pala_Frontal,17:15,18:00,44,07/04
+Dayse,Presponto_Pala_Frontal,00:00,00:00,132,10/04
 Dayse,Presponto pala,08:00,09:22,135,11/04
-Dayse,Prespontar Frente,08:00,11:10,176,14/04
-Dayse,Prespontar Frente,11:15,11:54,88,14/04
-Dayse,Prespontar Frente,13:00,13:54,88,14/04
+Dayse,Presponto_Pala_Frontal,08:00,11:10,176,14/04
+Dayse,Presponto_Pala_Frontal,11:15,11:54,88,14/04
+Dayse,Presponto_Pala_Frontal,13:00,13:54,88,14/04
 Dayse,Prespontar lateral,14:05,17:38,135,14/04
 Luiz,Fechar Pala,08:00,10:30,220,07/04
 Luiz,Fechar Lateral,10:35,11:30,44,07/04
@@ -243,25 +243,25 @@ Franciele,Montar frente,08:00,10:00,44,07/04
 Franciele,Fechar Pala Traseira,08:20,14:45,397,10/04
 Franciele,Virar elástico,14:47,15:35,62,10/04
 Franciele,Prespontar Pala Frente,16:00,17:20,88,10/04
-Mileudis,Fazer Barra Perna,00:00,00:00,210,14/04
-Mileudis,Fazer Barra Perna,00:00,00:00,49,11/04
-Mileudis,Etiqueta,00:00,00:00,96,11/04
-Mileudis,Etiqueta,00:00,00:00,126,10/04
-Mileudis,Fazer Barra Perna,00:00,00:00,163,10/04
-Mileudis,Fazer Barra Perna,00:00,00:00,169,09/04
-Mileudis,Etiqueta,00:00,00:00,234,09/04
-Mileudis,Fazer Barra Perna,00:00,00:00,88,03/04
-Mileudis,Etiqueta,00:00,00:00,322,03/04
-Mileudis,Fazer Barra Perna,00:00,00:00,45,08/04
-Mileudis,Etiqueta,00:00,00:00,190,08/04
-Mileudis,Etiqueta,00:00,00:00,177,04/04
-Mileudis,Fazer Barra Perna,00:00,00:00,153,04/04
-Mileudis,Fazer Barra Perna,00:00,00:00,159,02/04
-Mileudis,Etiqueta,00:00,00:00,167,02/04
-Mileudis,Etiqueta,00:00,00:00,240,28/03
-Mileudis,Prespontar Frente,00:00,00:00,14,01/04
-Mileudis,Etiqueta,00:00,00:00,243,01/04
-Mileudis,Fazer Barra Perna,00:00,00:00,128,01/04
+Mileudis,Barra_Final_Pernas,00:00,00:00,210,14/04
+Mileudis,Barra_Final_Pernas,00:00,00:00,49,11/04
+Mileudis,Costura_Etiqueta,00:00,00:00,96,11/04
+Mileudis,Costura_Etiqueta,00:00,00:00,126,10/04
+Mileudis,Barra_Final_Pernas,00:00,00:00,163,10/04
+Mileudis,Barra_Final_Pernas,00:00,00:00,169,09/04
+Mileudis,Costura_Etiqueta,00:00,00:00,234,09/04
+Mileudis,Barra_Final_Pernas,00:00,00:00,88,03/04
+Mileudis,Costura_Etiqueta,00:00,00:00,322,03/04
+Mileudis,Barra_Final_Pernas,00:00,00:00,45,08/04
+Mileudis,Costura_Etiqueta,00:00,00:00,190,08/04
+Mileudis,Costura_Etiqueta,00:00,00:00,177,04/04
+Mileudis,Barra_Final_Pernas,00:00,00:00,153,04/04
+Mileudis,Barra_Final_Pernas,00:00,00:00,159,02/04
+Mileudis,Costura_Etiqueta,00:00,00:00,167,02/04
+Mileudis,Costura_Etiqueta,00:00,00:00,240,28/03
+Mileudis,Presponto_Pala_Frontal,00:00,00:00,14,01/04
+Mileudis,Costura_Etiqueta,00:00,00:00,243,01/04
+Mileudis,Barra_Final_Pernas,00:00,00:00,128,01/04
 Inês,Fechar Lateral,00:00,00:00,163,28/04
 Inês,Fechar Lateral,00:00,00:00,71,26/04
 Inês,Fechar Pala Frente,00:00,00:00,99,26/04
@@ -283,27 +283,27 @@ Inês,Fechar Pala Traseira,00:00,00:00,312,24/04
 Inês,Fechar Traseira,00:00,00:00,84,24/04
 Inês,Fechar Traseira,00:00,00:00,114,24/04
 Lynda,Virar elástico,08:02,15:50,229,07/04
-Lynda,Etiqueta,10:02,13:30,270,04/04
-Lynda,Fazer Barra Perna,13:35,15:38,74,04/04
+Lynda,Costura_Etiqueta,10:02,13:30,270,04/04
+Lynda,Barra_Final_Pernas,13:35,15:38,74,04/04
 Lynda,Virar elástico,07:38,12:00,202,03/04
 Lynda,Virar elástico,13:05,13:30,29,03/04
 Lynda,Fechar Frente,08:00,09:30,89,01/04
 Lynda,Virar elástico,10:00,12:00,70,01/04
-Lynda,Fazer Barra Perna,13:30,16:30,120,01/04
+Lynda,Barra_Final_Pernas,13:30,16:30,120,01/04
 Lynda,Juntar Partes,08:30,09:30,90,28/03
-Lynda,Fazer Barra Perna,09:43,10:14,20,28/03
+Lynda,Barra_Final_Pernas,09:43,10:14,20,28/03
 Lynda,Lapela,10:15,11:00,107,28/03
-Lynda,Fazer Barra Perna,11:08,13:40,60,28/03
-Lynda,Barra e etiqueta,07:13,11:20,144,27/03
-Lynda,Barra e etiqueta,16:00,17:40,65,27/03
-Lynda,Barra e etiqueta,08:10,13:30,180,26/03
-Lynda,Barra e etiqueta,16:46,17:53,45,26/03
+Lynda,Barra_Final_Pernas,11:08,13:40,60,28/03
+Lynda,Barra e Costura_Etiqueta,07:13,11:20,144,27/03
+Lynda,Barra e Costura_Etiqueta,16:00,17:40,65,27/03
+Lynda,Barra e Costura_Etiqueta,08:10,13:30,180,26/03
+Lynda,Barra e Costura_Etiqueta,16:46,17:53,45,26/03
 Lynda,Barra,09:45,10:25,31,19/03
-Lynda,Barra e etiqueta,10:34,15:10,109,19/03
+Lynda,Barra e Costura_Etiqueta,10:34,15:10,109,19/03
 Lynda,Lapela,08:00,10:39,169,18/03
-Lynda,Etiqueta,10:19,10:39,55,18/03
+Lynda,Costura_Etiqueta,10:19,10:39,55,18/03
 Lynda,Barra,10:43,15:30,149,18/03
-Lynda,Etiqueta,15:37,15:47,30,18/03
+Lynda,Costura_Etiqueta,15:37,15:47,30,18/03
 Talita,Prespontar lateral,09:00,09:40,44,10/04
 Talita,Bolso lateral,09:43,11:10,44,10/04
 Talita,Bolso traseiro,11:15,13:37,44,10/04
@@ -331,13 +331,13 @@ Talita,Bolso traseiro,09:02,09:57,34,27/03
 Talita,Bolso traseiro,08:10,08:59,28,26/03
 Talita,Bolso lateral,08:54,09:47,28,28/03
 Talita,Bolso lateral,08:51,10:25,44,14/04
-lynda,Virar elástico,08:12,11:32,109,14/04
-lynda,Lapela,13:00,18:00,430,15/04
-lynda,Virar elástico,09:25,10:35,54,15/04
-lynda,Virar elástico,12:45,14:08,51,15/04
-lynda,Virar elástico,14:20,17:10,89,15/04
-lynda,Prespontar Frente,08:02,09:15,132,16/04
-lynda,Prespontar lateral,00:00,00:00,251,16/04
+Lynda,Virar elástico,08:12,11:32,109,14/04
+Lynda,Lapela,13:00,18:00,430,15/04
+Lynda,Virar elástico,09:25,10:35,54,15/04
+Lynda,Virar elástico,12:45,14:08,51,15/04
+Lynda,Virar elástico,14:20,17:10,89,15/04
+Lynda,Presponto_Pala_Frontal,08:02,09:15,132,16/04
+Lynda,Prespontar lateral,00:00,00:00,251,16/04
 Talita,Bolso lateral,09:40,11:59,44,16/04
 Inês,Fechar Lateral,00:00,00:00,176,16/04
 Inês,Fechar entre pernas,00:00,00:00,60,16/04
@@ -437,11 +437,11 @@ Talita,Aplicar_Bolso_Lateral,09:55,11:14,43,24/04
 Talita,Aplicar_Bolso_Traseiro,13:50,14:53,42,24/04
 Elielza,Presponto_Pala_Traseira,00:00,00:00,204,24/04
 Elielza,Presponto_Central_Traseira,13:08,18:00,262,24/04
-Deyse,Presponto_Pala_Traseira,08:05,09:42,99,24/04
-Deyse,Reforco_Fundilho,09:42,10:01,43,24/04
-Deyse,Presponto_Central_Traseira,00:00,00:00,139,24/04
-Deyse,Reforco_Fundilho,00:00,00:00,42,24/04
-Deyse,Presponto_Laterais,00:00,00:00,42,24/04
+Dayse,Presponto_Pala_Traseira,08:05,09:42,99,24/04
+Dayse,Reforco_Fundilho,09:42,10:01,43,24/04
+Dayse,Presponto_Central_Traseira,00:00,00:00,139,24/04
+Dayse,Reforco_Fundilho,00:00,00:00,42,24/04
+Dayse,Presponto_Laterais,00:00,00:00,42,24/04
 Talita,Aplicar_Bolso_Lateral,09:36,11:40,55,30/04
 Talita,Fechar_Fundilho,10:10,11:25,342,30/04
 Mileudis,Barra_Final_Pernas,00:00,00:00,286,30/04

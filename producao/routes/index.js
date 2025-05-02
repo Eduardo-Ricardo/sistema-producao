@@ -8,7 +8,8 @@ const {
     listarNomesFuncionarios,
     getLotesRemessas,
     addRemessa,
-    addLote
+    addLote,
+    carregarUltimoRegistro
 } = require("../controllers/producaoController");
 
 const router = express.Router();
@@ -35,6 +36,9 @@ router.get("/nomes-funcionarios", listarNomesFuncionarios);
 router.get("/remessas", getLotesRemessas);
 router.post("/remessas", addRemessa);
 router.post("/remessas/:remessaId/lotes", addLote);
+
+// Rota para carregar o último registro de um funcionário
+router.get("/ultimo-registro", carregarUltimoRegistro);
 
 // Rota de teste
 router.get("/teste", (req, res) => {

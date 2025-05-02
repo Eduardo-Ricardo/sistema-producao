@@ -8,6 +8,17 @@ let funcoesAdicionais = []; // Array para armazenar as funções adicionais
 document.addEventListener('DOMContentLoaded', async () => {
     console.log("[LOG] DOM carregado. Iniciando configuração...");
     await inicializarPagina();
+
+    // Adiciona evento ao dropdown de seleção de funcionário
+    const employeeDropdown = document.getElementById("employeeName");
+    if (employeeDropdown) {
+        employeeDropdown.addEventListener("change", () => {
+            console.log("[LOG] Funcionário selecionado:", employeeDropdown.value);
+            carregarUltimoRegistro();
+        });
+    } else {
+        console.error("[ERRO] Dropdown de seleção de funcionário não encontrado!");
+    }
 });
 
 // Função para inicializar a página
@@ -295,5 +306,45 @@ async function handleFormSubmit(event) {
     } catch (error) {
         console.error("[ERRO] Falha ao enviar dados de produção:", error);
         alert("Erro ao enviar os dados de produção.");
+    }
+}
+
+async function carregarUltimoRegistro() {
+    console.log("[LOG] Iniciando carregamento do último registro...");
+
+    const employeeName = document.getElementById("employeeName").value;
+    if (!employeeName) {
+        console.warn("[AVISO] Nome do funcionário não fornecido. Não é possível carregar o último registro.");
+        document.querySelector("#ultimoRegistro .registro-info").innerHTML = "<p>Selecione um funcionário para ver os registros.</p>";
+        return;
+    }
+
+    try {
+        console.log(`[LOG] Enviando requisição para o backend com o nome do funcionário: ${employeeName}`);
+        const resposta = await fetch(`/producao/ultimo-registro?employeeName=${encodeURIComponent(employeeName)}`);
+        if (!resposta.ok) {
+            throw new Error(`Erro ao carregar o último registro: ${resposta.statusText}`);
+        }
+
+        const registro = await resposta.json();
+        console.log("[LOG] Último registro carregado com sucesso:", registro);
+
+        if (!registro || Object.keys(registro).length === 0) {
+            document.querySelector("#ultimoRegistro .registro-info").innerHTML = "<p>Nenhum registro encontrado para este funcionário.</p>";
+            return;
+        }
+
+        // Atualiza a seção "Último Registro" com os dados do último registro
+        const registroInfo = document.querySelector("#ultimoRegistro .registro-info");
+        registroInfo.innerHTML = `
+            <p><strong>Função:</strong> ${registro.employeeRole}</p>
+            <p><strong>Início:</strong> ${registro.startTime}</p>
+            <p><strong>Fim:</strong> ${registro.endTime}</p>
+            <p><strong>Quantidade:</strong> ${registro.productionCount}</p>
+            <p><strong>Data:</strong> ${registro.productionDate}</p>
+        `;
+    } catch (error) {
+        console.error("[ERRO] Falha ao carregar o último registro:", error);
+        document.querySelector("#ultimoRegistro .registro-info").innerHTML = "<p>Erro ao carregar o último registro.</p>";
     }
 }

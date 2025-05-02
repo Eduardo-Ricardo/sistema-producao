@@ -2,6 +2,9 @@ const fs = require("fs");
 const { get } = require("http");
 const path = require("path");
 const csv = require("csv-parser");
+const { setMachineMap, getMachineMap } = require("./machineMapController");
+const { getLotesRemessas, addRemessa, addLote } = require("./lotesController");
+const { lerArquivoCSV } = require("../utils/fileUtils");
 
 // Caminho da pasta "data" e arquivos
 const pastaDados = path.join(__dirname, "../data");
@@ -16,31 +19,6 @@ function garantirPastaDados() {
     } else{
         return true; // Retorna true para indicar que a pasta já existe
     }
-}
-
-// Função genérica para ler e processar arquivos CSV
-function lerArquivoCSV(caminhoArquivo, opcoesOuCallback) {
-    if (!fs.existsSync(caminhoArquivo)) {
-        throw new Error("Arquivo não encontrado!");
-    }
-
-    const resultados = [];
-    const opcoes = typeof opcoesOuCallback === "function" ? {} : opcoesOuCallback || {};
-    const callback = typeof opcoesOuCallback === "function" ? opcoesOuCallback : null;
-
-    return new Promise((resolve, reject) => {
-        fs.createReadStream(caminhoArquivo)
-            .pipe(csv(opcoes))
-            .on("data", (data) => {
-                if (callback) {
-                    if (callback(data)) resultados.push(data);
-                } else {
-                    resultados.push(data);
-                }
-            })
-            .on("end", () => resolve(resultados))
-            .on("error", (err) => reject(err));
-    });
 }
 
 // Função para adicionar um registro de produção
@@ -119,143 +97,63 @@ function atualizarQuantidadesLotes(lotesUsados) {
 
 // Função para carregar o último registro de um funcionário
 function carregarUltimoRegistro(req, res) {
+    console.log("[LOG] Iniciando a função carregarUltimoRegistro...");
     const { employeeName } = req.query;
 
     if (!employeeName) {
+        console.warn("[AVISO] Nome do funcionário não fornecido.");
         return res.status(400).json({ error: "O nome do funcionário é obrigatório!" });
     }
+
+    console.log(`[LOG] Nome do funcionário recebido: ${employeeName}`);
 
     const nomeArquivo = `${new Date().getFullYear()}.csv`;
     const caminhoArquivo = path.join(pastaDados, nomeArquivo);
 
     if (!fs.existsSync(caminhoArquivo)) {
+        console.warn(`[AVISO] Arquivo ${nomeArquivo} não encontrado no caminho ${caminhoArquivo}.`);
         return res.status(404).json({ error: "Nenhum registro encontrado!" });
     }
 
     try {
+        console.log(`[LOG] Lendo o arquivo: ${caminhoArquivo}`);
         const dados = fs.readFileSync(caminhoArquivo, "utf-8");
         const linhas = dados.split("\n").filter(linha => linha.trim() !== "");
+        console.log(`[LOG] Total de linhas lidas: ${linhas.length}`);
+
         const registros = linhas.map(linha => {
             const [employeeName, employeeRole, startTime, endTime, productionCount, productionDate] = linha.split(",");
-            return { employeeName, employeeRole, startTime, endTime, productionCount, productionDate };
+            return {
+                employeeName: employeeName.trim(),
+                employeeRole: employeeRole.trim(),
+                startTime: startTime.trim(),
+                endTime: endTime.trim(),
+                productionCount: parseInt(productionCount.trim(), 10),
+                productionDate: productionDate.trim()
+            };
         }).filter(registro => registro.employeeName === employeeName);
 
+        console.log(`[LOG] Registros filtrados para o funcionário ${employeeName}:`, registros);
+
         if (registros.length === 0) {
+            console.warn(`[AVISO] Nenhum registro encontrado para o funcionário ${employeeName}.`);
             return res.status(404).json({ error: "Nenhum registro encontrado para o funcionário!" });
         }
 
-        res.json(registros[registros.length - 1]);
+        const registroMaisRecente = registros.reduce((maisRecente, registro) => {
+            const [dia, mes] = registro.productionDate.split("/").map(Number);
+            const dataAtual = new Date(new Date().getFullYear(), mes - 1, dia);
+            const [diaMaisRecente, mesMaisRecente] = maisRecente.productionDate.split("/").map(Number);
+            const dataMaisRecente = new Date(new Date().getFullYear(), mesMaisRecente - 1, diaMaisRecente);
+
+            return dataAtual > dataMaisRecente ? registro : maisRecente;
+        });
+
+        console.log(`[LOG] Registro mais recente encontrado:`, registroMaisRecente);
+        res.json(registroMaisRecente);
     } catch (error) {
-        console.error("[ERRO] Falha ao ler o arquivo:", error);
-        res.status(500).json({ error: "Erro ao ler o arquivo de produção!" });
-    }
-}
-
-// Função para salvar o machineMap
-function setMachineMap(req, res) {
-    console.log("[LOG] Iniciando salvamento do machineMap...");
-
-    garantirPastaDados();
-
-    const machineMap = req.body;
-    console.log("[LOG] Dados recebidos para o machineMap:", machineMap);
-
-    // Validar a estrutura do machineMap
-    const estruturaBasica = [
-        "1_Frente",
-        "2_Traseira",
-        "3_Montagem",
-        "4_Bolso_Lateral",
-        "5_Costura_Interna",
-        "6_Barras",
-        "7_Cos_Elastico",
-        "8_Acabamento"
-    ];
-
-    // Garantir que todas as seções básicas existam
-    const machineMapValidado = { ...machineMap };
-    estruturaBasica.forEach(secao => {
-        if (!machineMapValidado[secao]) {
-            machineMapValidado[secao] = {};
-        }
-    });
-
-    try {
-        fs.writeFileSync(machineMapPath, JSON.stringify(machineMapValidado, null, 2));
-        console.log("[LOG] Machine map salvo com sucesso!");
-        res.json({ message: "Machine map salvo com sucesso!" });
-    } catch (error) {
-        console.error("[ERRO] Falha ao salvar o machineMap:", error);
-        res.status(500).json({ error: "Erro ao salvar o machineMap!" });
-    }
-}
-
-// Função para carregar o machineMap
-function getMachineMap(req, res) {
-    console.log("[LOG] Iniciando carregamento do machineMap...");
-
-    garantirPastaDados();
-
-    console.log("[LOG] Caminho do arquivo machineMap.json:", machineMapPath);
-
-    // Estrutura básica do machineMap
-    const estruturaBasica = {
-        "1_Frente": {},
-        "2_Traseira": {},
-        "3_Montagem": {},
-        "4_Bolso_Lateral": {},
-        "5_Costura_Interna": {},
-        "6_Barras": {},
-        "7_Cos_Elastico": {},
-        "8_Acabamento": {}
-    };
-
-    try {
-        let machineMap = estruturaBasica;
-        
-        if (fs.existsSync(machineMapPath)) {
-            const dadosArquivo = JSON.parse(fs.readFileSync(machineMapPath, "utf8"));
-            
-            // Se o arquivo existe mas não está no formato novo, converte
-            if (Object.keys(dadosArquivo).length > 0 && !dadosArquivo["1_Frente"]) {
-                // Converte o formato antigo para o novo
-                Object.entries(dadosArquivo).forEach(([funcao, maquina]) => {
-                    // Tenta identificar a seção baseada na função
-                    let secaoEncontrada = "1_Frente"; // Default para funções não identificadas
-                    
-                    const funcaoLower = funcao.toLowerCase();
-                    if (funcaoLower.includes("traseira") || funcaoLower.includes("pala traseira")) {
-                        secaoEncontrada = "2_Traseira";
-                    } else if (funcaoLower.includes("lateral")) {
-                        secaoEncontrada = "3_Montagem";
-                    } else if (funcaoLower.includes("bolso")) {
-                        secaoEncontrada = "4_Bolso_Lateral";
-                    } else if (funcaoLower.includes("entreperna")) {
-                        secaoEncontrada = "5_Costura_Interna";
-                    } else if (funcaoLower.includes("barra")) {
-                        secaoEncontrada = "6_Barras";
-                    } else if (funcaoLower.includes("cós") || funcaoLower.includes("elastico")) {
-                        secaoEncontrada = "7_Cos_Elastico";
-                    }
-                    
-                    machineMap[secaoEncontrada][funcao] = maquina;
-                });
-                
-                // Salva o novo formato
-                fs.writeFileSync(machineMapPath, JSON.stringify(machineMap, null, 2));
-            } else {
-                machineMap = { ...estruturaBasica, ...dadosArquivo };
-            }
-        } else {
-            // Se o arquivo não existe, cria com a estrutura básica
-            fs.writeFileSync(machineMapPath, JSON.stringify(estruturaBasica, null, 2));
-        }
-
-        console.log("[LOG] Machine map carregado com sucesso:", machineMap);
-        res.json(machineMap);
-    } catch (error) {
-        console.error("[ERRO] Falha ao carregar o machineMap:", error);
-        res.status(500).json({ error: "Erro ao carregar o machineMap!" });
+        console.error("[ERRO] Falha ao processar o arquivo:", error);
+        res.status(500).json({ error: "Erro ao processar os dados!" });
     }
 }
 
@@ -441,105 +339,15 @@ function listarProducao(req, res) {
     }
 }
 
-// Função para carregar o arquivo de remessas e lotes
-function getLotesRemessas(req, res) {
-    console.log("[LOG] Iniciando carregamento das remessas e lotes...");
-    garantirPastaDados();
-
-    if (!fs.existsSync(lotesRemessasPath)) {
-        console.warn("[AVISO] Arquivo lotesRemessas.json não encontrado. Criando arquivo vazio...");
-        fs.writeFileSync(lotesRemessasPath, JSON.stringify({ remessas: [] }));
-    }
-
-    try {
-        const lotesRemessas = JSON.parse(fs.readFileSync(lotesRemessasPath, "utf8"));
-        console.log("[LOG] Remessas e lotes carregados com sucesso");
-        res.json(lotesRemessas);
-    } catch (error) {
-        console.error("[ERRO] Falha ao carregar remessas e lotes:", error);
-        res.status(500).json({ error: "Erro ao carregar remessas e lotes!" });
-    }
-}
-
-// Função para adicionar uma nova remessa
-function addRemessa(req, res) {
-    console.log("[LOG] Iniciando adição de nova remessa...");
-    garantirPastaDados();
-
-    const novaRemessa = req.body;
-    console.log("[LOG] Dados da nova remessa:", novaRemessa);
-
-    try {
-        let lotesRemessas = { remessas: [] };
-        if (fs.existsSync(lotesRemessasPath)) {
-            lotesRemessas = JSON.parse(fs.readFileSync(lotesRemessasPath, "utf8"));
-        }
-
-        // Adiciona a nova remessa com um ID único
-        novaRemessa.id = Date.now().toString();
-        novaRemessa.dataRegistro = new Date().toISOString();
-        lotesRemessas.remessas.push(novaRemessa);
-
-        fs.writeFileSync(lotesRemessasPath, JSON.stringify(lotesRemessas, null, 2));
-        console.log("[LOG] Remessa adicionada com sucesso!");
-        res.json({ message: "Remessa adicionada com sucesso!", remessaId: novaRemessa.id });
-    } catch (error) {
-        console.error("[ERRO] Falha ao adicionar remessa:", error);
-        res.status(500).json({ error: "Erro ao adicionar remessa!" });
-    }
-}
-
-// Função para adicionar um lote a uma remessa existente
-function addLote(req, res) {
-    console.log("[LOG] Iniciando adição de novo lote...");
-    const { remessaId } = req.params;
-    const novoLote = req.body;
-    
-    try {
-        const lotesRemessas = JSON.parse(fs.readFileSync(lotesRemessasPath, "utf8"));
-        const remessaIndex = lotesRemessas.remessas.findIndex(r => r.id === remessaId);
-        
-        if (remessaIndex === -1) {
-            return res.status(404).json({ error: "Remessa não encontrada!" });
-        }
-
-        // Se a remessa não tiver um array de lotes, cria um
-        if (!lotesRemessas.remessas[remessaIndex].lotes) {
-            lotesRemessas.remessas[remessaIndex].lotes = [];
-        }
-
-        // Encontra o maior número atual para o tamanho do lote
-        const lotesDoMesmoTamanho = lotesRemessas.remessas[remessaIndex].lotes
-            .filter(l => l.tamanho === novoLote.tamanho);
-        const maiorNumero = lotesDoMesmoTamanho.reduce((max, lote) => {
-            const num = parseInt(lote.numero) || 0;
-            return num > max ? num : max;
-        }, 0);
-
-        // Adiciona o novo lote com o próximo número da sequência
-        novoLote.id = Date.now().toString();
-        novoLote.numero = (maiorNumero + 1).toString();
-        lotesRemessas.remessas[remessaIndex].lotes.push(novoLote);
-
-        fs.writeFileSync(lotesRemessasPath, JSON.stringify(lotesRemessas, null, 2));
-        console.log("[LOG] Lote adicionado com sucesso!");
-        res.json({ message: "Lote adicionado com sucesso!", loteId: novoLote.id });
-    } catch (error) {
-        console.error("[ERRO] Falha ao adicionar lote:", error);
-        res.status(500).json({ error: "Erro ao adicionar lote!" });
-    }
-}
-
 module.exports = {
-    lerArquivoCSV,
     listarProducao,
     adicionarProducao,
     carregarUltimoRegistro,
-    setMachineMap,
-    getMachineMap,
     listarDadosFuncionario,
     listarNomesFuncionarios,
     getLotesRemessas,
     addRemessa,
-    addLote
+    addLote,
+    setMachineMap,
+    getMachineMap
 };

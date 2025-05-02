@@ -1,0 +1,139 @@
+{
+  "funcoes_compostas": {
+    "Preparar_Base_Inicial": {
+      "descricao": "Preparação inicial com chuleios necessários",
+      "operacoes": [
+        "Fechar_Fundilho",
+        "Chulear_Bolso_Frontal",
+        "Chulear_Bolso_Traseiro",
+        "Chulear_Bolso_Lateral"
+      ],
+      "fluxo_principal": "1_Painel_Frontal"
+    },
+    "Montar_Lapela": {
+      "descricao": "Montagem completa da lapela",
+      "operacoes": [
+        "Costurar_Lapela",
+        "Virar_Lapela",
+        "Prespontar_Lapela"
+      ],
+      "fluxo_principal": "5_Bolso_Lateral"
+    },
+    "Finalizar_Traseiro": {
+      "descricao": "Preparação e aplicação do conjunto traseiro",
+      "operacoes": [
+        "Prespontar_Central_Traseiro",
+        "Barra_Bolso_Traseiro",
+        "Aplicar_Bolso_Traseiro"
+      ],
+      "fluxo_principal": "2_Painel_Traseiro"
+    },
+    "Finalizar_Montagem": {
+      "descricao": "Operações finais de montagem da calça",
+      "operacoes": [
+        "Costurar_Etiqueta",
+        "Fechar_Entreperna",
+        "Barra_Perna"
+      ],
+      "fluxo_principal": "6_Montagem"
+    }
+  },
+  "funcoes_simples": {
+    "Prespontar_Fundilho": {
+      "maquina": "Prespontadeira",
+      "fluxo": "1_Painel_Frontal"
+    },
+    "Costurar_Pala_Frontal": {
+      "maquina": "Overlock",
+      "fluxo": "1_Painel_Frontal"
+    },
+    "Prespontar_Pala_Frontal": {
+      "maquina": "Reta",
+      "fluxo": "1_Painel_Frontal"
+    },
+    "Costurar_Pala_Traseira": {
+      "maquina": "Interlock",
+      "fluxo": "2_Painel_Traseiro"
+    },
+    "Prespontar_Pala_Traseira": {
+      "maquina": "Prespontadeira",
+      "fluxo": "2_Painel_Traseiro"
+    },
+    "Unir_Painel_Traseiro": {
+      "maquina": "Interlock",
+      "fluxo": "2_Painel_Traseiro"
+    },
+    "Prespontar_Central_Traseiro": {
+      "maquina": "Prespontadeira",
+      "fluxo": "2_Painel_Traseiro"
+    },
+    "Barra_Bolso_Frontal": {
+      "maquina": "Prespontadeira",
+      "fluxo": "3_Bolso_Frontal"
+    },
+    "Aplicar_Bolso_Frontal": {
+      "maquina": "Prespontadeira",
+      "fluxo": "3_Bolso_Frontal"
+    },
+    "Barra_Bolso_Traseiro": {
+      "maquina": "Prespontadeira",
+      "fluxo": "4_Bolso_Traseiro"
+    },
+    "Aplicar_Bolso_Traseiro": {
+      "maquina": "Prespontadeira",
+      "fluxo": "4_Bolso_Traseiro"
+    },
+    "Costurar_Lapela": {
+      "maquina": "Reta",
+      "fluxo": "5_Bolso_Lateral"
+    },
+    "Virar_Lapela": {
+      "maquina": "Manual",
+      "fluxo": "5_Bolso_Lateral"
+    },
+    "Prespontar_Lapela": {
+      "maquina": "Prespontadeira",
+      "fluxo": "5_Bolso_Lateral"
+    },
+    "Barra_Bolso_Lateral": {
+      "maquina": "Prespontadeira",
+      "fluxo": "5_Bolso_Lateral"
+    },
+    "Aplicar_Bolso_Lateral": {
+      "maquina": "Prespontadeira",
+      "fluxo": "5_Bolso_Lateral"
+    },
+    "Fechar_Lateral": {
+      "maquina": "Interlock",
+      "fluxo": "6_Montagem"
+    },
+    "Prespontar_Lateral": {
+      "maquina": "Prespontadeira",
+      "fluxo": "6_Montagem"
+    },
+    "Fechar_Entreperna": {
+      "maquina": "Interlock",
+      "fluxo": "6_Montagem"
+    },
+    "Barra_Perna": {
+      "maquina": "Reta",
+      "fluxo": "6_Montagem"
+    },
+    "Aplicar_Elastico": {
+      "maquina": "Interlock",
+      "fluxo": "7_Cos"
+    },
+    "Costurar_Etiqueta": {
+      "maquina": "Reta",
+      "fluxo": "7_Cos"
+    },
+    "Finalizar_Elastico": {
+      "maquina": "Elastiqueira",
+      "fluxo": "7_Cos"
+    },
+    "Revisar": {
+      "maquina": "Manual",
+      "fluxo": "8_Acabamento"
+    }
+  }
+}
