@@ -3,122 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Marcação de Produção Diária</title>
+  <title>Registrar Produção</title>
   <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/layouts.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
-    .section-card {
-      background: white;
-      border-radius: 8px;
-      box-shadow: var(--shadow-sm);
-      padding: var(--spacing-lg);
+    /* Estilos específicos da página de registro */
+    .radio-group {
+      display: flex;
+      gap: var(--spacing-lg);
       margin-bottom: var(--spacing-lg);
     }
 
-    .section-title {
-      color: var(--primary-color);
-      border-bottom: 2px solid var(--primary-color);
-      padding-bottom: var(--spacing-sm);
-      margin-bottom: var(--spacing-lg);
+    .radio-group label {
       display: flex;
       align-items: center;
       gap: var(--spacing-sm);
-    }
-
-    .form-flex {
-      display: flex;
-      gap: var(--spacing-lg);
-      flex-wrap: wrap;
-    }
-
-    .form-col {
-      flex: 1;
-      min-width: 300px;
-    }
-
-    .input-group .icon {
-      position: absolute;
-      left: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--primary-color);
-      pointer-events: none;
-    }
-
-    .input-group {
-      position: relative;
-      margin-bottom: var(--spacing-md);
-    }
-
-    .input-group input,
-    .input-group select {
-      padding-left: 35px;
-      width: 100%;
-    }
-
-    .input-group label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 5px;
-    }
-
-    .input-group label i {
-      color: var(--primary-color);
-    }
-
-    .tooltip {
-      position: relative;
-      display: inline-block;
-      margin-left: 5px;
-      color: #6c757d;
-    }
-
-    .tooltip:hover::after {
-      content: attr(data-tip);
-      position: absolute;
-      background: #333;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 4px;
-      font-size: 12px;
-      white-space: nowrap;
-      z-index: 1;
-      left: 100%;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
-    #ultimoRegistro {
-      background: white;
-      border-radius: 8px;
-      box-shadow: var(--shadow-sm);
-      padding: var(--spacing-lg);
-    }
-
-    .registro-info {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: var(--spacing-md);
-      margin-top: var(--spacing-md);
-    }
-
-    .registro-item {
-      padding: var(--spacing-md);
-      background: #f8f9fa;
-      border-radius: 4px;
-    }
-
-    .registro-item strong {
-      color: var(--primary-color);
-      display: block;
-      margin-bottom: 5px;
+      cursor: pointer;
     }
 
     .funcoes-lista {
       max-height: 200px;
       overflow-y: auto;
-      border: 1px solid #ddd;
+      border: 1px solid var(--border-color);
       border-radius: 4px;
       padding: 8px;
       margin-top: 8px;
@@ -130,64 +39,35 @@
       gap: 8px;
       margin-bottom: 8px;
       padding: 8px;
-      background: #f8f9fa;
+      background: var(--background-color);
       border-radius: 4px;
-    }
-
-    .funcao-adicional select {
-      flex: 1;
-    }
-
-    .funcao-adicional button {
-      background: none;
-      border: none;
-      color: #dc3545;
-      cursor: pointer;
-      padding: 4px;
-      border-radius: 4px;
-    }
-
-    .funcao-adicional button:hover {
-      background: #fee2e2;
     }
 
     .funcao-quantidade {
-      margin-bottom: 16px;
-      padding: 12px;
-      border: 1px solid #e9ecef;
+      margin-bottom: var(--spacing-md);
+      padding: var(--spacing-md);
+      border: 1px solid var(--border-color);
       border-radius: 4px;
-      background: #f8f9fa;
+      background: var(--background-color);
     }
 
-    .quantidade-header {
-      font-weight: bold;
-      color: var(--primary-color);
-      margin-bottom: 8px;
+    .registro-info {
+      margin-top: var(--spacing-md);
     }
   </style>
 </head>
 <body>
-  <nav class="nav">
-    <ul class="nav-list">
-      <li><a href="/" class="nav-link"><i class="fas fa-home"></i> Início</a></li>
-      <li><a href="/producao/html/registrar.html" class="nav-link"><i class="fas fa-plus-circle"></i> Registrar Produção</a></li>
-      <li><a href="/producao/html/visualizar.html" class="nav-link"><i class="fas fa-table"></i> Visualizar Registros</a></li>
-      <li><a href="/fluxo-caixa/caixa.html" class="nav-link"><i class="fas fa-dollar-sign"></i> Fluxo de Caixa</a></li>
-      <li><a href="/producao/html/gerenciar-lotes.html" class="nav-link"><i class="fas fa-boxes"></i> Gerenciar Lotes</a></li>
-    </ul>
-  </nav>
-
   <div class="container">
     <h1 class="section-title m-3">
       <i class="fas fa-clipboard-list"></i>
       Marcação de Produção Diária
     </h1>
     
-    <div class="grid-2">
-      <!-- Formulário -->
-      <form id="productionForm" class="form-container">
-        <!-- Seção de Identificação -->
-        <div class="section-card">
+    <form id="productionForm" class="form-container">
+      <!-- Primeira linha: Identificação e Funções -->
+      <div class="card-row">
+        <!-- Identificação -->
+        <div class="section-card card-vertical">
           <h2 class="section-title">
             <i class="fas fa-user"></i>
             Identificação
@@ -211,10 +91,27 @@
                 <option value="Suzane">
               </datalist>
             </div>
+            <div class="input-group">
+              <label for="productionDate" class="form-label">
+                <i class="fas fa-calendar"></i> Data:
+              </label>
+              <input type="text" id="productionDate" name="productionDate" class="form-control" placeholder="DD/MM" pattern="\d{2}/\d{2}" title="Formato DD/MM" required>
+            </div>
+          </div>
+
+          <!-- Último Registro movido para dentro do card de identificação -->
+          <div id="ultimoRegistro">
+            <h3 class="section-subtitle">
+              <i class="fas fa-history"></i>
+              Último Registro
+            </h3>
+            <div class="registro-info">
+              <p>Selecione um funcionário para ver os registros.</p>
+            </div>
           </div>
         </div>
 
-        <!-- Seção de Função -->
+        <!-- Funções e Máquina -->
         <div class="section-card">
           <h2 class="section-title">
             <i class="fas fa-tasks"></i>
@@ -248,9 +145,6 @@
                   <i class="fas fa-plus-circle"></i> Adicionar Função Extra
                 </button>
               </div>
-              <button type="button" id="adicionarFuncao" class="btn btn-primary m-2">
-                <i class="fas fa-plus"></i> Nova Função
-              </button>
             </div>
             <div class="form-col">
               <div class="input-group">
@@ -262,34 +156,11 @@
             </div>
           </div>
         </div>
+      </div>
 
-        <!-- Seção de Tempo -->
-        <div class="section-card">
-          <h2 class="section-title">
-            <i class="fas fa-clock"></i>
-            Período
-          </h2>
-          <div class="form-flex">
-            <div class="form-col">
-              <div class="input-group">
-                <label for="startTime" class="form-label">
-                  <i class="fas fa-play"></i> Início:
-                </label>
-                <input type="time" id="startTime" name="startTime" class="form-control">
-              </div>
-            </div>
-            <div class="form-col">
-              <div class="input-group">
-                <label for="endTime" class="form-label">
-                  <i class="fas fa-stop"></i> Fim:
-                </label>
-                <input type="time" id="endTime" name="endTime" class="form-control">
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Seção de Produção -->
+      <!-- Segunda linha: Produção e Período -->
+      <div class="card-row">
+        <!-- Produção -->
         <div class="section-card">
           <h2 class="section-title">
             <i class="fas fa-box"></i>
@@ -344,33 +215,41 @@
               <small class="form-text"><i class="fas fa-info-circle"></i> Segure CTRL para selecionar múltiplos lotes</small>
             </div>
           </div>
+        </div>
 
-          <div class="input-group">
-            <label for="productionDate" class="form-label">
-              <i class="fas fa-calendar"></i> Data:
-            </label>
-            <input type="text" id="productionDate" name="productionDate" class="form-control" placeholder="DD/MM" pattern="\d{2}/\d{2}" title="Formato DD/MM" required>
+        <!-- Período -->
+        <div class="section-card">
+          <h2 class="section-title">
+            <i class="fas fa-clock"></i>
+            Período
+          </h2>
+          <div class="form-flex horizontal">
+            <div class="input-group">
+              <label for="startTime" class="form-label">
+                <i class="fas fa-play"></i> Início:
+              </label>
+              <input type="time" id="startTime" name="startTime" class="form-control">
+            </div>
+            <div class="input-group">
+              <label for="endTime" class="form-label">
+                <i class="fas fa-stop"></i> Fim:
+              </label>
+              <input type="time" id="endTime" name="endTime" class="form-control">
+            </div>
+          </div>
+
+          <!-- Botão de Submit -->
+          <div class="form-actions">
+            <button type="submit" class="btn btn-success">
+              <i class="fas fa-save"></i> Registrar Produção
+            </button>
           </div>
         </div>
-
-        <button type="submit" class="btn btn-success btn-lg w-100">
-          <i class="fas fa-save"></i> Registrar Produção
-        </button>
-      </form>
-
-      <!-- Painel do Último Registro -->
-      <div id="ultimoRegistro" class="section-card">
-        <h2 class="section-title">
-          <i class="fas fa-history"></i>
-          Último Registro
-        </h2>
-        <div class="registro-info">
-          <p>Selecione um funcionário para ver os registros.</p>
-        </div>
       </div>
-    </div>
+    </form>
   </div>
   
+  <script src="/js/menu.js"></script>
   <script type="module" src="../js/registrar-funcao.js"></script>
 </body>
 </html>
