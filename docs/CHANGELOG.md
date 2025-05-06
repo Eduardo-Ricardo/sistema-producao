@@ -12,13 +12,20 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/lang/pt-BR
 - Guia de desenvolvimento detalhado
 - Documentação da API
 - Registro detalhado de mudanças (este arquivo)
+- Refatoração dos controladores de produção em módulos separados
+  - Criado `machineMapController.js` para funções relacionadas ao mapeamento de máquinas
+  - Criado `lotesController.js` para funções relacionadas a lotes e remessas
 
 ### Corrigido
 - Problemas identificados no menu principal (em andamento)
+- Funcionalidade "Último Registro" no módulo de produção
+- Recuperação da página de registro (registrar.html)
+- Recuperação da página de funcionários (ficha-funcionario.html)
 
 ### Alterado
 - Estrutura da documentação reorganizada
 - Melhorias no roadmap do projeto
+- Refatoração do `producaoController.js` para utilizar controladores especializados
 
 ## [1.0.0] - 2025-04-22
 

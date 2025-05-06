@@ -49,6 +49,104 @@ Este documento detalha as APIs disponíveis no sistema de gestão, incluindo end
   }
   ```
 
+### Mapeamento de Máquinas
+- **Endpoint**: `/api/producao/machine-map`
+- **Método**: GET
+- **Descrição**: Retorna o mapeamento de máquinas disponíveis
+- **Resposta**:
+  ```json
+  {
+    "machineMap": {
+      "categoria1": ["maquina1", "maquina2"],
+      "categoria2": ["maquina3", "maquina4"]
+    }
+  }
+  ```
+
+### Atualização de Mapeamento de Máquinas
+- **Endpoint**: `/api/producao/machine-map`
+- **Método**: POST
+- **Descrição**: Atualiza o mapeamento de máquinas
+- **Parâmetros**:
+  ```json
+  {
+    "machineMap": {
+      "categoria1": ["maquina1", "maquina2"],
+      "categoria2": ["maquina3", "maquina4"]
+    }
+  }
+  ```
+- **Resposta de Sucesso**:
+  ```json
+  {
+    "status": "success",
+    "message": "Mapeamento atualizado com sucesso"
+  }
+  ```
+
+### Gerenciamento de Lotes
+- **Endpoint**: `/api/producao/lotes`
+- **Método**: GET
+- **Descrição**: Retorna todos os lotes cadastrados
+- **Resposta**:
+  ```json
+  {
+    "lotes": [
+      {
+        "id": "string",
+        "descricao": "string",
+        "dataInicio": "YYYY-MM-DD",
+        "dataFim": "YYYY-MM-DD",
+        "remessas": ["id1", "id2"]
+      }
+    ]
+  }
+  ```
+
+### Criação de Lote
+- **Endpoint**: `/api/producao/lotes`
+- **Método**: POST
+- **Descrição**: Cria um novo lote
+- **Parâmetros**:
+  ```json
+  {
+    "descricao": "string",
+    "dataInicio": "YYYY-MM-DD",
+    "dataFim": "YYYY-MM-DD"
+  }
+  ```
+- **Resposta de Sucesso**:
+  ```json
+  {
+    "status": "success",
+    "message": "Lote criado com sucesso",
+    "lote": {
+      "id": "string",
+      "descricao": "string",
+      "dataInicio": "YYYY-MM-DD",
+      "dataFim": "YYYY-MM-DD"
+    }
+  }
+  ```
+
+### Último Registro
+- **Endpoint**: `/api/producao/ultimo-registro`
+- **Método**: GET
+- **Descrição**: Retorna o último registro de produção de um funcionário
+- **Parâmetros Query**:
+  - `funcionario`: Nome do funcionário
+- **Resposta**:
+  ```json
+  {
+    "registro": {
+      "funcionario": "string",
+      "data": "YYYY-MM-DD",
+      "maquina": "string",
+      "quantidade": "number"
+    }
+  }
+  ```
+
 ## Módulo de Fluxo de Caixa
 
 ### Registro de Transação

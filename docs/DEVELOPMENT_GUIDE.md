@@ -36,11 +36,19 @@
 
 ### Módulo Produção (/producao)
 - `controllers/` - Lógica de negócio
+  - `producaoController.js` - Controlador principal de produção
+  - `machineMapController.js` - Controlador para mapeamento de máquinas
+  - `lotesController.js` - Controlador para gerenciamento de lotes
 - `data/` - Arquivos CSV e configurações
+  - `*.csv` - Dados de produção por ano
+  - `machineMap.json` - Configuração de máquinas
+  - `lotesRemessas.json` - Configuração de lotes
 - `public/` - Interface do usuário
   - HTML para diferentes visualizações
   - Scripts específicos de produção
   - Estilos específicos
+- `utils/` - Utilitários
+  - `fileUtils.js` - Funções para manipulação de arquivos (planejado)
 
 ### Módulo Fluxo de Caixa (/fluxo-caixa)
 - `controllers/` - Rotas e lógica
@@ -142,3 +150,18 @@ Este guia deve ser atualizado sempre que:
 - Novos padrões são estabelecidos
 - Processos mudam
 - Novas ferramentas são adotadas
+
+## Fluxo de Desenvolvimento
+
+### Refatoração de Código
+1. Identifique componentes que podem ser separados em módulos
+2. Crie controladores/utilitários específicos
+3. Atualize as importações nos arquivos existentes
+4. Teste exaustivamente cada função refatorada
+5. Atualize a documentação com a nova estrutura
+
+### Adição de Novos Controladores
+1. Crie o arquivo do controlador na pasta adequada
+2. Siga o padrão de exportação de módulos do Node.js
+3. Importe o controlador nos arquivos que precisam utilizá-lo
+4. Implemente testes para validar a funcionalidade

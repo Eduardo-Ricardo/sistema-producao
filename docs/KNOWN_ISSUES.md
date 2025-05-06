@@ -26,6 +26,22 @@
 **Solução Temporária**: Usar planilhas externas para controle financeiro.  
 **Próximos Passos**: Implementação completa planejada para v2.0.
 
+### 4. Atualização do nome na GUI para machineMap
+**Status**: Pendente  
+**Módulo**: producao  
+**Impacto**: Baixo  
+**Descrição**: O nome mostrado na GUI não está atualizado após refatoração do machineMap.  
+**Solução Temporária**: Usar a interface normalmente, ignorando a inconsistência de nome.  
+**Próximos Passos**: Atualizar referências de nome na GUI.
+
+### 5. Testes para funções de lotes e remessas
+**Status**: Pendente  
+**Módulo**: producao  
+**Impacto**: Médio  
+**Descrição**: As funções relacionadas a lotes e remessas no novo lotesController.js precisam ser testadas.  
+**Solução Temporária**: Utilizar apenas funções já validadas.  
+**Próximos Passos**: Implementar testes unitários e validar todas as funções.
+
 ## Problemas Resolvidos
 
 ### 1. Servidor Node.js Iniciando
@@ -35,6 +51,14 @@
 ### 2. Registro de Produção
 **Versão Resolvida**: 1.0.0  
 **Solução**: Implementação do sistema de armazenamento em CSV.
+
+### 3. Funcionalidade "Último Registro"
+**Versão Resolvida**: 1.0.1 (não lançada)  
+**Solução**: Corrigida a função `carregarUltimoRegistro` no backend e adicionado evento `change` no frontend.
+
+### 4. Refatoração dos Controladores
+**Versão Resolvida**: 1.0.1 (não lançada)  
+**Solução**: Criação de controladores especializados para machineMap e lotes.
 
 ## Dicas de Solução de Problemas
 

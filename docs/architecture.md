@@ -21,6 +21,15 @@ O sistema é uma aplicação web modular para gestão empresarial, focando em do
   - Registro de produção diária
   - Visualização de dados por funcionário
   - Geração de relatórios
+  - Gerenciamento de lotes e remessas
+  - Mapeamento de máquinas
+- **Estrutura**:
+  - **Controllers**: 
+    - `producaoController.js`: Controlador principal
+    - `machineMapController.js`: Gerenciamento de mapeamento de máquinas
+    - `lotesController.js`: Gerenciamento de lotes e remessas
+  - **Data**: Armazenamento de dados em CSV e JSON
+  - **Utils**: Utilitários para manipulação de arquivos (em desenvolvimento)
 - **Tecnologias**: Node.js, JavaScript, CSV para armazenamento
 
 ### 3. Módulo Fluxo de Caixa
