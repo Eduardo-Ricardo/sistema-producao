@@ -1,17 +1,17 @@
 {
     "1_Painel_Frontal": {
       "Fechar_Fundilho": "Overlock",
-      "Prespontar_Fundilho": "Prespontadeira",
-      "Costurar_Pala_Frontal": "Overlock",
-      "Prespontar_Pala_Frontal": "Reta"
+      "Reforco_Fundilho": "Prespontadeira",
+      "Costura_Pala_Frontal": "Overlock",
+      "Reforco_Pala_Frontal": "Prespontadeira"
     },
     "2_Painel_Traseiro": {
-      "Costurar_Pala_Traseira": "Interlock",
-      "Prespontar_Pala_Traseira": "Prespontadeira",
-      "Unir_Paineis_Traseiros": "Interlock",
-      "Prespontar_Painel_Traseiro": "Prespontadeira"
+      "Costura_Pala_Traseira": "Interlock",
+      "Presponto_Pala_Traseira": "Reta",
+      "Uniao_Paineis_Traseiros": "Interlock",
+      "Presponto_Costura_Central": "Prespontadeira"
     },
-    "3_Bolso_Frontal": {
+    "3_Bolso_Frontral": {
       "Chulear_Bolso_Frontal": "Overlock",
       "Barra_Bolso_Frontal": "Prespontadeira",
       "Aplicar_Bolso_Frontal": "Prespontadeira"
@@ -31,17 +31,15 @@
     },
     "6_Montagem": {
       "Fechar_Lateral": "Interlock",
-      "Prespontar_Lateral": "Prespontadeira",
-      "Fechar_entreperna": "Interlock",
+      "Presponto_Lateral": "Prespontadeira",
       "Barra_Perna": "Reta"
     },
     "7_Cos": {
       "Aplicar_Elastico": "Interlock",
-      "Aplicar_Etiqueta": "Reta",
-      "Finalizar_Elastico": "Elastiqueira"
+      "Costura_Etiqueta": "Reta",
+      "Acabamento_Elastico": "Elastiqueira"
     },
     "8_Acabamento": {
-      "Retirar_Linha": "Manual",
-      "Revisar_Qualidade": "Manual"
+      "Retirar_Linha": "Manual"
     }
   }

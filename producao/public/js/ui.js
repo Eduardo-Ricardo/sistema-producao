@@ -36,16 +36,28 @@ export function atualizarDropdownFuncoes(machineMap) {
     // Limpa as opções existentes
     datalist.innerHTML = '';
 
-    // Itera sobre as seções do machineMap
-    Object.entries(machineMap).forEach(([secao, funcoes]) => {
-        // Para cada seção, adiciona suas funções ao datalist
-        Object.keys(funcoes).forEach(funcao => {
+    // Verifica o formato do machineMap (antigo ou novo)
+    const isFormatoAntigo = machineMap && typeof Object.values(machineMap)[0] === 'string';
+
+    if (isFormatoAntigo) {
+        // Formato antigo: objeto plano de "função": "máquina"
+        Object.keys(machineMap).forEach(funcao => {
             const option = document.createElement("option");
             option.value = funcao;
-            option.dataset.secao = secao; // Armazena a seção para referência
             datalist.appendChild(option);
         });
-    });
+    } else {
+        // Formato novo: objeto estruturado por seções
+        Object.entries(machineMap).forEach(([secao, funcoes]) => {
+            // Para cada seção, adiciona suas funções ao datalist
+            Object.keys(funcoes).forEach(funcao => {
+                const option = document.createElement("option");
+                option.value = funcao;
+                option.dataset.secao = secao; // Armazena a seção para referência
+                datalist.appendChild(option);
+            });
+        });
+    }
 
     console.log("[LOG] Lista de funções atualizada com sucesso.");
 }
@@ -64,12 +76,23 @@ export function atualizarCampoMaquina(machineMap) {
         const selectedFunction = this.value;
         console.log("[LOG] Função selecionada:", selectedFunction);
 
-        // Procura a função em todas as seções do machineMap
+        // Verifica o formato do machineMap (antigo ou novo)
+        const isFormatoAntigo = machineMap && typeof Object.values(machineMap)[0] === 'string';
+        
         let machine = "Máquina não especificada";
-        for (const [secao, funcoes] of Object.entries(machineMap)) {
-            if (selectedFunction in funcoes) {
-                machine = funcoes[selectedFunction];
-                break;
+        
+        if (isFormatoAntigo) {
+            // Formato antigo: objeto plano de "função": "máquina"
+            if (selectedFunction in machineMap) {
+                machine = machineMap[selectedFunction];
+            }
+        } else {
+            // Formato novo: objeto estruturado por seções
+            for (const [secao, funcoes] of Object.entries(machineMap)) {
+                if (selectedFunction in funcoes) {
+                    machine = funcoes[selectedFunction];
+                    break;
+                }
             }
         }
 
@@ -105,7 +128,38 @@ export function adicionarOpcaoAoDropdown(funcao) {
 export function capturarNovaFuncaoEMaquina(machineMap) {
     console.log("[LOG] Iniciando captura de nova função e máquina...");
 
-    // Lista as seções disponíveis
+    // Verifica o formato do machineMap (antigo ou novo)
+    const isFormatoAntigo = machineMap && typeof Object.values(machineMap)[0] === 'string';
+    
+    // Se for formato antigo, retorna um objeto simples
+    if (isFormatoAntigo) {
+        const novaFuncao = prompt("Digite o nome da nova função:");
+        if (!novaFuncao) {
+            console.warn("[AVISO] Nenhuma função foi digitada.");
+            alert("A função não pode ser vazia.");
+            return null;
+        }
+
+        let novaMaquina = null;
+        while (!novaMaquina) {
+            novaMaquina = prompt(`Digite o nome da máquina para a função "${novaFuncao}":\nOu deixe vazio para usar "Máquina não especificada".`);
+            if (novaMaquina === null) {
+                console.warn("[AVISO] Operação cancelada pelo usuário.");
+                alert("Operação cancelada. Nenhuma função foi adicionada.");
+                return null;
+            } else if (novaMaquina.trim() === "") {
+                novaMaquina = "Máquina não especificada";
+            }
+        }
+
+        console.log("[LOG] Nova função e máquina capturadas (formato antigo):", { novaFuncao, novaMaquina });
+        return {
+            funcao: novaFuncao,
+            maquina: novaMaquina
+        };
+    }
+    
+    // Formato novo - fluxo original
     const secoes = Object.keys(machineMap);
     let secaoSelecionada = prompt(
         `Selecione a seção para a nova função (digite o número):\n` +
@@ -147,7 +201,7 @@ export function capturarNovaFuncaoEMaquina(machineMap) {
         }
     }
 
-    console.log("[LOG] Nova função e máquina capturadas:", { secaoSelecionada, novaFuncao, novaMaquina });
+    console.log("[LOG] Nova função e máquina capturadas (formato novo):", { secaoSelecionada, novaFuncao, novaMaquina });
     return {
         secao: secaoSelecionada,
         funcao: novaFuncao,

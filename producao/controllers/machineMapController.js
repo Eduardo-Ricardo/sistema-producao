@@ -11,6 +11,18 @@ function garantirPastaDados() {
     }
 }
 
+// Define a estrutura básica padrão para o machineMap
+const estruturaBasica = {
+    "1_Frente": {},
+    "2_Traseira": {},
+    "3_Montagem": {},
+    "4_Bolso_Lateral": {},
+    "5_Costura_Interna": {},
+    "6_Barras": {},
+    "7_Cos_Elastico": {},
+    "8_Acabamento": {}
+};
+
 function setMachineMap(req, res) {
     console.log("[LOG] Iniciando salvamento do machineMap...");
 
@@ -19,25 +31,23 @@ function setMachineMap(req, res) {
     const machineMap = req.body;
     console.log("[LOG] Dados recebidos para o machineMap:", machineMap);
 
-    const estruturaBasica = [
-        "1_Frente",
-        "2_Traseira",
-        "3_Montagem",
-        "4_Bolso_Lateral",
-        "5_Costura_Interna",
-        "6_Barras",
-        "7_Cos_Elastico",
-        "8_Acabamento"
-    ];
-
-    const machineMapValidado = { ...machineMap };
-    estruturaBasica.forEach(secao => {
-        if (!machineMapValidado[secao]) {
-            machineMapValidado[secao] = {};
-        }
-    });
-
     try {
+        // Verifica se o machineMap já tem a estrutura esperada
+        let machineMapValidado = { ...machineMap };
+        
+        // Se for do formato antigo (plano), converte para o novo formato (por seções)
+        if (Object.keys(machineMap).length > 0 && !machineMap["1_Frente"] && typeof Object.values(machineMap)[0] === 'string') {
+            console.log("[LOG] Convertendo machineMap de formato antigo para novo...");
+            machineMapValidado = migrarParaNovaEstrutura(machineMap);
+        } else {
+            // Garante que todas as seções estejam presentes
+            Object.keys(estruturaBasica).forEach(secao => {
+                if (!machineMapValidado[secao]) {
+                    machineMapValidado[secao] = {};
+                }
+            });
+        }
+
         fs.writeFileSync(machineMapPath, JSON.stringify(machineMapValidado, null, 2));
         console.log("[LOG] Machine map salvo com sucesso!");
         res.json({ message: "Machine map salvo com sucesso!" });
@@ -52,50 +62,24 @@ function getMachineMap(req, res) {
 
     garantirPastaDados();
 
-    const estruturaBasica = {
-        "1_Frente": {},
-        "2_Traseira": {},
-        "3_Montagem": {},
-        "4_Bolso_Lateral": {},
-        "5_Costura_Interna": {},
-        "6_Barras": {},
-        "7_Cos_Elastico": {},
-        "8_Acabamento": {}
-    };
-
     try {
-        let machineMap = estruturaBasica;
+        let machineMap = { ...estruturaBasica };
 
         if (fs.existsSync(machineMapPath)) {
             const dadosArquivo = JSON.parse(fs.readFileSync(machineMapPath, "utf8"));
 
-            if (Object.keys(dadosArquivo).length > 0 && !dadosArquivo["1_Frente"]) {
-                Object.entries(dadosArquivo).forEach(([funcao, maquina]) => {
-                    let secaoEncontrada = "1_Frente";
-
-                    const funcaoLower = funcao.toLowerCase();
-                    if (funcaoLower.includes("traseira") || funcaoLower.includes("pala traseira")) {
-                        secaoEncontrada = "2_Traseira";
-                    } else if (funcaoLower.includes("lateral")) {
-                        secaoEncontrada = "3_Montagem";
-                    } else if (funcaoLower.includes("bolso")) {
-                        secaoEncontrada = "4_Bolso_Lateral";
-                    } else if (funcaoLower.includes("entreperna")) {
-                        secaoEncontrada = "5_Costura_Interna";
-                    } else if (funcaoLower.includes("barra")) {
-                        secaoEncontrada = "6_Barras";
-                    } else if (funcaoLower.includes("cós") || funcaoLower.includes("elastico")) {
-                        secaoEncontrada = "7_Cos_Elastico";
-                    }
-
-                    machineMap[secaoEncontrada][funcao] = maquina;
-                });
-
-                fs.writeFileSync(machineMapPath, JSON.stringify(machineMap, null, 2));
+            // Verifica se o arquivo tem o formato antigo (plano)
+            if (Object.keys(dadosArquivo).length > 0 && !dadosArquivo["1_Frente"] && typeof Object.values(dadosArquivo)[0] === 'string') {
+                console.log("[LOG] Formato antigo de machineMap detectado. Usando sem converter.");
+                // Apenas usa o formato antigo na resposta, sem reescrever o arquivo
+                res.json(dadosArquivo);
+                return;
             } else {
+                // Usa o formato novo, mesclando com a estrutura básica
                 machineMap = { ...estruturaBasica, ...dadosArquivo };
             }
         } else {
+            // Cria um arquivo novo apenas se não existir
             fs.writeFileSync(machineMapPath, JSON.stringify(estruturaBasica, null, 2));
         }
 
@@ -105,6 +89,34 @@ function getMachineMap(req, res) {
         console.error("[ERRO] Falha ao carregar o machineMap:", error);
         res.status(500).json({ error: "Erro ao carregar o machineMap!" });
     }
+}
+
+// Função específica para migrar do formato antigo para o novo
+function migrarParaNovaEstrutura(machineMapAntigo) {
+    const machineMapNovo = { ...estruturaBasica };
+    
+    Object.entries(machineMapAntigo).forEach(([funcao, maquina]) => {
+        let secaoEncontrada = "1_Frente";
+
+        const funcaoLower = funcao.toLowerCase();
+        if (funcaoLower.includes("traseira") || funcaoLower.includes("pala traseira")) {
+            secaoEncontrada = "2_Traseira";
+        } else if (funcaoLower.includes("lateral")) {
+            secaoEncontrada = "3_Montagem";
+        } else if (funcaoLower.includes("bolso")) {
+            secaoEncontrada = "4_Bolso_Lateral";
+        } else if (funcaoLower.includes("entreperna")) {
+            secaoEncontrada = "5_Costura_Interna";
+        } else if (funcaoLower.includes("barra")) {
+            secaoEncontrada = "6_Barras";
+        } else if (funcaoLower.includes("cós") || funcaoLower.includes("elastico")) {
+            secaoEncontrada = "7_Cos_Elastico";
+        }
+
+        machineMapNovo[secaoEncontrada][funcao] = maquina;
+    });
+    
+    return machineMapNovo;
 }
 
 module.exports = {

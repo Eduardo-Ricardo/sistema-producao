@@ -99,9 +99,18 @@ function setupEventListeners() {
 
 // Encontra a máquina associada a uma função no machineMap
 function encontrarMaquina(funcao) {
-    for (const [secao, funcoes] of Object.entries(machineMap)) {
-        if (funcao in funcoes) {
-            return funcoes[funcao];
+    // Verifica o formato do machineMap (antigo ou novo)
+    const isFormatoAntigo = machineMap && typeof Object.values(machineMap)[0] === 'string';
+    
+    if (isFormatoAntigo) {
+        // Formato antigo: objeto plano de "função": "máquina"
+        return machineMap[funcao] || "Máquina não especificada";
+    } else {
+        // Formato novo: objeto estruturado por seções
+        for (const [secao, funcoes] of Object.entries(machineMap)) {
+            if (funcao in funcoes) {
+                return funcoes[funcao];
+            }
         }
     }
     return "Máquina não especificada";
@@ -109,14 +118,29 @@ function encontrarMaquina(funcao) {
 
 // Retorna todas as funções disponíveis para uma determinada máquina
 function getFuncoesDaMaquina(maquina) {
+    // Verifica o formato do machineMap (antigo ou novo)
+    const isFormatoAntigo = machineMap && typeof Object.values(machineMap)[0] === 'string';
+    
     const funcoes = [];
-    for (const [secao, funcoesSecao] of Object.entries(machineMap)) {
-        for (const [funcao, maquinaFunc] of Object.entries(funcoesSecao)) {
+    
+    if (isFormatoAntigo) {
+        // Formato antigo: objeto plano de "função": "máquina"
+        Object.entries(machineMap).forEach(([funcao, maquinaFunc]) => {
             if (maquinaFunc === maquina) {
                 funcoes.push(funcao);
             }
+        });
+    } else {
+        // Formato novo: objeto estruturado por seções
+        for (const [secao, funcoesSecao] of Object.entries(machineMap)) {
+            for (const [funcao, maquinaFunc] of Object.entries(funcoesSecao)) {
+                if (maquinaFunc === maquina) {
+                    funcoes.push(funcao);
+                }
+            }
         }
     }
+    
     return funcoes;
 }
 
