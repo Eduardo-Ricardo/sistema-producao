@@ -1,8 +1,13 @@
 import { carregarDados, carregarMachineMap, salvarMachineMap, enviarDadosProducao } from "./dados.js";
 import { atualizarDropdownFuncoes, atualizarCampoMaquina, capturarNovaFuncaoEMaquina, limparCamposFormulario } from "./ui.js";
+// Importar funções do calendário
+import { gerarCalendario } from "./calendario.js";
 
 let machineMap = {}; // Variável global para armazenar o machineMap
 let funcoesAdicionais = []; // Array para armazenar as funções adicionais
+let mesAtualCalendario = new Date().getMonth() + 1; // Mês atual (1-12)
+let anoAtualCalendario = new Date().getFullYear(); // Ano atual
+let registrosCalendario = []; // Array para armazenar os registros do calendário
 
 // Event listener para quando o DOM estiver carregado
 document.addEventListener('DOMContentLoaded', async () => {
@@ -339,7 +344,6 @@ async function carregarUltimoRegistro() {
     const employeeName = document.getElementById("employeeName").value;
     if (!employeeName) {
         console.warn("[AVISO] Nome do funcionário não fornecido. Não é possível carregar o último registro.");
-        document.querySelector("#ultimoRegistro .registro-info").innerHTML = "<p>Selecione um funcionário para ver os registros.</p>";
         return;
     }
 
@@ -354,21 +358,149 @@ async function carregarUltimoRegistro() {
         console.log("[LOG] Último registro carregado com sucesso:", registro);
 
         if (!registro || Object.keys(registro).length === 0) {
-            document.querySelector("#ultimoRegistro .registro-info").innerHTML = "<p>Nenhum registro encontrado para este funcionário.</p>";
+            console.warn("[AVISO] Nenhum registro encontrado para este funcionário.");
             return;
         }
 
-        // Atualiza a seção "Último Registro" com os dados do último registro
-        const registroInfo = document.querySelector("#ultimoRegistro .registro-info");
-        registroInfo.innerHTML = `
-            <p><strong>Função:</strong> ${registro.employeeRole}</p>
-            <p><strong>Início:</strong> ${registro.startTime}</p>
-            <p><strong>Fim:</strong> ${registro.endTime}</p>
-            <p><strong>Quantidade:</strong> ${registro.productionCount}</p>
-            <p><strong>Data:</strong> ${registro.productionDate}</p>
-        `;
+        // Extrair o mês e ano do último registro
+        if (registro.productionDate) {
+            const [dia, mes] = registro.productionDate.split('/');
+            if (dia && mes) {
+                mesAtualCalendario = parseInt(mes);
+                // O ano será o atual ou anterior dependendo se o mês é maior que o mês atual
+                const mesAtual = new Date().getMonth() + 1;
+                anoAtualCalendario = mesAtualCalendario > mesAtual 
+                    ? new Date().getFullYear() - 1 
+                    : new Date().getFullYear();
+            }
+        }
+
+        // Carregar os registros do funcionário para o calendário
+        await carregarRegistrosCalendario(employeeName);
     } catch (error) {
         console.error("[ERRO] Falha ao carregar o último registro:", error);
-        document.querySelector("#ultimoRegistro .registro-info").innerHTML = "<p>Erro ao carregar o último registro.</p>";
     }
+}
+
+// Função para carregar os registros de produção de um funcionário
+async function carregarRegistrosCalendario(employeeName) {
+    if (!employeeName) return;
+
+    try {
+        console.log(`[LOG] Enviando requisição para carregar registros do funcionário: ${employeeName}`);
+        const resposta = await fetch(`/producao/registros-funcionario?employeeName=${encodeURIComponent(employeeName)}`);
+        if (!resposta.ok) {
+            throw new Error(`Erro ao carregar registros do funcionário: ${resposta.statusText}`);
+        }
+
+        const dados = await resposta.json();
+        console.log("[LOG] Registros do funcionário carregados com sucesso:", dados);
+
+        registrosCalendario = dados.registros || [];
+        
+        // Atualizar o nome do mês no calendário
+        atualizarNomeMesCalendario();
+        
+        // Gerar o calendário com os registros
+        gerarCalendarioRegistro();
+    } catch (error) {
+        console.error("[ERRO] Falha ao carregar registros do funcionário:", error);
+    }
+}
+
+// Função para atualizar o nome do mês mostrado no calendário
+function atualizarNomeMesCalendario() {
+    const meses = [
+        'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+    ];
+    
+    const mesNome = meses[mesAtualCalendario - 1];
+    document.getElementById('mesAtualCalendario').textContent = `${mesNome}/${anoAtualCalendario}`;
+}
+
+// Função para verificar se uma data existe nos registros do funcionário
+function dataExisteEmRegistros(dia, mes, ano) {
+    const dataFormatada = `${String(dia).padStart(2, '0')}/${String(mes).padStart(2, '0')}`;
+    return registrosCalendario.some(registro => registro.productionDate === dataFormatada);
+}
+
+// Função para verificar se é fim de semana
+function ehFimDeSemana(dia, mes, ano) {
+    const data = new Date(ano, mes - 1, dia);
+    const diaSemana = data.getDay();
+    return diaSemana === 0 || diaSemana === 6; // 0 = Domingo, 6 = Sábado
+}
+
+// Função para obter o número de dias em um mês
+function getDiasNoMes(mes, ano) {
+    return new Date(ano, mes, 0).getDate();
+}
+
+// Função para obter o primeiro dia da semana do mês (0 = Domingo, 1 = Segunda, etc)
+function getPrimeiroDiaSemana(mes, ano) {
+    return new Date(ano, mes - 1, 1).getDay();
+}
+
+// Função para gerar o calendário na página de registro
+function gerarCalendarioRegistro() {
+    console.log("[LOG] Gerando calendário para:", { mes: mesAtualCalendario, ano: anoAtualCalendario });
+    
+    const containerCalendario = document.getElementById('calendarioRegistro');
+    if (!containerCalendario) {
+        console.error("[ERRO] Container do calendário não encontrado");
+        return;
+    }
+    
+    const diasNoMes = getDiasNoMes(mesAtualCalendario, anoAtualCalendario);
+    const primeiroDia = getPrimeiroDiaSemana(mesAtualCalendario, anoAtualCalendario);
+
+    // Criar o cabeçalho do calendário
+    let html = `
+        <div class="calendario-header">
+            <span>D</span>
+            <span>S</span>
+            <span>T</span>
+            <span>Q</span>
+            <span>Q</span>
+            <span>S</span>
+            <span>S</span>
+        </div>
+        <div class="calendario-dias">
+    `;
+
+    // Adicionar dias vazios do mês anterior
+    for (let i = 0; i < primeiroDia; i++) {
+        html += '<div class="calendario-dia outro-mes"></div>';
+    }
+
+    // Adicionar os dias do mês atual
+    for (let dia = 1; dia <= diasNoMes; dia++) {
+        const temRegistro = dataExisteEmRegistros(dia, mesAtualCalendario, anoAtualCalendario);
+        const fimDeSemana = ehFimDeSemana(dia, mesAtualCalendario, anoAtualCalendario);
+        
+        let classe = 'calendario-dia';
+        
+        if (temRegistro) {
+            classe += ' tem-registro';
+        } else if (!fimDeSemana) {
+            classe += ' sem-registro';
+        } else {
+            classe += ' fim-de-semana';
+        }
+
+        html += `<div class="${classe}">${dia}</div>`;
+    }
+
+    // Calcular quantos dias faltam para completar a última semana
+    const totalDias = primeiroDia + diasNoMes;
+    const diasRestantes = 7 - (totalDias % 7);
+    if (diasRestantes < 7) {
+        for (let i = 0; i < diasRestantes; i++) {
+            html += '<div class="calendario-dia outro-mes"></div>';
+        }
+    }
+
+    html += '</div>';
+    containerCalendario.innerHTML = html;
 }
