@@ -9,7 +9,8 @@ const {
     getLotesRemessas,
     addRemessa,
     addLote,
-    carregarUltimoRegistro
+    carregarUltimoRegistro,
+    buscarRegistrosFuncionario
 } = require("../controllers/producaoController");
 
 const router = express.Router();
@@ -39,6 +40,9 @@ router.post("/remessas/:remessaId/lotes", addLote);
 
 // Rota para carregar o último registro de um funcionário
 router.get("/ultimo-registro", carregarUltimoRegistro);
+
+// Rota para buscar registros de um funcionário para o calendário
+router.get("/registros-funcionario", buscarRegistrosFuncionario);
 
 // Rota de teste
 router.get("/teste", (req, res) => {

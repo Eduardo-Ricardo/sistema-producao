@@ -181,24 +181,12 @@ function adicionarFuncaoAdicional() {
     select.innerHTML = `<option value="">Selecione uma função</option>
         ${funcoesDisponiveis.map(f => `<option value="${f}">${f}</option>`).join("")}`;
 
-    // Adicionar o campo de quantidade correspondente
-    const quantidadeDiv = document.createElement("div");
-    quantidadeDiv.className = "input-group funcao-quantidade";
-    quantidadeDiv.id = `quantidade-${funcaoId}`;
-    quantidadeDiv.innerHTML = `
-        <label class="form-label">
-            <i class="fas fa-hashtag"></i> Quantidade:
-        </label>
-        <input type="number" class="form-control quantidade-adicional" required>
-    `;
-
     // Botão para remover a função
     const btnRemover = document.createElement("button");
     btnRemover.type = "button";
     btnRemover.innerHTML = '<i class="fas fa-times"></i>';
     btnRemover.onclick = () => {
         funcaoDiv.remove();
-        quantidadeDiv.remove();
         const index = funcoesAdicionais.findIndex(f => f.id === funcaoId);
         if (index > -1) {
             funcoesAdicionais.splice(index, 1);
@@ -209,14 +197,10 @@ function adicionarFuncaoAdicional() {
     funcaoDiv.appendChild(btnRemover);
     container.appendChild(funcaoDiv);
 
-    const quantidadesContainer = document.getElementById("quantidades-container");
-    quantidadesContainer.appendChild(quantidadeDiv);
-
-    // Adicionar ao array de funções adicionais
+    // Adicionar ao array de funções adicionais - sem campo de quantidade separado
     funcoesAdicionais.push({
         id: funcaoId,
-        elemento: funcaoDiv,
-        quantidadeElemento: quantidadeDiv
+        elemento: funcaoDiv
     });
 }
 
@@ -263,10 +247,13 @@ function capturarDadosFormulario() {
         tipoEntrada: document.querySelector('input[name="tipoEntrada"]:checked').value
     };
 
+    // Obtém a quantidade principal que será usada para todas as funções
+    const quantidadePrincipal = document.getElementById("productionCount").value;
+
     // Captura dados da função principal
     const funcaoPrincipal = {
         funcao: document.getElementById("employeeRole").value,
-        quantidade: document.getElementById("productionCount").value,
+        quantidade: quantidadePrincipal,
         machine: document.getElementById("machine").value
     };
 
@@ -275,10 +262,9 @@ function capturarDadosFormulario() {
     document.querySelectorAll(".funcao-adicional").forEach(funcaoDiv => {
         const funcao = funcaoDiv.querySelector("select").value;
         if (funcao) {
-            const quantidadeInput = document.querySelector(`#quantidade-${funcaoDiv.id} input`);
             funcoesAdicionaisData.push({
                 funcao: funcao,
-                quantidade: quantidadeInput.value,
+                quantidade: quantidadePrincipal, // Usa a mesma quantidade da função principal
                 machine: document.getElementById("machine").value
             });
         }

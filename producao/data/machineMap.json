@@ -2,7 +2,7 @@
     "1_Painel_Frontal": {
       "Fechar_Fundilho": "Overlock",
       "Prespontar_Fundilho": "Prespontadeira",
-      "Costurar_Pala_Frontal": "Overlock",
+      "Costurar_Pala_Frontal": "Interlock",
       "Prespontar_Pala_Frontal": "Reta"
     },
     "2_Painel_Traseiro": {
@@ -25,6 +25,7 @@
       "Fechar_Lapela": "Reta",
       "Virar_Lapela": "Manual",
       "Prespontar_Lapela": "Reta",
+      "Chulear_Lapela": "Overlock",
       "Chulear_Bolso_Lateral": "Overlock",
       "Barra_Bolso_Lateral": "Prespontadeira",
       "Aplicar_Bolso_Lateral": "Prespontadeira"
@@ -42,6 +43,7 @@
     },
     "8_Acabamento": {
       "Retirar_Linha": "Manual",
-      "Revisar_Qualidade": "Manual"
+      "Revisar_Qualidade": "Manual",
+      "Cortar_Elastico": "Manual"
     }
   }

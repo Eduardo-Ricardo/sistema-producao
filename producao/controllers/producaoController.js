@@ -339,6 +339,52 @@ function listarProducao(req, res) {
     }
 }
 
+// Função para buscar registros de produção de um funcionário para o calendário
+function buscarRegistrosFuncionario(req, res) {
+    console.log("[LOG] Iniciando busca de registros para o calendário...");
+    const { employeeName } = req.query;
+
+    if (!employeeName) {
+        console.warn("[AVISO] Nome do funcionário não fornecido.");
+        return res.status(400).json({ error: "O nome do funcionário é obrigatório!" });
+    }
+
+    console.log(`[LOG] Nome do funcionário recebido: ${employeeName}`);
+
+    const nomeArquivo = `${new Date().getFullYear()}.csv`;
+    const caminhoArquivo = path.join(pastaDados, nomeArquivo);
+
+    if (!fs.existsSync(caminhoArquivo)) {
+        console.warn(`[AVISO] Arquivo ${nomeArquivo} não encontrado no caminho ${caminhoArquivo}.`);
+        return res.json({ registros: [] });
+    }
+
+    try {
+        console.log(`[LOG] Lendo o arquivo: ${caminhoArquivo}`);
+        const dados = fs.readFileSync(caminhoArquivo, "utf-8");
+        const linhas = dados.split("\n").filter(linha => linha.trim() !== "");
+        console.log(`[LOG] Total de linhas lidas: ${linhas.length}`);
+
+        const registros = linhas.map(linha => {
+            const [name, employeeRole, startTime, endTime, productionCount, productionDate] = linha.split(",");
+            return {
+                employeeName: name.trim(),
+                employeeRole: employeeRole.trim(),
+                startTime: startTime.trim(),
+                endTime: endTime.trim(),
+                productionCount: parseInt(productionCount.trim(), 10),
+                productionDate: productionDate.trim()
+            };
+        }).filter(registro => registro.employeeName === employeeName);
+
+        console.log(`[LOG] Registros encontrados para o funcionário ${employeeName}:`, registros.length);
+        res.json({ registros });
+    } catch (error) {
+        console.error("[ERRO] Falha ao processar o arquivo:", error);
+        res.status(500).json({ error: "Erro ao processar os dados!" });
+    }
+}
+
 module.exports = {
     listarProducao,
     adicionarProducao,
@@ -349,5 +395,6 @@ module.exports = {
     addRemessa,
     addLote,
     setMachineMap,
-    getMachineMap
+    getMachineMap,
+    buscarRegistrosFuncionario
 };
