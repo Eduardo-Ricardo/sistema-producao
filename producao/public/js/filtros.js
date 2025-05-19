@@ -1,27 +1,5 @@
-// Aplica os filtros selecionados na página (exemplo genérico para outra funcionalidade)
-export function aplicarFiltros() {
-    console.log("[LOG] Iniciando aplicação dos filtros...");
-
-    // Captura os valores dos filtros
-    const employeeName = document.getElementById("employeeName").value;
-    const employeeRole = document.getElementById("employeeRole").value;
-    const day = document.getElementById("day").value;
-    const month = document.getElementById("month").value;
-
-    console.log("[LOG] Filtros capturados:", { employeeName, employeeRole, day, month });
-
-    // Retorna os filtros capturados
-    return { employeeName, employeeRole, day, month };
-}
-
-// Função auxiliar para formatar a data do input type="date" para DD/MM
-function formatarData(dataInput) {
-    if (!dataInput) return '';
-    const data = new Date(dataInput);
-    const dia = String(data.getDate()).padStart(2, '0');
-    const mes = String(data.getMonth() + 1).padStart(2, '0');
-    return `${dia}/${mes}`;
-}
+// Este arquivo só captura filtros do usuário (inputs do formulário).
+// Não faz mais filtragem ou processamento de arrays de dados.
 
 // Captura os valores dos filtros selecionados na página ficha-funcionario.html
 export function capturarFiltrosFuncionario() {
@@ -47,4 +25,13 @@ export function capturarFiltrosFuncionario() {
 
     // Retorna os filtros capturados
     return { funcionario, dataInicio, dataFim };
+}
+
+// Função auxiliar para formatar a data do input type="date" para DD/MM
+function formatarData(dataInput) {
+    if (!dataInput) return '';
+    const data = new Date(dataInput);
+    const dia = String(data.getDate()).padStart(2, '0');
+    const mes = String(data.getMonth() + 1).padStart(2, '0');
+    return `${dia}/${mes}`;
 }

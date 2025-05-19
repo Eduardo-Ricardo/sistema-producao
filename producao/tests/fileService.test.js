@@ -14,4 +14,15 @@ const path = require('path');
     console.assert(r.hasOwnProperty('productionDate'), 'Deve ter campo productionDate');
   }
   console.log('Testes de fileService.js passaram!');
+
+  // Teste: arquivo inexistente
+  try {
+    await loadCsv(1999); // Ano improvável
+    console.assert(false, 'Deveria lançar erro para arquivo inexistente');
+  } catch (e) {
+    console.log('Teste de arquivo inexistente passou!');
+  }
+
+  // Teste: CSV malformado (simulado)
+  // Para testar, crie manualmente um arquivo 2026.csv malformado na pasta data, se desejar
 })();

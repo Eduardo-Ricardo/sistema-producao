@@ -216,6 +216,9 @@ export function preencherTabelaFuncionario(dados) {
     const tbody = document.getElementById("tabelaDadosPessoa").querySelector("tbody");
     tbody.innerHTML = ""; // Limpar tabela
 
+    // Funções de exibição abaixo usam apenas dados já processados do backend (agrupados, filtrados, agregados)
+    // Não há mais lógica de filtragem ou agrupamento aqui. Apenas exibição.
+
     // Itera sobre cada grupo de data
     dados.registros.forEach((grupo) => {
         // Criar linha de cabeçalho para a data
@@ -273,6 +276,9 @@ export function preencherFuncoesUnicas(funcoes) {
     
     const funcoesGrid = document.getElementById("funcoes-grid");
     funcoesGrid.innerHTML = ""; // Limpa o conteúdo anterior
+
+    // Funções de exibição abaixo usam apenas dados já processados do backend (agrupados, filtrados, agregados)
+    // Não há mais lógica de filtragem ou agrupamento aqui. Apenas exibição.
 
     // Ordena as funções por quantidade de registros (decrescente)
     funcoes.sort((a, b) => b.quantidade_registros - a.quantidade_registros);

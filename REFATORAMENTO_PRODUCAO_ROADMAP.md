@@ -1,51 +1,45 @@
-# Roadmap: Refatoramento dos Controllers de Produção
-
-Branch: `refactor-producao` criada ✅
-
-Objetivo: Modularizar e limpar a pasta `producao/controllers`, separando responsabilidades e removendo duplicações.
-
-## Estado Atual
-- Branch criada: `refactor-producao`
-- fileService.js criado e função `loadCsv(year)` implementada ✅
-- filterService.js criado e funções de filtro implementadas ✅
-- transformService.js criado e funções implementadas ✅
-- Plano de atividades definido neste roadmap.
+# Refatoramento Produção - Roadmap
 
 ## Etapas
 
-1. fileService (Concluído)
-   - [x] Criar `producao/controllers/fileService.js`
-   - [x] Implementar função `loadCsv(year)` usando `lerArquivoCSV`
-   - [x] Mapear linhas CSV em objetos nomeados
+1. **Mapear responsabilidades do controller de produção**
+   - [x] Analisar e documentar funções e responsabilidades do controller original.
 
-2. filterService (Concluído)
-   - [x] Criar `producao/controllers/filterService.js`
-   - [x] Implementar `filterByEmployee(records, name)`
-   - [x] Implementar `filterByDateRange(records, start, end)`
+2. **Criar serviços separados**
+   - [x] Criar `fileService.js` para leitura e mapeamento do CSV.
+   - [x] Criar `filterService.js` para filtros por funcionário e data.
+   - [x] Criar `transformService.js` para mapeamento, agrupamento e agregação.
 
-3. transformService (Concluído)
-   - [x] Criar `producao/controllers/transformService.js`
-   - [x] Implementar `mapToDomain(records)` para adicionar duração e flags
-   - [x] Implementar `groupByDate(mapped)` para agrupamento diário
-   - [x] Implementar `aggregateByFunction(mapped)` para totais e médias
+3. **Refatorar controller para usar serviços**
+   - [x] Refatorar `producaoController.js` para orquestrar os serviços, eliminando parsing manual e duplicações.
 
-4. Refatorar `producaoController.js` (Concluído)
-   - [x] Orquestrar chamadas aos serviços criados
-   - [x] Remover parsing manual de CSV e filtros duplicados
-   - [x] Garantir consistência de formatos de data
+4. **Atualizar rotas e integração global**
+   - [x] Atualizar rotas em `producao/routes/index.js`, `common/routes.js` e `common/app.js` para garantir integração com os novos controllers/serviços.
 
-5. Rotas e integrações (Pendente)
-   - [ ] Atualizar `producao/routes/index.js` para usar novos controllers
-   - [ ] Testar endpoints via Postman ou curl
+5. **Testar endpoints**
+   - [x] Testar todos os endpoints principais via Postman e PowerShell (`Invoke-RestMethod`).
 
-6. Frontend (Pendente)
-   - [ ] Ajustar chamadas em `public/js/dados.js` para novos endpoints
-   - [ ] Remover filtragem extra no frontend
-
-7. Testes (Pendente)
-   - [ ] Escrever testes unitários para cada serviço em `producao/tests`
-   - [ ] Validar cenários de filtro de datas e agregação
+6. **Refatorar frontend para consumir dados processados**
+   - [x] Remover lógica de filtragem, agrupamento e transformação de dados do frontend (`ui.js`, `filtros.js`).
+   - [x] Garantir que o frontend apenas exiba os dados já processados vindos do backend.
+   - [x] Adicionar comentários nos arquivos JS do frontend indicando que não há mais processamento de dados local.
+   - [x] Validar integração frontend-backend.
 
 ---
 
-> Este roadmap deve guiar o refatoramento, garantindo que cada passo seja testado e integrado antes de seguir adiante.
+## Próximas etapas
+
+7. **Testes unitários avançados**
+   - [ ] Escrever testes unitários mais completos para cada serviço em `producao/tests/`.
+   - [ ] Validar cenários de filtro de datas e agregação.
+
+8. **Ajustes finos e documentação**
+   - [ ] Realizar eventuais ajustes finos de integração frontend-backend conforme evolução do sistema.
+   - [ ] Atualizar documentação técnica e de uso.
+
+---
+
+## Observações
+- A pasta `producao/utils/` foi mantida para centralizar utilidades de leitura de arquivos.
+- Todos os commits até a etapa 6 foram realizados na branch `refactor-producao`.
+- O sistema está pronto para avançar para a etapa de testes unitários avançados e ajustes finos.
