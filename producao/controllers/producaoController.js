@@ -136,23 +136,18 @@ async function listarProducao(req, res) {
     }
 }
 
-// Função para buscar registros de produção de um funcionário para o calendário
+/**
+ * Controller: Busca registros de produção de um funcionário para o calendário
+ * Endpoint: GET /producao/buscar-registros-funcionario?employeeName=xxx
+ */
 async function buscarRegistrosFuncionario(req, res) {
-    console.log("[LOG] Iniciando busca de registros para o calendário...");
     const { employeeName } = req.query;
-
     if (!employeeName) {
-        console.warn("[AVISO] Nome do funcionário não fornecido.");
         return res.status(400).json({ error: "O nome do funcionário é obrigatório!" });
     }
-
-    console.log(`[LOG] Nome do funcionário recebido: ${employeeName}`);
-
     try {
-        const year = new Date().getFullYear();
-        const registros = await loadCsv(year);
-        const filtrados = filterByEmployee(registros, employeeName);
-        res.json({ registros: filtrados });
+        const registros = await buscarRegistrosFuncionarioService(employeeName);
+        res.json({ registros });
     } catch (error) {
         console.error("[ERRO] Falha ao buscar registros do funcionário:", error);
         res.status(500).json({ error: "Erro ao processar os dados!" });

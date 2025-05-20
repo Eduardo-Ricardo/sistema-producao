@@ -56,8 +56,24 @@ function listarProducaoService() {
     return lerRegistrosAnoAtual();
 }
 
+/**
+ * Busca registros de produção de um funcionário para o calendário
+ * @param {string} employeeName Nome do funcionário
+ * @param {function} [lerRegistros=lerRegistrosAnoAtual] Função para ler registros (injeção para testes)
+ * @returns {Promise<Array<Object>>} Lista de registros filtrados
+ */
+async function buscarRegistrosFuncionarioService(employeeName, lerRegistros = lerRegistrosAnoAtual) {
+    try {
+        const registros = await lerRegistros();
+        return registros.filter(r => r.employeeName === employeeName);
+    } catch (error) {
+        return [];
+    }
+}
+
 module.exports = {
     lerRegistrosAnoAtual,
     buscarUltimoRegistroFuncionario,
-    listarProducaoService
+    listarProducaoService,
+    buscarRegistrosFuncionarioService
 };

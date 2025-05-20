@@ -1,6 +1,6 @@
 # Refatoração do Controller de Produção - Roadmap Detalhado
 
-## Etapa Atual (Em Progresso)
+## Etapa Atual (Concluída)
 - [x] Extrair lógica de ficha do funcionário para `services/fichaFuncionarioService.js` (resumo e calendário).
 - [x] Refatorar endpoints de ficha do funcionário para delegar ao serviço.
 - [x] Documentar controller e serviços extraídos.
@@ -11,18 +11,23 @@
 - [x] Extrair e delegar lógica de `listarNomesFuncionarios` para `funcionarioService.js`.
 - [x] Extrair e delegar lógica de `listarProducao` para `registroService.js`.
 - [x] Criar serviço dedicado para lotes (`loteService.js`) e delegar atualização de lotes.
+- [x] Extrair e delegar lógica de `buscarRegistrosFuncionario` para `registroService.js`.
+- [x] Garantir cobertura de testes para os serviços extraídos.
+- [x] Remover testes antigos que não seguem o padrão Jest.
+- [x] Garantir que apenas os testes dos serviços refatorados são executados e passam.
+- [x] Expandir cobertura dos testes dos novos serviços, incluindo casos de erro e mocks.
 
 ## Próximos Passos (Prioridade)
-- [ ] Extrair lógica de `buscarRegistrosFuncionario` para `registroService.js`:
-    - Serviço retorna registros filtrados para o funcionário.
-    - Controller apenas responde.
-    - Documentar serviço e controller.
-- [ ] Garantir cobertura de testes para os serviços extraídos.
+- [ ] Avançar para reconstrução da página ficha-funcionário (frontend).
+- [ ] Garantir integração entre frontend e novos serviços refatorados.
+- [ ] Manter padrão de controller enxuto e serviços bem documentados.
+- [ ] Revisar e documentar endpoints REST e contratos de dados.
+- [ ] Garantir cobertura de testes de integração (API) após ajustes no frontend.
 - [ ] Atualizar este roadmap a cada etapa concluída.
 
 ## Após Refatoração
-- [ ] Avançar para reconstrução da página ficha-funcionário (frontend).
-- [ ] Manter padrão de controller enxuto e serviços bem documentados.
+- [ ] Evoluir funcionalidades do sistema de produção com base na nova arquitetura.
+- [ ] Manter documentação e testes sempre atualizados.
 
 ---
 
