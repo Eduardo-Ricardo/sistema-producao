@@ -10,7 +10,9 @@ const {
     addRemessa,
     addLote,
     carregarUltimoRegistro,
-    buscarRegistrosFuncionario
+    buscarRegistrosFuncionario,
+    resumoFichaFuncionario,
+    calendarioFichaFuncionario
 } = require("../controllers/producaoController");
 
 const router = express.Router();
@@ -54,5 +56,11 @@ router.get("/teste", (req, res) => {
 router.get("/", (req, res) => {
     res.send("Bem-vindo ao módulo Produção!");
 });
+
+// Endpoint para resumo da ficha do funcionário
+router.get("/ficha-funcionario/resumo", resumoFichaFuncionario);
+
+// Endpoint para calendário da ficha do funcionário
+router.get("/ficha-funcionario/calendario", calendarioFichaFuncionario);
 
 module.exports = router;

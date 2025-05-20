@@ -1,3 +1,7 @@
+// producaoController.js
+// Controller principal do módulo de produção
+// Responsável por orquestrar as requisições HTTP, delegando a lógica de negócio para os serviços
+
 const fs = require("fs");
 const { get } = require("http");
 const path = require("path");
@@ -8,6 +12,10 @@ const { lerArquivoCSV } = require("../utils/fileUtils");
 const { loadCsv } = require("./fileService");
 const { filterByEmployee } = require("./filterService");
 const { mapToDomain, groupByDate, aggregateByFunction } = require("./transformService");
+const { getResumo, getCalendario } = require("../services/fichaFuncionarioService");
+const { lerRegistrosAnoAtual, buscarUltimoRegistroFuncionario } = require("../services/registroService");
+const { listarDadosFuncionarioService, listarNomesFuncionariosService, listarProducaoService } = require("../services/funcionarioService");
+const { atualizarQuantidadesLotesService } = require("../services/loteService");
 
 // Caminho da pasta "data" e arquivos
 const pastaDados = path.join(__dirname, "../data");
@@ -55,7 +63,7 @@ function adicionarProducao(req, res) {
         
         // Se foi registrado por lotes, atualiza as quantidades nos lotes
         if (tipoEntrada === "lote" && lotes) {
-            atualizarQuantidadesLotes(lotes);
+            atualizarQuantidadesLotesService(lotes);
         }
 
         res.json({ message: "Produção registrada com sucesso!" });
@@ -65,134 +73,48 @@ function adicionarProducao(req, res) {
     }
 }
 
-// Função auxiliar para atualizar as quantidades dos lotes após uso
-function atualizarQuantidadesLotes(lotesUsados) {
-    console.log("[LOG] Atualizando quantidades dos lotes após uso...");
-
-    try {
-        const lotesRemessas = JSON.parse(fs.readFileSync(lotesRemessasPath, "utf8"));
-        let atualizou = false;
-
-        lotesRemessas.remessas.forEach(remessa => {
-            if (remessa.lotes) {
-                remessa.lotes.forEach(lote => {
-                    const loteUsado = lotesUsados.find(l => 
-                        l.tamanho === lote.tamanho && 
-                        l.numero === lote.numero
-                    );
-                    
-                    if (loteUsado) {
-                        lote.quantidade = Math.max(0, lote.quantidade - loteUsado.quantidade);
-                        atualizou = true;
-                    }
-                });
-            }
-        });
-
-        if (atualizou) {
-            fs.writeFileSync(lotesRemessasPath, JSON.stringify(lotesRemessas, null, 2));
-            console.log("[LOG] Quantidades dos lotes atualizadas com sucesso.");
-        }
-    } catch (error) {
-        console.error("[ERRO] Falha ao atualizar quantidades dos lotes:", error);
-    }
-}
-
-// Função para carregar o último registro de um funcionário
+/**
+ * Controller: Carrega o último registro de um funcionário
+ * Endpoint: GET /producao/ultimo-registro?employeeName=xxx
+ */
 function carregarUltimoRegistro(req, res) {
-    console.log("[LOG] Iniciando a função carregarUltimoRegistro...");
     const { employeeName } = req.query;
-
     if (!employeeName) {
-        console.warn("[AVISO] Nome do funcionário não fornecido.");
         return res.status(400).json({ error: "O nome do funcionário é obrigatório!" });
     }
-
-    console.log(`[LOG] Nome do funcionário recebido: ${employeeName}`);
-
-    const nomeArquivo = `${new Date().getFullYear()}.csv`;
-    const caminhoArquivo = path.join(pastaDados, nomeArquivo);
-
-    if (!fs.existsSync(caminhoArquivo)) {
-        console.warn(`[AVISO] Arquivo ${nomeArquivo} não encontrado no caminho ${caminhoArquivo}.`);
-        return res.status(404).json({ error: "Nenhum registro encontrado!" });
+    const registro = buscarUltimoRegistroFuncionario(employeeName);
+    if (!registro) {
+        return res.status(404).json({ error: "Nenhum registro encontrado para o funcionário!" });
     }
-
-    try {
-        console.log(`[LOG] Lendo o arquivo: ${caminhoArquivo}`);
-        const dados = fs.readFileSync(caminhoArquivo, "utf-8");
-        const linhas = dados.split("\n").filter(linha => linha.trim() !== "");
-        console.log(`[LOG] Total de linhas lidas: ${linhas.length}`);
-
-        const registros = linhas.map(linha => {
-            const [employeeName, employeeRole, startTime, endTime, productionCount, productionDate] = linha.split(",");
-            return {
-                employeeName: employeeName.trim(),
-                employeeRole: employeeRole.trim(),
-                startTime: startTime.trim(),
-                endTime: endTime.trim(),
-                productionCount: parseInt(productionCount.trim(), 10),
-                productionDate: productionDate.trim()
-            };
-        }).filter(registro => registro.employeeName === employeeName);
-
-        console.log(`[LOG] Registros filtrados para o funcionário ${employeeName}:`, registros);
-
-        if (registros.length === 0) {
-            console.warn(`[AVISO] Nenhum registro encontrado para o funcionário ${employeeName}.`);
-            return res.status(404).json({ error: "Nenhum registro encontrado para o funcionário!" });
-        }
-
-        const registroMaisRecente = registros.reduce((maisRecente, registro) => {
-            const [dia, mes] = registro.productionDate.split("/").map(Number);
-            const dataAtual = new Date(new Date().getFullYear(), mes - 1, dia);
-            const [diaMaisRecente, mesMaisRecente] = maisRecente.productionDate.split("/").map(Number);
-            const dataMaisRecente = new Date(new Date().getFullYear(), mesMaisRecente - 1, diaMaisRecente);
-
-            return dataAtual > dataMaisRecente ? registro : maisRecente;
-        });
-
-        console.log(`[LOG] Registro mais recente encontrado:`, registroMaisRecente);
-        res.json(registroMaisRecente);
-    } catch (error) {
-        console.error("[ERRO] Falha ao processar o arquivo:", error);
-        res.status(500).json({ error: "Erro ao processar os dados!" });
-    }
+    res.json(registro);
 }
 
-// Função para listar dados de um funcionário específico
+/**
+ * Controller: Lista dados de um funcionário específico
+ * Endpoint: GET /producao/dados-funcionario?funcionario=xxx
+ */
 async function listarDadosFuncionario(req, res) {
     console.log("[LOG] Iniciando listagem dos dados do funcionário...");
-
     const funcionario = req.query.funcionario;
-    console.log("[LOG] Nome do funcionário recebido:", funcionario);
-
+    if (!funcionario) {
+        return res.status(400).json({ error: "O nome do funcionário é obrigatório!" });
+    }
     try {
-        const year = new Date().getFullYear();
-        const registros = await loadCsv(year);
-        const filtrados = filterByEmployee(registros, funcionario);
-        const domain = mapToDomain(filtrados);
-        const registrosAgrupados = groupByDate(domain);
-        const totaisPorFuncao = aggregateByFunction(domain);
-
-        res.json({
-            registros: registrosAgrupados,
-            funcoes: totaisPorFuncao
-        });
+        const resultado = await listarDadosFuncionarioService(funcionario);
+        res.json(resultado);
     } catch (error) {
         console.error("[ERRO] Falha ao listar os dados do funcionário:", error);
         res.status(500).json({ error: "Erro ao listar os dados do funcionário!" });
     }
 }
 
-// Função para listar os nomes dos funcionários
+/**
+ * Controller: Lista nomes únicos de funcionários
+ * Endpoint: GET /producao/nomes-funcionarios
+ */
 async function listarNomesFuncionarios(req, res) {
-    console.log("[LOG] Iniciando listagem dos nomes dos funcionários...");
     try {
-        const year = new Date().getFullYear();
-        const registros = await loadCsv(year);
-        const nomes = [...new Set(registros.map(r => r.employeeName).filter(nome => nome && nome.trim()))];
-        console.log("[LOG] Nomes dos funcionários extraídos e filtrados:", nomes);
+        const nomes = await listarNomesFuncionariosService();
         res.json(nomes);
     } catch (error) {
         console.error("[ERRO] Falha ao listar os nomes dos funcionários:", error);
@@ -200,11 +122,13 @@ async function listarNomesFuncionarios(req, res) {
     }
 }
 
-// Função para listar registros de produção
+/**
+ * Controller: Lista todos os registros de produção do ano atual
+ * Endpoint: GET /producao/listar
+ */
 async function listarProducao(req, res) {
     try {
-        const year = new Date().getFullYear();
-        const registros = await loadCsv(year);
+        const registros = listarProducaoService();
         res.json(registros);
     } catch (error) {
         console.error("[ERRO] Falha ao listar produção:", error);
@@ -235,6 +159,56 @@ async function buscarRegistrosFuncionario(req, res) {
     }
 }
 
+/**
+ * Endpoint: GET /ficha-funcionario/resumo
+ * Retorna o resumo de produção do funcionário para um mês/ano
+ * Parâmetros: funcionario, mes, ano
+ */
+async function resumoFichaFuncionario(req, res) {
+    try {
+        const { funcionario, mes, ano } = req.query;
+        if (!funcionario || !mes || !ano) {
+            return res.status(400).json({ error: "Parâmetros obrigatórios: funcionario, mes, ano" });
+        }
+        const resumo = await getResumo({ funcionario, mes, ano });
+        res.json(resumo);
+    } catch (error) {
+        console.error("[ERRO] Falha ao gerar resumo da ficha do funcionário:", error);
+        res.status(500).json({ error: "Erro ao gerar resumo da ficha do funcionário" });
+    }
+}
+
+/**
+ * Endpoint: GET /ficha-funcionario/calendario
+ * Retorna o calendário de registros do funcionário para um mês/ano
+ * Parâmetros: funcionario, mes, ano
+ */
+async function calendarioFichaFuncionario(req, res) {
+    try {
+        const { funcionario, mes, ano } = req.query;
+        if (!funcionario || !mes || !ano) {
+            return res.status(400).json({ error: "Parâmetros obrigatórios: funcionario, mes, ano" });
+        }
+        const calendario = await getCalendario({ funcionario, mes, ano });
+        res.json(calendario);
+    } catch (error) {
+        console.error("[ERRO] Falha ao gerar calendário da ficha do funcionário:", error);
+        res.status(500).json({ error: "Erro ao gerar calendário da ficha do funcionário" });
+    }
+}
+
+// Utilitário para calcular dias úteis do mês
+function calcularDiasUteis(mes, ano) {
+    let diasUteis = 0;
+    const diasNoMes = new Date(ano, mes, 0).getDate();
+    for (let dia = 1; dia <= diasNoMes; dia++) {
+        const data = new Date(ano, mes - 1, dia);
+        const diaSemana = data.getDay();
+        if (diaSemana !== 0 && diaSemana !== 6) diasUteis++; // 0=Domingo, 6=Sábado
+    }
+    return diasUteis;
+}
+
 module.exports = {
     listarProducao,
     adicionarProducao,
@@ -246,5 +220,7 @@ module.exports = {
     addLote,
     setMachineMap,
     getMachineMap,
-    buscarRegistrosFuncionario
+    buscarRegistrosFuncionario,
+    resumoFichaFuncionario,
+    calendarioFichaFuncionario
 };
