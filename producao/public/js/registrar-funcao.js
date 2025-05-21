@@ -1,7 +1,7 @@
 import { carregarDados, carregarMachineMap, salvarMachineMap, enviarDadosProducao } from "./dados.js";
 import { atualizarDropdownFuncoes, atualizarCampoMaquina, capturarNovaFuncaoEMaquina, limparCamposFormulario } from "./ui.js";
 // Importar funções do calendário
-import { gerarCalendario } from "./calendario.js";
+import { gerarCalendario, getDiasNoMes, getPrimeiroDiaSemana, ehFimDeSemana, dataExisteEmRegistros, carregarRegistrosCalendario } from "./calendario.js";
 
 let machineMap = {}; // Variável global para armazenar o machineMap
 let funcoesAdicionais = []; // Array para armazenar as funções adicionais
@@ -26,7 +26,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-// Função para inicializar a página
+/**
+ * Inicializa a página de registro de produção, carregando dados e configurando eventos.
+ */
 async function inicializarPagina() {
     try {
         // Carrega o machineMap do backend
@@ -47,7 +49,9 @@ async function inicializarPagina() {
     }
 }
 
-// Configurar todos os event listeners
+/**
+ * Configura todos os event listeners da página de registro.
+ */
 function setupEventListeners() {
     console.log("[LOG] Configurando event listeners...");
 
@@ -102,7 +106,11 @@ function setupEventListeners() {
     console.log("[LOG] Event listeners configurados com sucesso");
 }
 
-// Encontra a máquina associada a uma função no machineMap
+/**
+ * Encontra a máquina associada a uma função no machineMap.
+ * @param {string} funcao
+ * @returns {string}
+ */
 function encontrarMaquina(funcao) {
     // Verifica o formato do machineMap (antigo ou novo)
     const isFormatoAntigo = machineMap && typeof Object.values(machineMap)[0] === 'string';
@@ -121,7 +129,11 @@ function encontrarMaquina(funcao) {
     return "Máquina não especificada";
 }
 
-// Retorna todas as funções disponíveis para uma determinada máquina
+/**
+ * Retorna todas as funções disponíveis para uma determinada máquina.
+ * @param {string} maquina
+ * @returns {string[]}
+ */
 function getFuncoesDaMaquina(maquina) {
     // Verifica o formato do machineMap (antigo ou novo)
     const isFormatoAntigo = machineMap && typeof Object.values(machineMap)[0] === 'string';
@@ -149,7 +161,9 @@ function getFuncoesDaMaquina(maquina) {
     return funcoes;
 }
 
-// Adiciona uma nova função adicional ao formulário
+/**
+ * Adiciona uma nova função adicional ao formulário.
+ */
 function adicionarFuncaoAdicional() {
     const maquinaAtual = document.getElementById("machine").value;
     if (!maquinaAtual) {
@@ -204,7 +218,10 @@ function adicionarFuncaoAdicional() {
     });
 }
 
-// Atualiza as opções disponíveis para funções adicionais
+/**
+ * Atualiza as opções disponíveis para funções adicionais.
+ * @param {string} maquina
+ */
 function atualizarOpcoesDisponiveisParaFuncoesAdicionais(maquina) {
     const funcoesDaMaquina = getFuncoesDaMaquina(maquina);
     const funcaoPrincipal = document.getElementById("employeeRole").value;
@@ -218,7 +235,9 @@ function atualizarOpcoesDisponiveisParaFuncoesAdicionais(maquina) {
     });
 }
 
-// Função para carregar as remessas do servidor
+/**
+ * Carrega as remessas do servidor e atualiza o dropdown.
+ */
 async function carregarRemessas() {
     console.log("[LOG] Iniciando carregamento das remessas...");
 
@@ -237,7 +256,10 @@ async function carregarRemessas() {
     }
 }
 
-// Captura todos os dados do formulário incluindo funções adicionais
+/**
+ * Captura todos os dados do formulário, incluindo funções adicionais.
+ * @returns {Object}
+ */
 function capturarDadosFormulario() {
     const dadosBase = {
         employeeName: document.getElementById("employeeName").value,
@@ -277,7 +299,10 @@ function capturarDadosFormulario() {
     };
 }
 
-// Handler do formulário separado para melhor organização
+/**
+ * Handler do formulário para submissão dos dados de produção.
+ * @param {Event} event
+ */
 async function handleFormSubmit(event) {
     event.preventDefault();
     console.log("[LOG] Formulário de produção submetido");
@@ -324,6 +349,9 @@ async function handleFormSubmit(event) {
     }
 }
 
+/**
+ * Carrega o último registro de produção de um funcionário e atualiza o calendário.
+ */
 async function carregarUltimoRegistro() {
     console.log("[LOG] Iniciando carregamento do último registro...");
 
@@ -368,7 +396,10 @@ async function carregarUltimoRegistro() {
     }
 }
 
-// Função para carregar os registros de produção de um funcionário
+/**
+ * Carrega os registros de produção de um funcionário e atualiza o calendário.
+ * @param {string} employeeName
+ */
 async function carregarRegistrosCalendario(employeeName) {
     if (!employeeName) return;
 
@@ -394,7 +425,9 @@ async function carregarRegistrosCalendario(employeeName) {
     }
 }
 
-// Função para atualizar o nome do mês mostrado no calendário
+/**
+ * Atualiza o nome do mês mostrado no calendário.
+ */
 function atualizarNomeMesCalendario() {
     const meses = [
         'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
@@ -403,90 +436,4 @@ function atualizarNomeMesCalendario() {
     
     const mesNome = meses[mesAtualCalendario - 1];
     document.getElementById('mesAtualCalendario').textContent = `${mesNome}/${anoAtualCalendario}`;
-}
-
-// Função para verificar se uma data existe nos registros do funcionário
-function dataExisteEmRegistros(dia, mes, ano) {
-    const dataFormatada = `${String(dia).padStart(2, '0')}/${String(mes).padStart(2, '0')}`;
-    return registrosCalendario.some(registro => registro.productionDate === dataFormatada);
-}
-
-// Função para verificar se é fim de semana
-function ehFimDeSemana(dia, mes, ano) {
-    const data = new Date(ano, mes - 1, dia);
-    const diaSemana = data.getDay();
-    return diaSemana === 0 || diaSemana === 6; // 0 = Domingo, 6 = Sábado
-}
-
-// Função para obter o número de dias em um mês
-function getDiasNoMes(mes, ano) {
-    return new Date(ano, mes, 0).getDate();
-}
-
-// Função para obter o primeiro dia da semana do mês (0 = Domingo, 1 = Segunda, etc)
-function getPrimeiroDiaSemana(mes, ano) {
-    return new Date(ano, mes - 1, 1).getDay();
-}
-
-// Função para gerar o calendário na página de registro
-function gerarCalendarioRegistro() {
-    console.log("[LOG] Gerando calendário para:", { mes: mesAtualCalendario, ano: anoAtualCalendario });
-    
-    const containerCalendario = document.getElementById('calendarioRegistro');
-    if (!containerCalendario) {
-        console.error("[ERRO] Container do calendário não encontrado");
-        return;
-    }
-    
-    const diasNoMes = getDiasNoMes(mesAtualCalendario, anoAtualCalendario);
-    const primeiroDia = getPrimeiroDiaSemana(mesAtualCalendario, anoAtualCalendario);
-
-    // Criar o cabeçalho do calendário
-    let html = `
-        <div class="calendario-header">
-            <span>D</span>
-            <span>S</span>
-            <span>T</span>
-            <span>Q</span>
-            <span>Q</span>
-            <span>S</span>
-            <span>S</span>
-        </div>
-        <div class="calendario-dias">
-    `;
-
-    // Adicionar dias vazios do mês anterior
-    for (let i = 0; i < primeiroDia; i++) {
-        html += '<div class="calendario-dia outro-mes"></div>';
-    }
-
-    // Adicionar os dias do mês atual
-    for (let dia = 1; dia <= diasNoMes; dia++) {
-        const temRegistro = dataExisteEmRegistros(dia, mesAtualCalendario, anoAtualCalendario);
-        const fimDeSemana = ehFimDeSemana(dia, mesAtualCalendario, anoAtualCalendario);
-        
-        let classe = 'calendario-dia';
-        
-        if (temRegistro) {
-            classe += ' tem-registro';
-        } else if (!fimDeSemana) {
-            classe += ' sem-registro';
-        } else {
-            classe += ' fim-de-semana';
-        }
-
-        html += `<div class="${classe}">${dia}</div>`;
-    }
-
-    // Calcular quantos dias faltam para completar a última semana
-    const totalDias = primeiroDia + diasNoMes;
-    const diasRestantes = 7 - (totalDias % 7);
-    if (diasRestantes < 7) {
-        for (let i = 0; i < diasRestantes; i++) {
-            html += '<div class="calendario-dia outro-mes"></div>';
-        }
-    }
-
-    html += '</div>';
-    containerCalendario.innerHTML = html;
 }
