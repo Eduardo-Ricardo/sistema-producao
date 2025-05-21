@@ -27,7 +27,7 @@
 
 3. **Manter registrar-funcao.js focado em UI e integração**
    - [x] Limpeza realizada: arquivo agora contém apenas inicialização, configuração de eventos, coleta de dados do formulário e integração com backend. Toda lógica de negócio foi delegada aos módulos externos.
-   - [ ] Garantir que toda lógica de negócio crítica esteja validada também no backend.
+   - [x] Garantir que toda lógica de negócio crítica esteja validada também no backend.
 
 4. **Revisar e documentar**
    - [x] Garantir documentação JSDoc em todos os arquivos e funções exportadas. (Etapa concluída: revisão feita, padrão seguido em todos os módulos JS exportados)
