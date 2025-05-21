@@ -1,4 +1,10 @@
 // Atualiza a tabela de produção na tela visualizar.html
+/**
+ * Atualiza a tabela de produção exibida na página visualizar.html com os dados fornecidos.
+ * 
+ * @param {Array} dados - Array de objetos contendo os dados de produção a serem exibidos.
+ * Cada objeto deve conter as propriedades: employeeName, employeeRole, startTime, endTime, productionCount, productionDate.
+ */
 export function atualizarTabela(dados) {
     console.log("[LOG] Iniciando atualização da tabela de produção...");
 
@@ -24,6 +30,12 @@ export function atualizarTabela(dados) {
 }
 
 // Atualiza o dropdown de funções na tela registrar.html
+/**
+ * Atualiza o dropdown de funções na tela registrar.html com as funções disponíveis no machineMap.
+ * 
+ * @param {Object} machineMap - Objeto contendo as funções disponíveis organizadas por seção ou em formato plano.
+ * O formato pode ser antigo (objeto plano) ou novo (objeto estruturado por seções).
+ */
 export function atualizarDropdownFuncoes(machineMap) {
     console.log("[LOG] Atualizando lista de funções...");
 
@@ -63,6 +75,12 @@ export function atualizarDropdownFuncoes(machineMap) {
 }
 
 // Atualiza o campo de máquina ao selecionar o dropdown na tela registrar.html
+/**
+ * Configura o evento para atualizar o campo de máquina com base na função selecionada pelo usuário.
+ * 
+ * @param {Object} machineMap - Objeto contendo as máquinas disponíveis para cada função.
+ * O formato pode ser antigo (objeto plano) ou novo (objeto estruturado por seções).
+ */
 export function atualizarCampoMaquina(machineMap) {
     console.log("[LOG] Configurando EventListener para atualizar o campo de máquina...");
 
@@ -107,6 +125,11 @@ export function atualizarCampoMaquina(machineMap) {
 }
 
 // Adiciona uma nova opção ao dropdown de funções
+/**
+ * Adiciona uma nova opção ao dropdown de funções na tela registrar.html.
+ * 
+ * @param {string} funcao - O nome da nova função a ser adicionada ao dropdown.
+ */
 export function adicionarOpcaoAoDropdown(funcao) {
     console.log("[LOG] Adicionando nova opção ao dropdown de funções:", funcao);
 
@@ -125,6 +148,14 @@ export function adicionarOpcaoAoDropdown(funcao) {
 }
 
 // Captura nova função e máquina do usuário e retorna um objeto com essas informações
+/**
+ * Captura uma nova função e máquina do usuário através de prompts e retorna um objeto com essas informações.
+ * O formato do objeto retornado depende do formato do machineMap (antigo ou novo).
+ * 
+ * @param {Object} machineMap - Objeto contendo as máquinas disponíveis para cada função.
+ * O formato pode ser antigo (objeto plano) ou novo (objeto estruturado por seções).
+ * @returns {Object|null} Um objeto contendo a função e máquina capturadas, ou null se a operação foi cancelada ou os dados são inválidos.
+ */
 export function capturarNovaFuncaoEMaquina(machineMap) {
     console.log("[LOG] Iniciando captura de nova função e máquina...");
 
@@ -210,6 +241,12 @@ export function capturarNovaFuncaoEMaquina(machineMap) {
 }
 
 // Atualiza a tabela de dados do funcionário na página ficha-funcionario.html
+/**
+ * Preenche a tabela de dados do funcionário na página ficha-funcionario.html com os dados fornecidos.
+ * 
+ * @param {Object} dados - Objeto contendo os dados do funcionário, incluindo registros de produção.
+ * Deve conter as propriedades: registros (array de registros de produção) e funcoes (array de funções únicas).
+ */
 export function preencherTabelaFuncionario(dados) {
     console.log("[LOG] Iniciando preenchimento da tabela de dados do funcionário...");
 
@@ -271,6 +308,12 @@ export function preencherTabelaFuncionario(dados) {
 }
 
 // Nova função para exibir as funções únicas
+/**
+ * Preenche o grid de funções únicas na página ficha-funcionario.html com os dados fornecidos.
+ * 
+ * @param {Array} funcoes - Array de objetos contendo os dados das funções únicas a serem exibidas.
+ * Cada objeto deve conter as propriedades: funcao, total, total_horas, media_por_hora, registros_sem_tempo, quantidade_registros.
+ */
 export function preencherFuncoesUnicas(funcoes) {
     console.log("[LOG] Preenchendo grid de funções únicas...");
     
@@ -309,6 +352,12 @@ export function preencherFuncoesUnicas(funcoes) {
 }
 
 // Calcula e exibe o resumo dos dados do funcionário na página ficha-funcionario.html
+/**
+ * Calcula e exibe o resumo dos dados do funcionário, incluindo totais e médias, na página ficha-funcionario.html.
+ * 
+ * @param {Array} dados - Array de objetos contendo os dados de produção do funcionário.
+ * Cada objeto deve conter uma propriedade registros, que é um array de registros de produção.
+ */
 export function calcularResumoFuncionario(dados) {
     console.log("[LOG] Iniciando cálculo do resumo dos dados do funcionário...");
 
@@ -337,6 +386,11 @@ export function calcularResumoFuncionario(dados) {
 }
 
 // Preenche o dropdown com os nomes dos funcionários
+/**
+ * Preenche o dropdown de seleção de funcionários com os nomes dos funcionários disponíveis.
+ * 
+ * @param {Array} nomes - Array de strings contendo os nomes dos funcionários a serem exibidos no dropdown.
+ */
 export function preencherDropdownFuncionarios(nomes) {
     console.log("[LOG] Iniciando preenchimento do dropdown com os nomes dos funcionários...");
 
@@ -354,6 +408,12 @@ export function preencherDropdownFuncionarios(nomes) {
 }
 
 // Captura os dados do formulário de produção
+/**
+ * Captura os dados do formulário de produção e retorna um objeto com esses dados.
+ * 
+ * @returns {Object|null} Um objeto contendo os dados do formulário (employeeName, employeeRole, machine, startTime, endTime, productionCount, productionDate),
+ * ou null se os dados são inválidos.
+ */
 export function capturarDadosFormulario() {
     console.log("[LOG] Capturando os dados do formulário...");
 
@@ -389,6 +449,9 @@ export function capturarDadosFormulario() {
 }
 
 // Limpa os campos do formulário após o envio
+/**
+ * Limpa os campos do formulário de produção, definindo seus valores padrão.
+ */
 export function limparCamposFormulario() {
     console.log("[LOG] Limpando os campos do formulário...");
     document.getElementById("employeeRole").value = "";

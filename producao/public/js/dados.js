@@ -1,6 +1,9 @@
 import { atualizarTabela } from "./ui.js";
 
-// Carrega os dados da tabela de produção para carregar em visualizar.html
+/**
+ * Carrega os dados da tabela de produção para carregar em visualizar.html
+ * @param {Object} filtros - Filtros para a consulta dos dados
+ */
 export async function carregarDados(filtros) {
     console.log("[LOG] Iniciando carregamento dos dados com filtros:", filtros);
 
@@ -21,7 +24,10 @@ export async function carregarDados(filtros) {
     }
 }
 
-// Retorna o machineMap
+/**
+ * Retorna o machineMap
+ * @returns {Object} - O machineMap contendo a distribuição das máquinas
+ */
 export async function carregarMachineMap() {
     console.log("[LOG] Iniciando carregamento do machineMap...");
 
@@ -55,7 +61,11 @@ export async function carregarMachineMap() {
     }
 }
 
-// Salva o machineMap no servidor
+/**
+ * Salva o machineMap no servidor
+ * @param {Object} machineMap - O machineMap a ser salvo
+ * @returns {boolean} - Retorna verdadeiro se o salvamento for bem-sucedido, falso caso contrário
+ */
 export async function salvarMachineMap(machineMap) {
     console.log("[LOG] Iniciando salvamento do machineMap:", machineMap);
 
@@ -79,7 +89,13 @@ export async function salvarMachineMap(machineMap) {
     }
 }
 
-// Faz uma requisição ao backend para buscar os dados do funcionário
+/**
+ * Faz uma requisição ao backend para buscar os dados do funcionário
+ * @param {string} funcionario - O identificador do funcionário
+ * @param {string} [dataInicio] - A data de início para o filtro
+ * @param {string} [dataFim] - A data de fim para o filtro
+ * @returns {Array} - Retorna um array com os dados do funcionário
+ */
 export async function carregarDadosFuncionarioBackend(funcionario, dataInicio, dataFim) {
     console.log(`[LOG] Iniciando carregamento dos dados do funcionário: ${funcionario}`);
     console.log(`[LOG] Período: ${dataInicio || 'início'} até ${dataFim || 'fim'}`);
@@ -105,7 +121,10 @@ export async function carregarDadosFuncionarioBackend(funcionario, dataInicio, d
     }
 }
 
-// Faz uma requisição ao backend para buscar os nomes dos funcionários
+/**
+ * Faz uma requisição ao backend para buscar os nomes dos funcionários
+ * @returns {Array} - Retorna um array com os nomes dos funcionários
+ */
 export async function carregarNomesFuncionariosBackend() {
     console.log("[LOG] Iniciando carregamento dos nomes dos funcionários...");
 
@@ -126,7 +145,11 @@ export async function carregarNomesFuncionariosBackend() {
     }
 }
 
-// Envia os dados de produção para o servidor
+/**
+ * Envia os dados de produção para o servidor
+ * @param {Object} dados - Os dados de produção a serem enviados
+ * @returns {Object} - Retorna um objeto contendo o status da operação e uma mensagem
+ */
 export async function enviarDadosProducao(dados) {
     console.log("[LOG] Dados a serem enviados para o servidor:", dados);
 

@@ -1,7 +1,10 @@
 // Este arquivo só captura filtros do usuário (inputs do formulário).
 // Não faz mais filtragem ou processamento de arrays de dados.
 
-// Captura os valores dos filtros selecionados na página ficha-funcionario.html
+/**
+ * Captura os valores dos filtros selecionados na página ficha-funcionario.html
+ * @returns {Object|null} Um objeto contendo os filtros capturados (funcionario, dataInicio, dataFim) ou null se nenhum funcionário foi selecionado
+ */
 export function capturarFiltrosFuncionario() {
     console.log("[LOG] Capturando filtros para a página ficha-funcionario.html...");
 
@@ -27,7 +30,11 @@ export function capturarFiltrosFuncionario() {
     return { funcionario, dataInicio, dataFim };
 }
 
-// Função auxiliar para formatar a data do input type="date" para DD/MM
+/**
+ * Função auxiliar para formatar a data do input type="date" para DD/MM
+ * @param {string} dataInput - A data no formato de entrada do tipo "date" do HTML
+ * @returns {string} A data formatada como DD/MM ou uma string vazia se dataInput estiver vazio
+ */
 function formatarData(dataInput) {
     if (!dataInput) return '';
     const data = new Date(dataInput);

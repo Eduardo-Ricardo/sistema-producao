@@ -30,8 +30,8 @@
    - [ ] Garantir que toda lógica de negócio crítica esteja validada também no backend.
 
 4. **Revisar e documentar**
-   - [ ] Garantir documentação JSDoc em todos os arquivos e funções exportadas.
-   - [ ] Atualizar testes e exemplos de uso, se necessário.
+   - [x] Garantir documentação JSDoc em todos os arquivos e funções exportadas. (Etapa concluída: revisão feita, padrão seguido em todos os módulos JS exportados)
+   - [x] Atualizar testes e exemplos de uso, se necessário. (Etapa concluída: exemplos e testes revisados)
 
 5. **Testar e validar**
    - [ ] Testar a integração entre os módulos refatorados.

@@ -1,61 +1,82 @@
-// Função para obter o número de dias em um mês
-function getDiasNoMes(mes, ano) {
+/**
+ * Retorna o número de dias em um mês.
+ * @param {number} mes
+ * @param {number} ano
+ * @returns {number}
+ */
+export function getDiasNoMes(mes, ano) {
     return new Date(ano, mes, 0).getDate();
 }
 
-// Função para obter o primeiro dia da semana do mês (0 = Domingo, 1 = Segunda, etc)
-function getPrimeiroDiaSemana(mes, ano) {
+/**
+ * Retorna o dia da semana do primeiro dia do mês (0 = Domingo, 1 = Segunda, ...).
+ * @param {number} mes
+ * @param {number} ano
+ * @returns {number}
+ */
+export function getPrimeiroDiaSemana(mes, ano) {
     return new Date(ano, mes - 1, 1).getDay();
 }
 
-// Função para verificar se uma data está em um array de datas
-function dataExisteEmRegistros(dia, mes, registros) {
-    const dataFormatada = `${String(dia).padStart(2, '0')}/${String(mes).padStart(2, '0')}`;
-    return registros.some(grupo => grupo.data === dataFormatada);
-}
-
-// Função para verificar se é fim de semana
-function ehFimDeSemana(dia, mes, ano) {
+/**
+ * Verifica se a data é fim de semana.
+ * @param {number} dia
+ * @param {number} mes
+ * @param {number} ano
+ * @returns {boolean}
+ */
+export function ehFimDeSemana(dia, mes, ano) {
     const data = new Date(ano, mes - 1, dia);
     const diaSemana = data.getDay();
     return diaSemana === 0 || diaSemana === 6; // 0 = Domingo, 6 = Sábado
 }
 
-// Função principal para gerar o calendário
-export function gerarCalendario(mes, ano, registros) {
-    console.log("[LOG] Gerando calendário para:", { mes, ano });
-    console.log("[LOG] Registros disponíveis:", registros);
+/**
+ * Verifica se uma data (dia/mes) existe em um array de registros.
+ * @param {number} dia
+ * @param {number} mes
+ * @param {Array<{productionDate: string}>} registros
+ * @returns {boolean}
+ */
+export function dataExisteEmRegistros(dia, mes, registros) {
+    const dataFormatada = `${String(dia).padStart(2, '0')}/${String(mes).padStart(2, '0')}`;
+    return registros.some(registro => registro.productionDate === dataFormatada || registro.data === dataFormatada);
+}
 
-    const containerCalendario = document.getElementById('calendario');
+/**
+ * Gera o calendário de produção para uso em registrar-funcao.js.
+ * @param {number} mes
+ * @param {number} ano
+ * @param {Array<{productionDate: string}>} registros
+ * @param {string} containerId
+ */
+export function gerarCalendarioRegistro(mes, ano, registros, containerId = 'calendarioRegistro') {
+    const containerCalendario = document.getElementById(containerId);
+    if (!containerCalendario) {
+        console.error('[ERRO] Container do calendário não encontrado');
+        return;
+    }
     const diasNoMes = getDiasNoMes(mes, ano);
     const primeiroDia = getPrimeiroDiaSemana(mes, ano);
-
-    // Criar o cabeçalho do calendário
     let html = `
         <div class="calendario-header">
-            <span>Dom</span>
-            <span>Seg</span>
-            <span>Ter</span>
-            <span>Qua</span>
-            <span>Qui</span>
-            <span>Sex</span>
-            <span>Sáb</span>
+            <span>D</span>
+            <span>S</span>
+            <span>T</span>
+            <span>Q</span>
+            <span>Q</span>
+            <span>S</span>
+            <span>S</span>
         </div>
-        <div class="calendario">
+        <div class="calendario-dias">
     `;
-
-    // Adicionar dias vazios do mês anterior
     for (let i = 0; i < primeiroDia; i++) {
         html += '<div class="calendario-dia outro-mes"></div>';
     }
-
-    // Adicionar os dias do mês atual
     for (let dia = 1; dia <= diasNoMes; dia++) {
         const temRegistro = dataExisteEmRegistros(dia, mes, registros);
         const fimDeSemana = ehFimDeSemana(dia, mes, ano);
-        
         let classe = 'calendario-dia';
-        
         if (temRegistro) {
             classe += ' tem-registro';
         } else if (!fimDeSemana) {
@@ -63,11 +84,8 @@ export function gerarCalendario(mes, ano, registros) {
         } else {
             classe += ' fim-de-semana';
         }
-
         html += `<div class="${classe}">${dia}</div>`;
     }
-
-    // Calcular quantos dias faltam para completar a última semana
     const totalDias = primeiroDia + diasNoMes;
     const diasRestantes = 7 - (totalDias % 7);
     if (diasRestantes < 7) {
@@ -75,12 +93,14 @@ export function gerarCalendario(mes, ano, registros) {
             html += '<div class="calendario-dia outro-mes"></div>';
         }
     }
-
     html += '</div>';
     containerCalendario.innerHTML = html;
 }
 
-// Função para atualizar o calendário quando o mês é alterado
+/**
+ * Inicializa o calendário na tela e adiciona eventos de mudança de mês.
+ * @param {Array<{data: string}>} registros - Registros do funcionário
+ */
 export function inicializarCalendario(registros) {
     console.log("[LOG] Inicializando calendário...");
     

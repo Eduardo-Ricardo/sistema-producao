@@ -5,14 +5,11 @@ import { inicializarCalendario } from "./calendario.js";
 
 let dadosAtuais = null;
 
-// Elementos da interface
-const btnBuscar = document.getElementById("buscarDados");
-const selectPessoa = document.getElementById("selecaoPessoa");
-const dataInicioInput = document.getElementById("dataInicio");
-const dataFimInput = document.getElementById("dataFim");
-
-// Carregar os nomes dos funcionários ao carregar a página
-window.onload = async () => {
+/**
+ * Função para carregar os nomes dos funcionários ao carregar a página
+ * @returns {Promise<void>}
+ */
+async function carregarNomesFuncionarios() {
     btnBuscar.disabled = true;
     selectPessoa.disabled = true;
     try {
@@ -24,9 +21,12 @@ window.onload = async () => {
     } finally {
         btnBuscar.disabled = false;
     }
-};
+}
 
-// Evento para buscar os dados do funcionário selecionado
+/**
+ * Evento para buscar os dados do funcionário selecionado
+ * @returns {Promise<void>}
+ */
 btnBuscar.addEventListener("click", async () => {
     // Validação extra de datas
     const dataInicio = dataInicioInput.value;
@@ -53,3 +53,6 @@ btnBuscar.addEventListener("click", async () => {
         btnBuscar.disabled = false;
     }
 });
+
+// Carregar os nomes dos funcionários ao carregar a página
+window.onload = carregarNomesFuncionarios;

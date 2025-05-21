@@ -4,7 +4,9 @@ window.onload = () => {
     carregarRemessas();
 };
 
-// Função para carregar as remessas do servidor
+/**
+ * Função para carregar as remessas do servidor
+ */
 async function carregarRemessas() {
     console.log("[LOG] Iniciando carregamento das remessas...");
 
@@ -25,14 +27,21 @@ async function carregarRemessas() {
     }
 }
 
-// Função para formatar a data de uma forma mais legível
+/**
+ * Função para formatar a data de uma forma mais legível
+ * @param {string} dataISO - A data em formato ISO a ser formatada
+ * @returns {string} A data formatada como DD/MM
+ */
 function formatarData(dataISO) {
     if (!dataISO) return '-';
     const data = new Date(dataISO);
     return `${data.getDate().toString().padStart(2, '0')}/${(data.getMonth() + 1).toString().padStart(2, '0')}`;
 }
 
-// Função para atualizar a tabela de remessas
+/**
+ * Função para atualizar a tabela de remessas
+ * @param {Array} remessas - A lista de remessas a serem exibidas na tabela
+ */
 function atualizarTabelaRemessas(remessas) {
     console.log("[LOG] Atualizando tabela de remessas...");
 
@@ -108,7 +117,10 @@ function atualizarTabelaRemessas(remessas) {
     });
 }
 
-// Função para expandir/recolher os detalhes dos lotes
+/**
+ * Função para expandir/recolher os detalhes dos lotes
+ * @param {number} remessaId - O ID da remessa cujos lotes devem ser exibidos/ocultados
+ */
 function toggleLotes(remessaId) {
     const rowDetalhes = document.getElementById(`lotes-${remessaId}`);
     if (rowDetalhes) {
@@ -121,7 +133,10 @@ function toggleLotes(remessaId) {
     }
 }
 
-// Função para atualizar o dropdown de remessas
+/**
+ * Função para atualizar o dropdown de remessas
+ * @param {Array} remessas - A lista de remessas a serem exibidas no dropdown
+ */
 function atualizarDropdownRemessas(remessas) {
     console.log("[LOG] Atualizando dropdown de remessas...");
 
