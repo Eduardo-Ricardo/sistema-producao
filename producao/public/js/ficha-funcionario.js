@@ -5,49 +5,51 @@ import { inicializarCalendario } from "./calendario.js";
 
 let dadosAtuais = null;
 
+// Elementos da interface
+const btnBuscar = document.getElementById("buscarDados");
+const selectPessoa = document.getElementById("selecaoPessoa");
+const dataInicioInput = document.getElementById("dataInicio");
+const dataFimInput = document.getElementById("dataFim");
+
 // Carregar os nomes dos funcionários ao carregar a página
 window.onload = async () => {
-    console.log("[INFO] Página carregada. Iniciando carregamento dos nomes dos funcionários...");
-
+    btnBuscar.disabled = true;
+    selectPessoa.disabled = true;
     try {
         const nomes = await carregarNomesFuncionariosBackend();
-        console.log("[INFO] Nomes dos funcionários carregados com sucesso:", nomes);
-
         preencherDropdownFuncionarios(nomes);
-        console.log("[INFO] Dropdown preenchido com os nomes dos funcionários.");
+        selectPessoa.disabled = false;
     } catch (error) {
-        console.error("[ERRO] Falha ao carregar os nomes dos funcionários:", error);
+        alert("Erro ao carregar nomes dos funcionários. Tente recarregar a página.");
+    } finally {
+        btnBuscar.disabled = false;
     }
 };
 
 // Evento para buscar os dados do funcionário selecionado
-document.getElementById("buscarDados").addEventListener("click", async () => {
-    console.log("[INFO] Botão 'Buscar Dados' clicado. Capturando filtros...");
-
-    const filtros = capturarFiltrosFuncionario();
-    if (!filtros) {
-        console.warn("[AVISO] Filtros inválidos. A busca foi cancelada.");
+btnBuscar.addEventListener("click", async () => {
+    // Validação extra de datas
+    const dataInicio = dataInicioInput.value;
+    const dataFim = dataFimInput.value;
+    if (dataInicio && dataFim && dataInicio > dataFim) {
+        alert("A data de início não pode ser maior que a data de fim.");
         return;
     }
-
-    console.log("[INFO] Filtros capturados:", filtros);
-
+    btnBuscar.disabled = true;
+    const filtros = capturarFiltrosFuncionario();
+    if (!filtros) {
+        btnBuscar.disabled = false;
+        return;
+    }
     try {
         const dados = await carregarDadosFuncionarioBackend(filtros.funcionario, filtros.dataInicio, filtros.dataFim);
-        console.log("[INFO] Dados do funcionário carregados com sucesso:", dados);
-
         dadosAtuais = dados;
-        
         preencherTabelaFuncionario(dados);
-        console.log("[INFO] Tabela preenchida com os dados do funcionário.");
-
         calcularResumoFuncionario(dados.registros);
-        console.log("[INFO] Resumo calculado e exibido com sucesso.");
-
-        // Inicializar o calendário com os registros carregados
         inicializarCalendario(dados.registros);
-        console.log("[INFO] Calendário inicializado com sucesso.");
     } catch (error) {
-        console.error("[ERRO] Falha ao carregar os dados do funcionário:", error);
+        alert("Erro ao buscar dados do funcionário.");
+    } finally {
+        btnBuscar.disabled = false;
     }
 });

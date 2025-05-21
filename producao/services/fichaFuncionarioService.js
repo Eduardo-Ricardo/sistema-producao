@@ -2,9 +2,9 @@
 // Serviço responsável por cálculos e agregações da ficha do funcionário
 // Fornece funções para obter o resumo e o calendário de registros de produção de um funcionário
 
-const { loadCsv } = require("../controllers/fileService");
-const { filterByEmployee } = require("../controllers/filterService");
-const { mapToDomain, aggregateByFunction } = require("../controllers/transformService");
+const { loadCsv } = require("../services/fileService");
+const { filterByEmployee } = require("../services/filterService");
+const { mapToDomain, aggregateByFunction } = require("../services/transformService");
 
 /**
  * Calcula o número de dias úteis de um mês/ano (exclui sábados e domingos)

@@ -1,9 +1,9 @@
 const { listarDadosFuncionarioService, listarNomesFuncionariosService } = require('../services/funcionarioService');
 
-jest.mock('../controllers/fileService', () => ({
+jest.mock('../services/fileService', () => ({
   loadCsv: jest.fn()
 }));
-const { loadCsv } = require('../controllers/fileService');
+const { loadCsv } = require('../services/fileService');
 
 const registrosMock = [
   { employeeName: 'Ana', employeeRole: 'Costureira', productionCount: 10, productionDate: '01/05' },

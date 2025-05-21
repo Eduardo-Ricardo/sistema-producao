@@ -8,14 +8,11 @@ const { lerArquivoCSV } = require('../utils/fileUtils');
  * @param {number|string} year - Ano do arquivo CSV (ex: 2025)
  * @returns {Promise<Array<{employeeName: string, employeeRole: string, startTime: string, endTime: string, productionCount: string, productionDate: string}>>}
  */
-
 async function loadCsv(year) {
     const pastaDados = path.join(__dirname, '../data');
     const nomeArquivo = `${year}.csv`;
     const caminhoArquivo = path.join(pastaDados, nomeArquivo);
-    // Usa lerArquivoCSV, que já retorna array de arrays
-    const registros = await lerArquivoCSV(caminhoArquivo, { headers: false });
-    // Mapeia para objetos nomeados
+    const registros = await lerArquivoCSV(caminhoArquivo, { headers: false });    
     return registros.map(registro => ({
         employeeName: registro[0] || '',
         employeeRole: registro[1] || '',

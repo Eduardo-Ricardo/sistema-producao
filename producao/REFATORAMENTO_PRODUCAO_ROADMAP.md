@@ -16,10 +16,12 @@
 - [x] Remover testes antigos que não seguem o padrão Jest.
 - [x] Garantir que apenas os testes dos serviços refatorados são executados e passam.
 - [x] Expandir cobertura dos testes dos novos serviços, incluindo casos de erro e mocks.
+- [x] Ajustes e melhorias nos controllers para integração com frontend refatorado.
+- [x] Início da reconstrução da página ficha-funcionário: melhorias na experiência do usuário, validações de filtros, feedback visual e robustez na busca de dados.
 
 ## Próximos Passos (Prioridade)
-- [ ] Avançar para reconstrução da página ficha-funcionário (frontend).
-- [ ] Garantir integração entre frontend e novos serviços refatorados.
+- [ ] Finalizar reconstrução da página ficha-funcionário (frontend), seção por seção.
+- [ ] Garantir integração total entre frontend e novos serviços refatorados.
 - [ ] Manter padrão de controller enxuto e serviços bem documentados.
 - [ ] Revisar e documentar endpoints REST e contratos de dados.
 - [ ] Garantir cobertura de testes de integração (API) após ajustes no frontend.

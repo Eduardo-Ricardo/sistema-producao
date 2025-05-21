@@ -3,9 +3,9 @@
  * - Lista dados de um funcionário específico
  * - Agrega totais por função
  */
-const { loadCsv } = require("../controllers/fileService");
-const { filterByEmployee } = require("../controllers/filterService");
-const { mapToDomain, groupByDate, aggregateByFunction } = require("../controllers/transformService");
+const { loadCsv } = require("../services/fileService");
+const { filterByEmployee } = require("../services/filterService");
+const { mapToDomain, groupByDate, aggregateByFunction } = require("../services/transformService");
 
 /**
  * Lista dados de um funcionário específico, agrupando por data e função

@@ -312,13 +312,21 @@ export function preencherFuncoesUnicas(funcoes) {
 export function calcularResumoFuncionario(dados) {
     console.log("[LOG] Iniciando cálculo do resumo dos dados do funcionário...");
 
+    if (!Array.isArray(dados) || dados.length === 0) {
+        document.getElementById("totalDias").textContent = "--";
+        document.getElementById("totalRegistros").textContent = "--";
+        document.getElementById("mediaGeral").textContent = "--";
+        document.getElementById("mediaPorDia").textContent = "--";
+        return;
+    }
+
     const totalDias = dados.length;
     const totalRegistros = dados.reduce((acc, grupo) => acc + grupo.registros.length, 0);
     const totalQuantidade = dados.reduce((acc, grupo) => 
         acc + grupo.registros.reduce((sum, registro) => sum + registro.Quantidade, 0), 0);
     
-    const mediaGeral = totalQuantidade / totalRegistros;
-    const mediaPorDia = totalQuantidade / totalDias;
+    const mediaGeral = totalRegistros > 0 ? (totalQuantidade / totalRegistros) : 0;
+    const mediaPorDia = totalDias > 0 ? (totalQuantidade / totalDias) : 0;
 
     document.getElementById("totalDias").textContent = totalDias;
     document.getElementById("totalRegistros").textContent = totalRegistros;
