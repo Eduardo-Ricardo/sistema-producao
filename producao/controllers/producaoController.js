@@ -32,7 +32,12 @@ function garantirPastaDados() {
     }
 }
 
-// Função para adicionar um registro de produção
+/**
+ * Adiciona um registro de produção (quantidade ou lote) ao CSV do ano atual.
+ * Atualiza lotes se necessário.
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 function adicionarProducao(req, res) {
     garantirPastaDados();
 
@@ -76,6 +81,8 @@ function adicionarProducao(req, res) {
 /**
  * Controller: Carrega o último registro de um funcionário
  * Endpoint: GET /producao/ultimo-registro?employeeName=xxx
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
  */
 function carregarUltimoRegistro(req, res) {
     const { employeeName } = req.query;
@@ -92,6 +99,8 @@ function carregarUltimoRegistro(req, res) {
 /**
  * Controller: Lista dados de um funcionário específico
  * Endpoint: GET /producao/dados-funcionario?funcionario=xxx
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
  */
 async function listarDadosFuncionario(req, res) {
     console.log("[LOG] Iniciando listagem dos dados do funcionário...");
@@ -111,6 +120,8 @@ async function listarDadosFuncionario(req, res) {
 /**
  * Controller: Lista nomes únicos de funcionários
  * Endpoint: GET /producao/nomes-funcionarios
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
  */
 async function listarNomesFuncionarios(req, res) {
     try {
@@ -125,6 +136,8 @@ async function listarNomesFuncionarios(req, res) {
 /**
  * Controller: Lista todos os registros de produção do ano atual
  * Endpoint: GET /producao/listar
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
  */
 async function listarProducao(req, res) {
     try {
@@ -139,6 +152,8 @@ async function listarProducao(req, res) {
 /**
  * Controller: Busca registros de produção de um funcionário para o calendário
  * Endpoint: GET /producao/buscar-registros-funcionario?employeeName=xxx
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
  */
 async function buscarRegistrosFuncionario(req, res) {
     const { employeeName } = req.query;
@@ -155,9 +170,11 @@ async function buscarRegistrosFuncionario(req, res) {
 }
 
 /**
+ * Retorna o resumo de produção do funcionário para um mês/ano.
  * Endpoint: GET /ficha-funcionario/resumo
- * Retorna o resumo de produção do funcionário para um mês/ano
  * Parâmetros: funcionario, mes, ano
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
  */
 async function resumoFichaFuncionario(req, res) {
     try {
@@ -174,9 +191,11 @@ async function resumoFichaFuncionario(req, res) {
 }
 
 /**
+ * Retorna o calendário de registros do funcionário para um mês/ano.
  * Endpoint: GET /ficha-funcionario/calendario
- * Retorna o calendário de registros do funcionário para um mês/ano
  * Parâmetros: funcionario, mes, ano
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
  */
 async function calendarioFichaFuncionario(req, res) {
     try {
@@ -192,7 +211,12 @@ async function calendarioFichaFuncionario(req, res) {
     }
 }
 
-// Utilitário para calcular dias úteis do mês
+/**
+ * Calcula o número de dias úteis de um mês/ano (exclui sábados e domingos).
+ * @param {number} mes - Mês (1-12)
+ * @param {number} ano - Ano (ex: 2025)
+ * @returns {number} Dias úteis
+ */
 function calcularDiasUteis(mes, ano) {
     let diasUteis = 0;
     const diasNoMes = new Date(ano, mes, 0).getDate();

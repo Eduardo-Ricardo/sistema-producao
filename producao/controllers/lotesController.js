@@ -4,6 +4,9 @@ const path = require("path");
 const pastaDados = path.join(__dirname, "../data");
 const lotesRemessasPath = path.join(pastaDados, "lotesRemessas.json");
 
+/**
+ * Garante que a pasta de dados exista, criando-a se necessário.
+ */
 function garantirPastaDados() {
     if (!fs.existsSync(pastaDados)) {
         console.log("[LOG] Pasta 'data' não encontrada. Criando...");
@@ -11,6 +14,12 @@ function garantirPastaDados() {
     }
 }
 
+/**
+ * Retorna todas as remessas e lotes cadastrados.
+ * Cria o arquivo se não existir.
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 function getLotesRemessas(req, res) {
     console.log("[LOG] Iniciando carregamento das remessas e lotes...");
     garantirPastaDados();
@@ -30,6 +39,11 @@ function getLotesRemessas(req, res) {
     }
 }
 
+/**
+ * Adiciona uma nova remessa ao sistema.
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 function addRemessa(req, res) {
     console.log("[LOG] Iniciando adição de nova remessa...");
     garantirPastaDados();
@@ -63,6 +77,11 @@ function addRemessa(req, res) {
     }
 }
 
+/**
+ * Adiciona um novo lote a uma remessa existente.
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 function addLote(req, res) {
     console.log("[LOG] Iniciando adição de novo lote...");
     const { remessaId } = req.params;

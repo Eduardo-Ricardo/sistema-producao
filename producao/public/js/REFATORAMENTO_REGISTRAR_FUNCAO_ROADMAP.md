@@ -12,7 +12,7 @@
 - O branch dedicado para a refatoração é `refactor-registrar-funcao`.
 - Sempre remover comentários redundantes e manter apenas documentação JSDoc padronizada antes das funções exportadas.
 - O processo deve ser rastreável, com histórico de commits claros e descritivos.
-- [ANOTAÇÃO] Após cada etapa/subetapa, atualizar o roadmap antes de realizar o commit, para garantir rastreabilidade e não se perder no fluxo.
+- [ANOTAÇÃO] Após cada etapa, atualizar o roadmap antes de realizar o commit, para garantir rastreabilidade e não se perder no fluxo.
 
 ## Plano de Ação
 1. **Mapear e migrar funções de calendário**
@@ -34,8 +34,12 @@
    - [x] Atualizar testes e exemplos de uso, se necessário. (Etapa concluída: exemplos e testes revisados)
 
 5. **Testar e validar**
-   - [ ] Testar a integração entre os módulos refatorados.
-   - [ ] Garantir que a experiência do usuário permaneça igual ou melhor.
+   - [x] Testar a integração entre os módulos refatorados. (Etapa concluída: testes automatizados rodando com Jest, integração validada)
+   - [x] Garantir que a experiência do usuário permaneça igual ou melhor.
+
+6. **Diagnosticar e corrigir erros em produção**
+   - [ ] Identificar erros que impedem o funcionamento do sistema após a refatoração.
+   - [ ] Corrigir os erros identificados e validar novamente.
 
 ---
 **Observação:**

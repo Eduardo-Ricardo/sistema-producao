@@ -4,6 +4,9 @@ const path = require("path");
 const pastaDados = path.join(__dirname, "../data");
 const machineMapPath = path.join(pastaDados, "machineMap.json");
 
+/**
+ * Garante que a pasta de dados exista, criando-a se necessário.
+ */
 function garantirPastaDados() {
     if (!fs.existsSync(pastaDados)) {
         console.log("[LOG] Pasta 'data' não encontrada. Criando...");
@@ -23,6 +26,12 @@ const estruturaBasica = {
     "8_Acabamento": {}
 };
 
+/**
+ * Salva o mapa de máquinas (machineMap) recebido no corpo da requisição.
+ * Converte formato antigo se necessário e garante todas as seções.
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 function setMachineMap(req, res) {
     console.log("[LOG] Iniciando salvamento do machineMap...");
 
@@ -57,6 +66,12 @@ function setMachineMap(req, res) {
     }
 }
 
+/**
+ * Retorna o mapa de máquinas (machineMap) atual.
+ * Se não existir, cria com estrutura básica.
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ */
 function getMachineMap(req, res) {
     console.log("[LOG] Iniciando carregamento do machineMap...");
 
@@ -91,7 +106,11 @@ function getMachineMap(req, res) {
     }
 }
 
-// Função específica para migrar do formato antigo para o novo
+/**
+ * Migra um machineMap do formato antigo (plano) para o novo (por seções).
+ * @param {Object} machineMapAntigo
+ * @returns {Object} Novo machineMap estruturado por seções
+ */
 function migrarParaNovaEstrutura(machineMapAntigo) {
     const machineMapNovo = { ...estruturaBasica };
     
