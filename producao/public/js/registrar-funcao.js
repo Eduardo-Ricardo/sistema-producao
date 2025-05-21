@@ -2,6 +2,7 @@ import { carregarDados, carregarMachineMap, salvarMachineMap, enviarDadosProduca
 import { atualizarDropdownFuncoes, atualizarCampoMaquina, capturarNovaFuncaoEMaquina, limparCamposFormulario } from "./ui.js";
 // Importar funções do calendário
 import { gerarCalendario, getDiasNoMes, getPrimeiroDiaSemana, ehFimDeSemana, dataExisteEmRegistros, carregarRegistrosCalendario } from "./calendario.js";
+import { encontrarMaquina, getFuncoesDaMaquina, atualizarOpcoesDisponiveisParaFuncoesAdicionais, adicionarFuncaoAdicional } from "./funcoes-maquinas.js";
 
 let machineMap = {}; // Variável global para armazenar o machineMap
 let funcoesAdicionais = []; // Array para armazenar as funções adicionais
@@ -61,11 +62,11 @@ function setupEventListeners() {
         employeeRole.addEventListener("change", function() {
             console.log("[LOG] Função principal alterada:", this.value);
             const funcaoPrincipal = this.value;
-            const maquinaPrincipal = encontrarMaquina(funcaoPrincipal);
+            const maquinaPrincipal = encontrarMaquina(funcaoPrincipal, machineMap);
             document.getElementById("machine").value = maquinaPrincipal;
             
             // Atualiza as opções disponíveis para funções adicionais
-            atualizarOpcoesDisponiveisParaFuncoesAdicionais(maquinaPrincipal);
+            atualizarOpcoesDisponiveisParaFuncoesAdicionais(maquinaPrincipal, machineMap);
         });
     }
 
@@ -75,7 +76,7 @@ function setupEventListeners() {
         console.log("[LOG] Botão Adicionar Função Extra encontrado");
         btnAddFuncaoExtra.addEventListener("click", () => {
             console.log("[LOG] Botão Adicionar Função Extra clicado");
-            adicionarFuncaoAdicional();
+            adicionarFuncaoAdicional(machineMap, funcoesAdicionais);
         });
     } else {
         console.error("[ERRO] Botão Adicionar Função Extra não encontrado!");
@@ -104,156 +105,6 @@ function setupEventListeners() {
     });
 
     console.log("[LOG] Event listeners configurados com sucesso");
-}
-
-/**
- * Encontra a máquina associada a uma função no machineMap.
- * @param {string} funcao
- * @returns {string}
- */
-function encontrarMaquina(funcao) {
-    // Verifica o formato do machineMap (antigo ou novo)
-    const isFormatoAntigo = machineMap && typeof Object.values(machineMap)[0] === 'string';
-    
-    if (isFormatoAntigo) {
-        // Formato antigo: objeto plano de "função": "máquina"
-        return machineMap[funcao] || "Máquina não especificada";
-    } else {
-        // Formato novo: objeto estruturado por seções
-        for (const [secao, funcoes] of Object.entries(machineMap)) {
-            if (funcao in funcoes) {
-                return funcoes[funcao];
-            }
-        }
-    }
-    return "Máquina não especificada";
-}
-
-/**
- * Retorna todas as funções disponíveis para uma determinada máquina.
- * @param {string} maquina
- * @returns {string[]}
- */
-function getFuncoesDaMaquina(maquina) {
-    // Verifica o formato do machineMap (antigo ou novo)
-    const isFormatoAntigo = machineMap && typeof Object.values(machineMap)[0] === 'string';
-    
-    const funcoes = [];
-    
-    if (isFormatoAntigo) {
-        // Formato antigo: objeto plano de "função": "máquina"
-        Object.entries(machineMap).forEach(([funcao, maquinaFunc]) => {
-            if (maquinaFunc === maquina) {
-                funcoes.push(funcao);
-            }
-        });
-    } else {
-        // Formato novo: objeto estruturado por seções
-        for (const [secao, funcoesSecao] of Object.entries(machineMap)) {
-            for (const [funcao, maquinaFunc] of Object.entries(funcoesSecao)) {
-                if (maquinaFunc === maquina) {
-                    funcoes.push(funcao);
-                }
-            }
-        }
-    }
-    
-    return funcoes;
-}
-
-/**
- * Adiciona uma nova função adicional ao formulário.
- */
-function adicionarFuncaoAdicional() {
-    const maquinaAtual = document.getElementById("machine").value;
-    if (!maquinaAtual) {
-        alert("Selecione primeiro a função principal!");
-        return;
-    }
-
-    const funcoesDaMaquina = getFuncoesDaMaquina(maquinaAtual);
-    const funcaoPrincipal = document.getElementById("employeeRole").value;
-    
-    // Remove a função principal das opções
-    const funcoesDisponiveis = funcoesDaMaquina.filter(f => f !== funcaoPrincipal);
-
-    if (funcoesDisponiveis.length === 0) {
-        alert("Não há outras funções disponíveis para esta máquina!");
-        return;
-    }
-
-    const container = document.getElementById("funcoes-adicionais");
-    const funcaoId = `funcao-${Date.now()}`;
-
-    const funcaoDiv = document.createElement("div");
-    funcaoDiv.className = "funcao-adicional";
-    funcaoDiv.id = funcaoId;
-
-    // Criar o select para a função
-    const select = document.createElement("select");
-    select.className = "form-control funcao-select";
-    select.innerHTML = `<option value="">Selecione uma função</option>
-        ${funcoesDisponiveis.map(f => `<option value="${f}">${f}</option>`).join("")}`;
-
-    // Botão para remover a função
-    const btnRemover = document.createElement("button");
-    btnRemover.type = "button";
-    btnRemover.innerHTML = '<i class="fas fa-times"></i>';
-    btnRemover.onclick = () => {
-        funcaoDiv.remove();
-        const index = funcoesAdicionais.findIndex(f => f.id === funcaoId);
-        if (index > -1) {
-            funcoesAdicionais.splice(index, 1);
-        }
-    };
-
-    funcaoDiv.appendChild(select);
-    funcaoDiv.appendChild(btnRemover);
-    container.appendChild(funcaoDiv);
-
-    // Adicionar ao array de funções adicionais - sem campo de quantidade separado
-    funcoesAdicionais.push({
-        id: funcaoId,
-        elemento: funcaoDiv
-    });
-}
-
-/**
- * Atualiza as opções disponíveis para funções adicionais.
- * @param {string} maquina
- */
-function atualizarOpcoesDisponiveisParaFuncoesAdicionais(maquina) {
-    const funcoesDaMaquina = getFuncoesDaMaquina(maquina);
-    const funcaoPrincipal = document.getElementById("employeeRole").value;
-    const funcoesDisponiveis = funcoesDaMaquina.filter(f => f !== funcaoPrincipal);
-
-    // Atualiza os selects existentes
-    document.querySelectorAll(".funcao-adicional select").forEach(select => {
-        const valorAtual = select.value;
-        select.innerHTML = `<option value="">Selecione uma função</option>
-            ${funcoesDisponiveis.map(f => `<option value="${f}" ${f === valorAtual ? 'selected' : ''}>${f}</option>`).join("")}`;
-    });
-}
-
-/**
- * Carrega as remessas do servidor e atualiza o dropdown.
- */
-async function carregarRemessas() {
-    console.log("[LOG] Iniciando carregamento das remessas...");
-
-    try {
-        const resposta = await fetch("/producao/remessas");
-        if (!resposta.ok) {
-            throw new Error(`Erro ao carregar remessas: ${resposta.statusText}`);
-        }
-
-        const dados = await resposta.json();
-        console.log("[LOG] Remessas carregadas com sucesso:", dados);
-
-        atualizarDropdownRemessas(dados.remessas);
-    } catch (error) {
-        console.error("[ERRO] Falha ao carregar remessas:", error);
-    }
 }
 
 /**

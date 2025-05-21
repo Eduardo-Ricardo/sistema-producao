@@ -23,7 +23,7 @@
 
 2. **Criar módulo para funções/máquinas**
    - [x] Extrair funções como `encontrarMaquina`, `getFuncoesDaMaquina`, `atualizarOpcoesDisponiveisParaFuncoesAdicionais`, `adicionarFuncaoAdicional` para um novo arquivo (ex: `funcoes-maquinas.js`).
-   - [ ] Adaptar `registrar-funcao.js` para importar/utilizar esse novo módulo.
+   - [x] Adaptar `registrar-funcao.js` para importar/utilizar esse novo módulo. (Etapa concluída: imports e chamadas adaptadas para o novo módulo)
 
 3. **Manter registrar-funcao.js focado em UI e integração**
    - [ ] Deixar apenas inicialização, configuração de eventos, coleta de dados do formulário e integração com backend.
