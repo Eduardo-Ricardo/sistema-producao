@@ -288,3 +288,10 @@ function atualizarNomeMesCalendario() {
     const mesNome = meses[mesAtualCalendario - 1];
     document.getElementById('mesAtualCalendario').textContent = `${mesNome}/${anoAtualCalendario}`;
 }
+
+// registrar-funcao.js agora contém apenas:
+// - Inicialização da página
+// - Configuração de eventos de UI
+// - Coleta de dados do formulário
+// - Integração com backend (fetch, envio de dados, etc.)
+// Toda lógica de negócio de funções/máquinas e calendário está delegada aos módulos externos.

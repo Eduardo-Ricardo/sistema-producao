@@ -26,7 +26,7 @@
    - [x] Adaptar `registrar-funcao.js` para importar/utilizar esse novo módulo. (Etapa concluída: imports e chamadas adaptadas para o novo módulo)
 
 3. **Manter registrar-funcao.js focado em UI e integração**
-   - [ ] Deixar apenas inicialização, configuração de eventos, coleta de dados do formulário e integração com backend.
+   - [x] Limpeza realizada: arquivo agora contém apenas inicialização, configuração de eventos, coleta de dados do formulário e integração com backend. Toda lógica de negócio foi delegada aos módulos externos.
    - [ ] Garantir que toda lógica de negócio crítica esteja validada também no backend.
 
 4. **Revisar e documentar**
