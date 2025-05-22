@@ -13,8 +13,8 @@ const { loadCsv } = require("../services/fileService");
 const { filterByEmployee } = require("../services/filterService");
 const { mapToDomain, groupByDate, aggregateByFunction } = require("../services/transformService");
 const { getResumo, getCalendario } = require("../services/fichaFuncionarioService");
-const { lerRegistrosAnoAtual, buscarUltimoRegistroFuncionario } = require("../services/registroService");
-const { listarDadosFuncionarioService, listarNomesFuncionariosService, listarProducaoService } = require("../services/funcionarioService");
+const { lerRegistrosAnoAtual, buscarUltimoRegistroFuncionario, buscarRegistrosFuncionarioService, listarProducaoService } = require("../services/registroService");
+const { listarDadosFuncionarioService, listarNomesFuncionariosService } = require("../services/funcionarioService");
 const { atualizarQuantidadesLotesService } = require("../services/loteService");
 
 // Caminho da pasta "data" e arquivos

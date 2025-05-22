@@ -1,8 +1,10 @@
 import { carregarDados, carregarMachineMap, salvarMachineMap, enviarDadosProducao } from "./dados.js";
 import { atualizarDropdownFuncoes, atualizarCampoMaquina, capturarNovaFuncaoEMaquina, limparCamposFormulario } from "./ui.js";
 // Importar funções do calendário
-import { gerarCalendario, getDiasNoMes, getPrimeiroDiaSemana, ehFimDeSemana, dataExisteEmRegistros, carregarRegistrosCalendario } from "./calendario.js";
+import { gerarCalendarioRegistro, getDiasNoMes, getPrimeiroDiaSemana, ehFimDeSemana, dataExisteEmRegistros } from "./calendario.js";
 import { encontrarMaquina, getFuncoesDaMaquina, atualizarOpcoesDisponiveisParaFuncoesAdicionais, adicionarFuncaoAdicional } from "./funcoes-maquinas.js";
+// Importar funções de remessas e lotes
+import { carregarRemessasParaDropdown, carregarLotesDaRemessa } from "./remessas-lotes.js";
 
 let machineMap = {}; // Variável global para armazenar o machineMap
 let funcoesAdicionais = []; // Array para armazenar as funções adicionais
@@ -34,17 +36,17 @@ async function inicializarPagina() {
     try {
         // Carrega o machineMap do backend
         machineMap = await carregarMachineMap();
-        console.log("[LOG] MachineMap carregado com sucesso:", machineMap);
-
-        // Atualiza os elementos da página com os dados do machineMap
+        console.log("[LOG] MachineMap carregado com sucesso:", machineMap);        // Atualiza os elementos da página com os dados do machineMap
         atualizarDropdownFuncoes(machineMap);
         console.log("[LOG] Dropdown de funções atualizado com sucesso.");
-
-        // Configura os event listeners
+        
+        // Configura a atualização automática do campo de máquina
+        atualizarCampoMaquina(machineMap);
+        console.log("[LOG] Configuração para atualização do campo de máquina concluída.");        // Configura os event listeners
         setupEventListeners();
 
         // Carrega as remessas para o dropdown
-        await carregarRemessas();
+        await carregarRemessasParaDropdown();
     } catch (error) {
         console.error("[ERRO] Falha ao inicializar a página:", error);
     }
@@ -225,9 +227,7 @@ async function carregarUltimoRegistro() {
         if (!registro || Object.keys(registro).length === 0) {
             console.warn("[AVISO] Nenhum registro encontrado para este funcionário.");
             return;
-        }
-
-        // Extrair o mês e ano do último registro
+        }        // Extrair o mês e ano do último registro
         if (registro.productionDate) {
             const [dia, mes] = registro.productionDate.split('/');
             if (dia && mes) {
@@ -262,15 +262,14 @@ async function carregarRegistrosCalendario(employeeName) {
         }
 
         const dados = await resposta.json();
-        console.log("[LOG] Registros do funcionário carregados com sucesso:", dados);
-
+        console.log("[LOG] Registros do funcionário carregados com sucesso:", dados);        
         registrosCalendario = dados.registros || [];
         
         // Atualizar o nome do mês no calendário
         atualizarNomeMesCalendario();
         
         // Gerar o calendário com os registros
-        gerarCalendarioRegistro();
+        gerarCalendarioRegistro(mesAtualCalendario, anoAtualCalendario, registrosCalendario);
     } catch (error) {
         console.error("[ERRO] Falha ao carregar registros do funcionário:", error);
     }
