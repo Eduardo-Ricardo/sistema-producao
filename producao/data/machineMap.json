@@ -1,15 +1,15 @@
 {
     "1_Painel_Frontal": {
-      "Fechar_Fundilho": "Overlock", 
-      "Prespontar_Fundilho": "Prespontadeira",
+      "Fechar_Frente": "Overlock", 
+      "Prespontar_Frente": "Prespontadeira",
       "Costurar_Pala_Frontal": "Interlock",
       "Prespontar_Pala_Frontal": "Reta"
     },
     "2_Painel_Traseiro": {
       "Costurar_Pala_Traseira": "Interlock",
       "Prespontar_Pala_Traseira": "Prespontadeira",
-      "Unir_Paineis_Traseiros": "Interlock",
-      "Prespontar_Painel_Traseiro": "Prespontadeira"
+      "Fechar_Traseira": "Interlock",
+      "Prespontar_Traseira": "Prespontadeira"
     },
     "3_Bolso_Frontal": {
       "Chulear_Bolso_Frontal": "Overlock",
@@ -34,7 +34,8 @@
       "Fechar_Lateral": "Interlock",
       "Prespontar_Lateral": "Prespontadeira",
       "Fechar_entreperna": "Interlock",
-      "Barra_Perna": "Reta"
+      "Barra_Perna": "Reta",
+      "Aplicar_Faixa": "Elastiqueira"
     },
     "7_Cos": {
       "Aplicar_Elastico": "Interlock",
