@@ -309,16 +309,21 @@
               <label for="startTime" class="form-label">
                 <i class="fas fa-play"></i> Início:
               </label>
-              <input type="time" id="startTime" name="startTime" class="form-control">
+              <input type="time" id="startTime" name="startTime" class="form-control" autocomplete="off">
             </div>
             <div class="input-group">
               <label for="endTime" class="form-label">
                 <i class="fas fa-stop"></i> Fim:
               </label>
-              <input type="time" id="endTime" name="endTime" class="form-control">
+              <input type="time" id="endTime" name="endTime" class="form-control" autocomplete="off">
             </div>
           </div>
 
+          <!-- Botões de Atalho para Período -->
+          <div class="form-actions" style="display: flex; gap: 8px; margin-bottom: 12px;">
+            <button type="button" class="btn btn-outline-info" onclick="document.getElementById('startTime').value='08:00';document.getElementById('endTime').value='12:00'">Manhã</button>
+            <button type="button" class="btn btn-outline-info" onclick="document.getElementById('startTime').value='13:00';document.getElementById('endTime').value='18:00'">Tarde</button>
+          </div>
           <!-- Botão de Submit -->
           <div class="form-actions">
             <button type="submit" class="btn btn-success">

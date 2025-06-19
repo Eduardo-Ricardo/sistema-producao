@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dados por Pessoa</title>
+  <title>Ficha do Funcionário</title>
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
@@ -12,7 +12,7 @@
       <li><a href="/" class="nav-link">Início</a></li>
       <li><a href="/producao/html/registrar.html" class="nav-link">Registrar Produção</a></li>
       <li><a href="/producao/html/visualizar.html" class="nav-link">Visualizar Registros</a></li>
-      <li><a href="/producao/html/ficha-funcionario.html" class="nav-link">Funcionários</a></li>
+      <li><a href="/producao/html/ficha-funcionario.html" class="nav-link active">Funcionários</a></li>
       <li><a href="/producao/html/gerenciar-lotes.html" class="nav-link">Lotes</a></li>
       <li><a href="/fluxo-caixa/caixa.html" class="nav-link">Fluxo de Caixa</a></li>
     </ul>
@@ -20,16 +20,18 @@
 
   <div class="container">
     <header>
-      <h1 class="m-3">Dados por Pessoa</h1>
+      <h1 class="m-3">Ficha do Funcionário</h1>
     </header>
 
+    <!-- Pesquisa e Filtros -->
     <div class="card">
       <div class="form-container">
         <div class="form-group">
-          <label for="selecaoPessoa" class="form-label">Selecione a Pessoa:</label>
-          <select id="selecaoPessoa" class="form-control">
-            <option value="">Selecione...</option>
-          </select>
+          <label for="selecaoPessoa" class="form-label">Funcionário:</label>
+          <input list="listaFuncionarios" id="selecaoPessoa" class="form-control" placeholder="Digite ou selecione...">
+          <datalist id="listaFuncionarios">
+            <!-- Opções preenchidas via JS -->
+          </datalist>
         </div>
         <div class="form-group">
           <label for="dataInicio" class="form-label">Data Início:</label>
@@ -43,35 +45,41 @@
       </div>
     </div>
 
+    <!-- Resumo -->
     <div class="card m-3">
       <div class="card-header">
         <h2>Resumo</h2>
       </div>
       <div class="resumo-grid">
         <div class="resumo-item">
-          <p>Total de Dias: <span id="totalDias">--</span></p>
+          <p>Funções mais frequentes: <span id="funcoesModa">--</span></p>
         </div>
         <div class="resumo-item">
-          <p>Total de Registros: <span id="totalRegistros">--</span></p>
+          <p>Produção média/dia: <span id="mediaPorDia">--</span></p>
         </div>
         <div class="resumo-item">
-          <p>Média Geral: <span id="mediaGeral">--</span></p>
+          <p>Produção média/hora: <span id="mediaPorHora">--</span></p>
         </div>
         <div class="resumo-item">
-          <p>Média por Dia: <span id="mediaPorDia">--</span></p>
+          <p>Dias úteis: <span id="diasUteis">--</span></p>
+        </div>
+        <div class="resumo-item">
+          <p>Dias trabalhados: <span id="diasTrabalhados">--</span></p>
+        </div>
+        <div class="resumo-item">
+          <p>Finais de semana trabalhados: <span id="finaisSemana">--</span></p>
         </div>
       </div>
     </div>
 
-
-    <!-- Nova seção do calendário -->
+    <!-- Calendário -->
     <div class="card m-3">
       <div class="card-header">
         <h2>Calendário de Registros</h2>
       </div>
       <div class="form-container">
         <div class="form-group">
-          <label for="mesCalendario" class="form-label">Selecione o Mês:</label>
+          <label for="mesCalendario" class="form-label">Mês:</label>
           <select id="mesCalendario" class="form-control">
             <option value="1">Janeiro</option>
             <option value="2">Fevereiro</option>
@@ -93,16 +101,28 @@
       </div>
     </div>
 
-    <!-- Nova seção para exibir as funções -->
+    <!-- Semana (Tabela comparativa) -->
     <div class="card m-3">
       <div class="card-header">
-        <h2>Funções Realizadas</h2>
+        <h2>Semana Atual</h2>
       </div>
-      <div class="resumo-grid" id="funcoes-grid">
-        <!-- Funções serão inseridas aqui dinamicamente -->
+      <div class="table-container">
+        <table id="tabelaSemana" class="table">
+          <thead>
+            <tr>
+              <th>Dia</th>
+              <th>Funções Moda</th>
+              <th>Quantidade</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Linhas preenchidas via JS -->
+          </tbody>
+        </table>
       </div>
     </div>
 
+    <!-- Detalhes por Dia -->
     <div class="card m-3">
       <div class="card-header">
         <h2>Detalhes por Dia</h2>
@@ -118,7 +138,7 @@
             </tr>
           </thead>
           <tbody>
-            <!-- Linhas serão preenchidas dinamicamente -->
+            <!-- Linhas preenchidas dinamicamente -->
           </tbody>
         </table>
       </div>
