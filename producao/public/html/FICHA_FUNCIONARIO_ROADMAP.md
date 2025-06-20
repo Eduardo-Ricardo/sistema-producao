@@ -59,9 +59,9 @@
 - [ ] Commit: feat(ficha-func): resumo do funcionário
 
 ### 4. Calendário de Registros
-- [ ] Exibir calendário mensal (como já existia)
-- [ ] Destacar dias com registro, dias úteis, finais de semana
-- [ ] Permitir navegação entre meses/anos
+- [x] Exibir calendário mensal (como já existia)
+- [x] Destacar dias com registro, dias úteis, finais de semana
+- [x] Permitir navegação entre meses/anos
 - [ ] Commit: feat(ficha-func): calendário de registros
 
 ### 5. Tabela da Semana
@@ -75,7 +75,7 @@
 - [ ] Commit: feat(ficha-func): detalhes por dia
 
 ### 7. Feedback Visual e Usabilidade
-- [ ] Adicionar mensagens de erro, loaders e feedbacks visuais
+- [x] Adicionar mensagens de erro, loaders e feedbacks visuais
 - [ ] Garantir acessibilidade (teclado, leitores de tela)
 - [ ] Commit: feat(ficha-func): feedback visual e acessibilidade
 

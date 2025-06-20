@@ -355,11 +355,23 @@ export function preencherFuncoesUnicas(funcoes) {
 export function calcularResumoFuncionario(dados) {
     console.log("[LOG] Iniciando cálculo do resumo dos dados do funcionário...");
 
+    // Função auxiliar para atualizar elemento com segurança
+    function atualizarElemento(id, valor) {
+        const elemento = document.getElementById(id);
+        if (elemento) {
+            elemento.textContent = valor;
+        } else {
+            console.warn(`[AVISO] Elemento #${id} não encontrado`);
+        }
+    }
+
     if (!Array.isArray(dados) || dados.length === 0) {
-        document.getElementById("totalDias").textContent = "--";
-        document.getElementById("totalRegistros").textContent = "--";
-        document.getElementById("mediaGeral").textContent = "--";
-        document.getElementById("mediaPorDia").textContent = "--";
+        atualizarElemento("diasTrabalhados", "--");
+        atualizarElemento("funcoesModa", "--");
+        atualizarElemento("mediaPorDia", "--");
+        atualizarElemento("mediaPorHora", "--");
+        atualizarElemento("diasUteis", "--");
+        atualizarElemento("finaisSemana", "--");
         return;
     }
 
@@ -370,13 +382,36 @@ export function calcularResumoFuncionario(dados) {
     
     const mediaGeral = totalRegistros > 0 ? (totalQuantidade / totalRegistros) : 0;
     const mediaPorDia = totalDias > 0 ? (totalQuantidade / totalDias) : 0;
-
-    document.getElementById("totalDias").textContent = totalDias;
-    document.getElementById("totalRegistros").textContent = totalRegistros;
-    document.getElementById("mediaGeral").textContent = mediaGeral.toFixed(2);
-    document.getElementById("mediaPorDia").textContent = mediaPorDia.toFixed(2);
-
-    console.log("[LOG] Resumo dos dados do funcionário calculado com sucesso.");
+    
+    // Calcular dias úteis e fins de semana
+    const diasUteis = dados.filter(grupo => {
+        const data = new Date(grupo.date);
+        const diaSemana = data.getDay(); // 0 = domingo, 6 = sábado
+        return diaSemana > 0 && diaSemana < 6;
+    }).length;
+    
+    const finaisSemana = totalDias - diasUteis;    // Calcular funções mais frequentes (moda)
+    const contagemFuncoes = {};
+    dados.forEach(grupo => {
+        grupo.registros.forEach(registro => {
+            const funcao = registro.Funcao;
+            contagemFuncoes[funcao] = (contagemFuncoes[funcao] || 0) + 1;
+        });
+    });
+    
+    // Transformar em array e ordenar por frequência (decrescente)
+    const funcoesOrdenadas = Object.entries(contagemFuncoes)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3) // Pegar as 3 principais
+        .map(([funcao, qtd]) => `<div class="funcao-linha">${funcao} <span class="badge bg-secondary">${qtd}</span></div>`);
+    
+    // Atualizar elementos no DOM com formatação para tabela
+    atualizarElemento("diasTrabalhados", totalDias);
+    atualizarElemento("mediaPorDia", mediaPorDia.toFixed(2));
+    atualizarElemento("mediaPorHora", (mediaPorDia / 8).toFixed(2)); // Assumindo jornada de 8h
+    atualizarElemento("diasUteis", diasUteis);
+    atualizarElemento("finaisSemana", finaisSemana);
+    atualizarElemento("funcoesModa", funcoesOrdenadas.join("") || "<em>Sem dados</em>");console.log("[LOG] Resumo dos dados do funcionário calculado com sucesso.");
 }
 
 // Mostra ou esconde mensagem de erro de validação
@@ -433,7 +468,8 @@ export function preencherDropdownFuncionarios(nomes) {
     nomes.forEach(nome => {
         const option = document.createElement("option");
         option.value = nome;
-        dropdown.appendChild(option);
+        option.textContent = nome;
+        selectPessoa.appendChild(option);
     });
 
     console.log(`[LOG] Dropdown preenchido com ${nomes.length} funcionários`);

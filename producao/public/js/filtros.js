@@ -3,26 +3,41 @@
 
 /**
  * Captura os valores dos filtros selecionados na página ficha-funcionario.html
- * @returns {Object|null} Um objeto contendo os filtros capturados (funcionario, dataInicio, dataFim) ou null se nenhum funcionário foi selecionado
+ * com validações mais robustas e sem alertas (para melhor UX)
+ * @returns {Object|null} Um objeto contendo os filtros capturados (funcionario, dataInicio, dataFim) ou null se os filtros são inválidos
  */
 export function capturarFiltrosFuncionario() {
     console.log("[LOG] Capturando filtros para a página ficha-funcionario.html...");
 
-    // Captura o valor do dropdown de seleção de funcionário
-    const funcionario = document.getElementById("selecaoPessoa").value;
+    // Referências aos elementos (evita repetir getElementById)
+    const erroFuncionario = document.getElementById("erro-funcionario");
+    
+    // Captura valores dos campos
+    const funcionario = document.getElementById("selecaoPessoa").value.trim();
     const dataInicioInput = document.getElementById("dataInicio").value;
     const dataFimInput = document.getElementById("dataFim").value;
 
-    // Verifica se um funcionário foi selecionado
+    // Verifica se um funcionário foi selecionado (validação já feita no evento click, mas mantida aqui para robustez)
     if (!funcionario) {
         console.warn("[AVISO] Nenhum funcionário foi selecionado.");
-        alert("Por favor, selecione um funcionário.");
+        if (erroFuncionario) erroFuncionario.style.display = "block";
         return null;
     }
 
     // Converte as datas para o formato DD/MM
     const dataInicio = formatarData(dataInicioInput);
     const dataFim = formatarData(dataFimInput);
+
+    // Verificação adicional de consistência das datas
+    if (dataInicio && dataFim) {
+        const [diaInicio, mesInicio] = dataInicio.split('/').map(Number);
+        const [diaFim, mesFim] = dataFim.split('/').map(Number);
+        
+        if (mesInicio > mesFim || (mesInicio === mesFim && diaInicio > diaFim)) {
+            console.warn("[AVISO] Data inicial maior que data final");
+            return null;
+        }
+    }
 
     console.log("[LOG] Filtros capturados:", { funcionario, dataInicio, dataFim });
 
