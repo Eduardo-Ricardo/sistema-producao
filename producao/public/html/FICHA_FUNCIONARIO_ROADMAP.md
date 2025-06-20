@@ -45,9 +45,10 @@
 - [x] Commit: feat(ficha-func): estrutura inicial e navegação
 
 ### 2. Pesquisa e Filtros
-- [ ] Implementar datalist/autocomplete para seleção de funcionário
-- [ ] Adicionar campos de data início e fim
-- [ ] Botão de busca de dados
+- [x] Implementar datalist/autocomplete para seleção de funcionário
+- [x] Adicionar campos de data início e fim
+- [x] Botão de busca de dados
+- [x] Corrigir problemas de preenchimento da lista de funcionários
 - [ ] Commit: feat(ficha-func): pesquisa e filtros
 
 ### 3. Resumo do Funcionário

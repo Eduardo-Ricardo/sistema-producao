@@ -1,4 +1,3 @@
-// Atualiza a tabela de produção na tela visualizar.html
 /**
  * Atualiza a tabela de produção exibida na página visualizar.html com os dados fornecidos.
  * 
@@ -29,7 +28,6 @@ export function atualizarTabela(dados) {
     console.log("[LOG] Tabela de produção atualizada com sucesso.");
 }
 
-// Atualiza o dropdown de funções na tela registrar.html
 /**
  * Atualiza o dropdown de funções na tela registrar.html com as funções disponíveis no machineMap.
  * 
@@ -74,7 +72,6 @@ export function atualizarDropdownFuncoes(machineMap) {
     console.log("[LOG] Lista de funções atualizada com sucesso.");
 }
 
-// Atualiza o campo de máquina ao selecionar o dropdown na tela registrar.html
 /**
  * Configura o evento para atualizar o campo de máquina com base na função selecionada pelo usuário.
  * 
@@ -124,7 +121,6 @@ export function atualizarCampoMaquina(machineMap) {
     });
 }
 
-// Adiciona uma nova opção ao dropdown de funções
 /**
  * Adiciona uma nova opção ao dropdown de funções na tela registrar.html.
  * 
@@ -147,7 +143,6 @@ export function adicionarOpcaoAoDropdown(funcao) {
     console.log("[LOG] Nova opção adicionada ao dropdown de funções com sucesso.");
 }
 
-// Captura nova função e máquina do usuário e retorna um objeto com essas informações
 /**
  * Captura uma nova função e máquina do usuário através de prompts e retorna um objeto com essas informações.
  * O formato do objeto retornado depende do formato do machineMap (antigo ou novo).
@@ -240,7 +235,7 @@ export function capturarNovaFuncaoEMaquina(machineMap) {
     };
 }
 
-// Atualiza a tabela de dados do funcionário na página ficha-funcionario.html
+
 /**
  * Preenche a tabela de dados do funcionário na página ficha-funcionario.html com os dados fornecidos.
  * 
@@ -307,7 +302,7 @@ export function preencherTabelaFuncionario(dados) {
     console.log("[LOG] Tabela de dados do funcionário preenchida com sucesso.");
 }
 
-// Nova função para exibir as funções únicas
+
 /**
  * Preenche o grid de funções únicas na página ficha-funcionario.html com os dados fornecidos.
  * 
@@ -351,7 +346,6 @@ export function preencherFuncoesUnicas(funcoes) {
     console.log("[LOG] Grid de funções únicas preenchido com sucesso.");
 }
 
-// Calcula e exibe o resumo dos dados do funcionário na página ficha-funcionario.html
 /**
  * Calcula e exibe o resumo dos dados do funcionário, incluindo totais e médias, na página ficha-funcionario.html.
  * 
@@ -385,26 +379,64 @@ export function calcularResumoFuncionario(dados) {
     console.log("[LOG] Resumo dos dados do funcionário calculado com sucesso.");
 }
 
-// Preenche o dropdown com os nomes dos funcionários
+// Mostra ou esconde mensagem de erro de validação
+/**
+ * Exibe ou esconde mensagens de validação para o usuário
+ * @param {HTMLElement} elemento - O elemento HTML onde a mensagem será exibida/escondida
+ * @param {string|null} mensagem - A mensagem de erro a ser exibida, ou null para esconder
+ */
+export function mostrarErroValidacao(elemento, mensagem = null) {
+    if (!elemento) return;
+    
+    if (mensagem) {
+        elemento.textContent = mensagem;
+        elemento.style.display = "block";
+    } else {
+        elemento.textContent = "";
+        elemento.style.display = "none";
+    }
+}
+
+
 /**
  * Preenche o dropdown de seleção de funcionários com os nomes dos funcionários disponíveis.
  * 
  * @param {Array} nomes - Array de strings contendo os nomes dos funcionários a serem exibidos no dropdown.
  */
 export function preencherDropdownFuncionarios(nomes) {
-    console.log("[LOG] Iniciando preenchimento do dropdown com os nomes dos funcionários...");
+    console.log("[LOG] Preenchendo dropdown de funcionários...");
 
-    const dropdown = document.getElementById("selecaoPessoa");
-    dropdown.innerHTML = '<option value="">Selecione um funcionário</option>'; // Limpar e adicionar opção padrão
+    // Primeiro tentamos preencher o datalist (para autocomplete)
+    const datalist = document.getElementById("listaFuncionarios");
+    if (datalist) {
+        datalist.innerHTML = "";
+        nomes.forEach(nome => {
+            const option = document.createElement("option");
+            option.value = nome;
+            datalist.appendChild(option);
+        });
+    }
 
-    nomes.forEach((nome) => {
+    // Depois preenchemos o dropdown de seleção
+    const selectPessoa = document.getElementById("selecaoPessoa");
+    if (!selectPessoa) {
+        console.warn("[AVISO] Dropdown de funcionários (select) não encontrado.");
+        return;
+    }
+
+    // Preservar a opção padrão
+    const defaultOption = selectPessoa.options[0];
+    selectPessoa.innerHTML = "";
+    selectPessoa.appendChild(defaultOption);
+
+    // Adiciona os nomes ao dropdown
+    nomes.forEach(nome => {
         const option = document.createElement("option");
         option.value = nome;
-        option.textContent = nome;
         dropdown.appendChild(option);
     });
 
-    console.log("[LOG] Dropdown de funcionários preenchido com sucesso.");
+    console.log(`[LOG] Dropdown preenchido com ${nomes.length} funcionários`);
 }
 
 // Captura os dados do formulário de produção
@@ -448,7 +480,7 @@ export function capturarDadosFormulario() {
     return { employeeName, employeeRole, machine, startTime, endTime, productionCount, productionDate };
 }
 
-// Limpa os campos do formulário após o envio
+
 /**
  * Limpa os campos do formulário de produção, definindo seus valores padrão.
  */
